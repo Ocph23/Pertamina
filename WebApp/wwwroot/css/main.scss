@@ -1,0 +1,226 @@
+.dashboard {
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr;
+    grid-template-rows: 1.5fr 3.5fr 1fr;
+    grid-gap: 10px;
+    max-height: 83vh;
+    padding: 20px;
+    .chart-company {
+        grid-column: 1/3;
+        grid-row: 1/3;
+        #chart-canvas {
+            height: 90%;
+            padding: 10px;
+            #myChart {
+                height: 100%;
+            }
+        }
+    }
+    .chart-kind {
+        padding: 20px;
+        background-color: #ffffff8c;
+        border-radius: 10px;
+        color: rgb(0, 0, 0);
+        grid-template: 3/4;
+        #dounatCanvas {
+            width: 100%;
+            height: 300px;
+        }
+    }
+    .best-perform {
+        padding-top: 20px;
+        padding-bottom: 10px;
+
+        grid-row: 2/4;
+        grid-column: 3/4;
+    }
+
+    .today {
+        color: black;
+        grid-column: 1/3;
+        .today-container {
+            display: flex;
+            height: 80%;
+
+            .today-item {
+                margin: 5px;
+                width: 20%;
+                height: 100%;
+                padding: 15px;
+                .today-title {
+                    font-size: 20px;
+                    color: white;
+                }
+                .today-content {
+                    font-size: 50px;
+                    text-align: center;
+                    color: white;
+                }
+            }
+        }
+    }
+}
+
+.chard {
+    border-radius: 0px;
+    background: white;
+    box-shadow: 17px 17px 35px #00395f, -17px -17px 35px #004d81;
+}
+
+.main {
+    height: 90vh;
+    background: white;
+    display: grid;
+    grid-template-columns: auto 1.5fr;
+    color: black;
+
+    .main-left {
+        position: relative;
+        margin: 10px;
+
+        .btncapturemain {
+            width: 100%;
+            position: absolute;
+            left: 0;
+            right: 0;
+            margin: auto;
+            top: 90%;
+            z-index: 1;
+            text-align: center;
+
+            button {
+                width: 200px;
+            }
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            border-radius: 2px;
+            background: #ffffff;
+            box-shadow: 5px 5px 10px #e3e3e3, 0px 0px 10px #ffffff;
+        }
+    }
+
+    .main-right {
+        overflow-y: auto;
+        height: 88vh;
+        display: grid;
+
+        .screen {
+            height: 200px;
+            padding: 10px;
+            margin: 5px;
+
+            #screen1 {
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+}
+
+#employes {
+    width: 0;
+}
+
+.employes {
+    overflow-y: auto;
+    height: 94%;
+    margin-bottom: 20px;
+
+    .search-container {
+        display: flex;
+        justify-content: space-between;
+        margin: 10px;
+        padding: 10px;
+        box-shadow: 5px 5px 10px #e3e3e3, 0px 0px 10px #ffffff;
+
+        .search-input {
+            width: 80%;
+        }
+
+        .search-button {
+            height: 10%;
+        }
+    }
+
+    .employe {
+        height: 150px;
+        margin: 10px;
+        padding: 10px;
+        box-shadow: 5px 5px 10px #e3e3e3, 0px 0px 10px #ffffff;
+        display: grid;
+        grid-template-columns: 1.5fr 3fr;
+
+        .employe-photo {
+            border-radius: 3px;
+
+            img {
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+        .employe-content {
+            position: relative;
+            height: 100%;
+
+            .inputPunishment {
+                position: absolute;
+                height: 0px;
+                width: 0px;
+                background-color: rgb(187, 187, 187);
+                z-index: -10;
+
+                textarea {
+                    width: 100%;
+                    height: 70%;
+                    font-size: 9px;
+                }
+
+                .save-action {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    font-size: 8px;
+
+                    .btn {
+                        font-size: 0.5rem;
+                    }
+                }
+            }
+
+            .employe-data {
+                padding: 5px;
+                height: 100%;
+                width: 100%;
+                background-color: white;
+                z-index: -100;
+
+                .form-data {
+                    margin-bottom: 8px;
+
+                    .content-label {
+                        font-size: 8px;
+                    }
+
+                    .content-value {
+                        font-size: 12px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+#item3 {
+    background-color: #8d2100;
+    box-shadow: 5px 5px 10px #e3e3e3, 0px 0px 10px #ffffff;
+}
+#item2 {
+    background-color: #8d5c00;
+}
+#item1 {
+    background-color: #788d00;
+}

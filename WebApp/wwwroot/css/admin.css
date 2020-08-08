@@ -1,0 +1,200 @@
+.admin {
+  height: 92vh;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: auto 1fr;
+      grid-template-columns: auto 1fr;
+  color: black;
+}
+
+.admin .main-left {
+  position: relative;
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 1;
+  grid-column: 1/2;
+  background: rgba(0, 34, 58, 0.59);
+  -webkit-box-shadow: 5px 5px 10px #a1a1a1c5, 0px 0px 10px #ffffffa4;
+          box-shadow: 5px 5px 10px #a1a1a1c5, 0px 0px 10px #ffffffa4;
+  width: 220px;
+  height: 100%;
+}
+
+.admin .main-left .menus {
+  height: 100%;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: 1fr 3fr;
+      grid-template-rows: 1fr 3fr;
+}
+
+.admin .main-left .menus .menus-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-grid-row: 1;
+  -ms-grid-row-span: 1;
+  grid-row: 1/2;
+}
+
+.admin .main-left .menus .menus-header img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  -webkit-box-shadow: 1px 1px 0px white;
+          box-shadow: 1px 1px 0px white;
+}
+
+.admin .main-left .menus .menus-header .user-name {
+  margin-top: 15px;
+  font-size: 15px;
+  color: white;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.admin .main-left .menus .menus-header .user-job {
+  color: white;
+  font-size: 10px;
+}
+
+.admin .main-left .menus .menus-body {
+  -ms-grid-row: 2;
+  -ms-grid-row-span: 1;
+  grid-row: 2/3;
+  background: rgba(0, 34, 58, 0.59);
+  border-radius: 40px 40px 0px 0px;
+  -webkit-box-shadow: -2px -2px 6px #5f7788;
+          box-shadow: -2px -2px 6px #5f7788;
+  padding: 10%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.admin .main-left .menus .menus-body ul {
+  list-style-type: none;
+  margin: 0px;
+  margin-top: 20px;
+  padding: 0px;
+}
+
+.admin .main-left .menus .menus-body ul li {
+  border-radius: 0px;
+  border-bottom: 1px solid grey;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin: 2px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: white;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.admin .main-left .menus .menus-body ul li img {
+  margin-right: 10px;
+}
+
+.admin .main-left .menus .menus-body ul li .menu-icon {
+  margin-right: 20px;
+}
+
+.admin .main-left .menus .menus-body ul li:hover {
+  border-bottom: 2px solid #ff0202;
+}
+
+.admin .main-left .menus .menus-body .close-menu {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #143655;
+  -webkit-box-shadow: inset 5px 5px 10px #081622, inset -5px -5px 10px #205688;
+          box-shadow: inset 5px 5px 10px #081622, inset -5px -5px 10px #205688;
+  color: white;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-item-align: end;
+      align-self: flex-end;
+}
+
+.admin .main-left .menus .menus-body .close-menu:hover {
+  background: #970101;
+  -webkit-box-shadow: inset 5px 5px 10px #3c0000, inset -5px -5px 10px #f20202;
+          box-shadow: inset 5px 5px 10px #3c0000, inset -5px -5px 10px #f20202;
+  -webkit-transition: -webkit-box-shadow 200ms ease-in-out;
+  transition: -webkit-box-shadow 200ms ease-in-out;
+  transition: box-shadow 200ms ease-in-out;
+  transition: box-shadow 200ms ease-in-out, -webkit-box-shadow 200ms ease-in-out;
+}
+
+.admin .main-right {
+  height: 100%;
+  -ms-grid-column: 2;
+  -ms-grid-column-span: 1;
+  grid-column: 2/3;
+  padding: 10px;
+  padding-left: 20px;
+}
+
+.admin .main-right .header {
+  color: white;
+  font-size: 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.admin .main-right table {
+  color: black;
+  border-radius: 6px;
+  background: linear-gradient(145deg, #f0f0f0, #ffffff);
+  padding: 10px;
+}
+
+.admin .main-right table tr {
+  margin-top: 10px;
+}
+
+.admin .main-right table tr th,
+.admin .main-right table tr td {
+  border-top: 0.5px solid #dee2e6;
+  border-bottom: 0.5px solid grey;
+}
+
+.admin .main-right table tr:hover {
+  color: #84c125;
+}
+/*# sourceMappingURL=admin.css.map */

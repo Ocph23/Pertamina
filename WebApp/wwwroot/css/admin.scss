@@ -1,0 +1,134 @@
+.admin {
+    height: 92vh;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    color: black;
+
+    .main-left {
+        position: relative;
+        grid-column: 1/2;
+        background: rgba(0, 34, 58, 0.59);
+        box-shadow: 5px 5px 10px #a1a1a1c5, 0px 0px 10px #ffffffa4;
+        width: 220px;
+        height: 100%;
+        .menus {
+            height: 100%;
+            display: grid;
+            grid-template-rows: 1fr 3fr;
+            .menus-header {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                grid-row: 1/2;
+                img {
+                    width: 100px;
+                    height: 100px;
+                    border-radius: 50%;
+                    box-shadow: 1px 1px 0px white;
+                }
+                .user-name {
+                    margin-top: 15px;
+                    font-size: 15px;
+                    color: white;
+                    text-decoration: underline;
+                    font-weight: bold;
+                }
+                .user-job {
+                    color: white;
+                    font-size: 10px;
+                }
+            }
+
+            .menus-body {
+                grid-row: 2/3;
+                background: rgba(0, 34, 58, 0.59);
+                border-radius: 40px 40px 0px 0px;
+                box-shadow: -2px -2px 6px #5f7788;
+                padding: 10%;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                ul {
+                    list-style-type: none;
+                    margin: 0px;
+                    margin-top: 20px;
+                    padding: 0px;
+                    li {
+                        border-radius: 0px;
+                        border-bottom: 1px solid grey;
+                        padding-top: 10px;
+                        padding-bottom: 10px;
+                        margin: 2px;
+                        margin-bottom: 10px;
+                        font-size: 14px;
+                        color: white;
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        img {
+                            margin-right: 10px;
+                        }
+                        .menu-icon {
+                            margin-right: 20px;
+                        }
+                    }
+
+                    li:hover {
+                        border-bottom: 2px solid rgb(255, 2, 2);
+                    }
+                }
+
+                .close-menu {
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 50%;
+                    background: #143655;
+                    box-shadow: inset 5px 5px 10px #081622, inset -5px -5px 10px #205688;
+                    color: white;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    align-self: flex-end;
+                }
+
+                .close-menu:hover {
+                    background: #970101;
+                    box-shadow: inset 5px 5px 10px #3c0000, inset -5px -5px 10px #f20202;
+                    transition: box-shadow 200ms ease-in-out;
+                }
+            }
+        }
+    }
+
+    .main-right {
+        height: 100%;
+        grid-column: 2/3;
+        padding: 10px;
+        padding-left: 20px;
+        .header {
+            color: white;
+            font-size: 20px;
+            display: flex;
+            margin-bottom: 20px;
+        }
+        table {
+            color: black;
+            border-radius: 6px;
+            background: linear-gradient(145deg, #f0f0f0, #ffffff);
+            //box-shadow: 5px 5px 17px #354d0f, -5px -5px 17px #d3ff3b;
+            padding: 10px;
+            tr {
+                margin-top: 10px;
+                th,
+                td {
+                    border-top: 0.5px solid #dee2e6;
+                    border-bottom: 0.5px solid grey;
+                }
+            }
+            tr:hover {
+                color: #84c125;
+            }
+        }
+    }
+}

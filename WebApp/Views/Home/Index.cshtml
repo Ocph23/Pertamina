@@ -1,0 +1,71 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<div class="dashboard" ng-app="dashboard" ng-controller="dashboard.controller">
+    <div class="chart-company">
+        <h5 class="title">Pelanggaran Perusahaan</h5>
+        <div id="chart-canvas">
+              <canvas id="myChart"  ></canvas>
+        </div>
+    </div>
+    <div class="chart-kind">
+        <h5 class="title">Pelanggaran Berdasarkan Jenis</h5>
+         <div id="chart-canvas">
+             <canvas id="dounatChart"></canvas>
+         </div>
+    </div>
+    <div class="best-perform">
+          <h5 class="title">Best Perform</h5>
+          <div class="employes">
+              <div class="employe" id="employee" ng-repeat="item in source">
+                  <div class="employe-photo">
+                      <img ng-src="{{item.photo}}">
+                  </div>
+                  <div class="employe-content">
+                      <div class="employe-data">
+                          <div class="form-data">
+                              <div class="content-label">Name</div>
+                              <div class="content-value">{{item.name}} </div>
+                          </div>
+                          <div class="form-data">
+                              <div class="content-label">Job</div>
+                              <div class="content-value">{{item.job}} </div>
+                          </div>
+                          <div class="form-data">
+                              <div class="content-label">Sub Company</div>
+                              <div class="content-value">{{item.company}} </div>
+                          </div>
+                      </div>
+
+                  </div>
+              </div>
+          </div>
+        
+    </div>
+    <div class="today">
+          <h5 class="title">Pelanggaran Hari Ini</h5>
+        <div class="today-container">
+         <div class="today-item" id="item1">
+            <div class="today-title">
+                Ringan
+            </div>
+            <hr/>
+            <div class="today-content">15</div>
+        </div>
+          <div class="today-item" id="item2">
+            <div class="today-title">
+                Sedang
+            </div>
+            <hr/>
+            <div class="today-content">10</div>
+        </div>
+          <div class="today-item" id="item3">
+            <div class="today-title">
+                Berat
+            </div>
+                <hr/>
+            <div class="today-content">5</div>
+        </div>
+        </div>
+    </div>
+</div>
