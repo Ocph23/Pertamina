@@ -15,5 +15,7 @@ namespace WebApp.Models {
           [DbColumn ("level")]
           public string level { get; set; }
 
+          public List<Jenispelanggaran> Datas { get; set; } = new List<Jenispelanggaran> ();
+
      }
 }

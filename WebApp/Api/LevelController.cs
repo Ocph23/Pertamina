@@ -21,7 +21,13 @@ namespace WebApp.Api {
         [HttpGet]
         public IActionResult Get () {
             using (var db = new OcphDbContext (_config.GetConnectionString ("DefaultConnection"))) {
-                return Ok (db.Level.Select ());
+
+                var results = from a in db.Level.Select ()
+                join b in db.JenisPelanggaran.Select () on a.idlevel equals b.idlevel into c
+
+                select new Level { idlevel = a.idlevel, level = a.level, Datas = c.ToList () };
+
+                return Ok (results.ToList ());
             }
         }
 

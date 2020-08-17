@@ -66,6 +66,7 @@ body {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
     background-image: url("../images/src/bg.png");
+    background-repeat: no-repeat;
     background-size: cover;
 }
 .footer {
@@ -77,15 +78,28 @@ body {
 }
 
 .brand {
-    background-image: url("../images/src/logo.png");
-    height: 50px;
-    width: 75px;
-    background-size: 100% 100%;
+    //background-image: url("../images/src/logo.png");
+    height: 100%;
+    margin-right: 10px;
+    background-size: cover;
 }
 
 .nav-container {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    width: 100%;
+}
+
+.navbar-brand {
+    height: 100%;
+}
+
+@media only screen and (max-width: 1360px) {
+    h5 {
+        font-size: 1rem;
+    }
+}
+
+.hidden {
+    display: none;
 }

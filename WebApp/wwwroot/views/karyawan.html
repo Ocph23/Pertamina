@@ -1,88 +1,101 @@
-<div class="profile">
-    <div class="profile-biodata">
-        <h5>PROFILE</h5>
-        <div class="profile-biodata-body">
-            <img
+<div class="perusahaan">
+    <div class="perusahaan-baru " ng-class="{hidden: !addItem}">
+        <div class="header">
+            <strong>Tambah Karyawan</strong><i></i>
+        </div>
+        <div class="logo">
+            <img ng-model="model.logo"
                 src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" />
-            <hr />
-            <div class="biodata-data">
+        </div>
+        <div class="data-body">
+            <form ng-submit="save(model)">
                 <div class="form-info-group">
-                    <div class="label">Nama</div>
-                    <div class="nilai">Chandra Witjaksana Selalu</div>
+                    <div class="label">ID Karyawan</div>
+                    <div class="nilai"><input ng-model="model.kodekaryawan" type="text" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-info-group">
+                    <div class="label">Nama Karyawan</div>
+                    <div class="nilai"><input ng-model="model.namakaryawan" type="text" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-info-group">
+                    <div class="label">Perusahaan</div>
+                    <div class="nilai">
+                        <select ng-model="model.perusahaan" type="text" class="form-control" required
+                            ng-options="item as item.namaperusahaan for item in perusahaan track by item.idperusahaan"></select>
+                    </div>
                 </div>
                 <div class="form-info-group">
                     <div class="label">Jabatan</div>
-                    <div class="nilai">Driver</div>
+                    <div class="nilai"><input ng-model="model.jabatan" type="text" class="form-control" required>
+                    </div>
                 </div>
                 <div class="form-info-group">
-                    <div class="label">Nama Perusahaan</div>
-                    <div class="nilai">Chandra Electic</div>
+                    <div class="label">Kontak</div>
+                    <div class="nilai"><input ng-model="model.kontak" type="text" class="form-control" required>
+                    </div>
                 </div>
-
-            </div>
-
-            <div class="point">
-
-            </div>
-
-        </div>
-
-    </div>
-    <div class="profile-grafik">
-        <h5>GRAFIK</h5>
-    </div>
-    <div class="profile-data">
-        <h5>DAFTAR PELANGGARAN</h5>
-        <div class="profile-data-date">
-            <div class="form-info-group">
-                <div class="label">Bulan</div>
-                <div class="nilai">
-                    <select class="form-control">
-                        <option>Januari</option>
-                        <option>Februari</option>
-                        <option>Maret</option>
-                    </select>
+                <div class="form-info-group">
+                    <div class="label">Email</div>
+                    <div class="nilai"><input ng-model="model.email" type="email" class="form-control" required>
+                    </div>
                 </div>
-            </div>
-
-            <div class="form-info-group">
-                <div class="label">Tahun</div>
-                <div class="nilai"> <select class="form-control">
-                        <option>2018</option>
-                        <option>2019</option>
-                        <option>2020</option>
-                    </select> </div>
-            </div>
+                <div class="form-info-group">
+                    <div class="label">Alamat</div>
+                    <div class="nilai"><textarea id="alamatPerusahaan" ng-model="model.alamat" type="text"
+                            class="form-control" required></textarea>
+                    </div>
+                </div>
+                <div class="btn-option">
+                    <button class="btn btn-success">
+                        <i class="fa fa-save" ng-show="!isBusy"> Simpan</i>
+                        <i class="fa fa-spinner fa-spin" ng-show="isBusy"></i>
+                    </button>
+                    <button type="button" class="btn btn-warning" ng-click="newItem()">
+                        <i class="fa fa-times"> Batal</i>
+                    </button>
+                </div>
+            </form>
         </div>
+    </div>
 
-        <hr />
-
+    <div class="data-perusahaan">
+        <div class="header">
+            <strong>DATA KARYAWAN</strong><i></i>
+            <div class="add-menu" id="close-menu" ng-click="newItem()"><i class="fa fa-plus"></i></div>
+        </div>
         <table class="table table-dark table-hover">
             <thead>
                 <tr>
-                    <th>Firstname</th>
-                    <th>Lastname</th>
+                    <th>ID KARYAWAN</th>
+                    <th>Nama</th>
+                    <th>Perusahaan</th>
+                    <th>Jabatan</th>
+                    <th>Kontak</th>
                     <th>Email</th>
+                    <th>Alamat</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>John</td>
-                    <td>Doe</td>
-                    <td>john@example.com</td>
-                </tr>
-                <tr>
-                    <td>Mary</td>
-                    <td>Moe</td>
-                    <td>mary@example.com</td>
-                </tr>
-                <tr>
-                    <td>July</td>
-                    <td>Dooley</td>
-                    <td>july@example.com</td>
+                <tr ng-repeat="data in datas">
+                    <td valign="center">{{data.kodekaryawan}}</td>
+                    <td>{{data.namakaryawan}}</td>
+                    <td>{{data.perusahaan.namaperusahaan}}</td>
+                    <td>{{data.jabatan}}</td>
+                    <td>{{data.kontak}}</td>
+                    <td>{{data.email}}</td>
+                    <td>{{data.alamat}}</td>
+                    <td>
+                        <button class="btn btn-info" ui-sref="karyawan-detail({id:data.idkaryawan})">
+                            <i class="fa fa-list"></i>
+                        </button>
+                    </td>
                 </tr>
             </tbody>
         </table>
-
     </div>
+
+
 </div>

@@ -6,6 +6,7 @@
     <title>@ViewData["Title"] - WebApp</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/lib/fontawesome5/css/all.css" />
+    <link rel="stylesheet" href="~/lib/Chartjs/Chart.css"/>
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/admin.css" />
 </head>
@@ -14,7 +15,7 @@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
             <div class="nav-container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    <div class="brand"></div> <span>PERTAMINA</span>
+                    <img class="brand" src="~/images/src/logo.png" /> <span>PERTAMINA</span>
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -46,12 +47,17 @@
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/Chartjs/Chart.js"></script>
       <script src="~/lib/animejs/anime.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/angularjs/angular.min.js"></script>
     <script src="~/lib/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="~/js/services.js" asp-append-version="true"></script>
+    <script src="~/js/ng-files.js" asp-append-version="true"></script>
     <script src="~/js/admin.js" asp-append-version="true"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/swipe.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

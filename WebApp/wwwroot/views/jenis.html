@@ -1,0 +1,90 @@
+<div class="jenis-pelanggaran">
+    <div class="header">
+        <h5>Jenis Pelanggaran</h5>
+    </div>
+    <div class="jenis-main">
+        <div class="jenis-body vertical-scroll">
+            <div class="jenis" id="jenis{{$index}}" ng-class="{'jenis-baru':item.isNew}" ng-repeat="item in items">
+                <div class="jenis-text" ng-click="selectItem(item)">{{item.level}}</div>
+                <div class="jenis-input">
+                    <div class="data-input">
+                        <form ng-submit="saveJenis(item)">
+                            <input type="text" placeholder="Tambah Baru" ng-model="item.level" class="form-control"
+                                required>
+                            <button class="btn btn-outline-success" type="submit" ng-class="{disabled:!item.level}">
+                                <i class="fa fa-save" ng-show="!item.proccess"></i>
+                                <i class="fa fa-spinner fa-spin" ng-show="item.proccess"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <div class="arrow-body">
+                    <div class="arrow" ng-class="{'arrow-show':item.showEdit, 'arrow-select':item.select}"
+                        ng-click="item.showEdit = !item.showEdit"></div>
+                    <div class="remove-item" ng-class="{'remove-item-show':item.showEdit}">
+                        <i class="fa fa-edit text-warning" ng-click="item.isNew=true; item.showEdit=false"></i>
+                        <i class="fa fa-trash  text-danger" ng-click="deleteJenis(item)"></i>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="detail-body">
+            <div class="header">
+                <h5>Detail Pelanggaran</h5>
+                <div ng-show="selected" class="add-menu" id="close-menu" ng-click="addDetail()"><i
+                        class="fa fa-plus"></i></div>
+
+            </div>
+            <div class="vertical-scroll" style="height: 65vh;">
+                <table class="table" ng-show="selected">
+                    <thead>
+                        <tr>
+                            <th style="min-width: 200px;">Nama Pelanggaran</th>
+                            <th style="width: auto;">Karyawan</th>
+                            <th style="width: auto;">Perusahaan</th>
+                            <th style="width: auto;">Melaporkan</th>
+                            <th style="width: 100px;" class="text-center"></th>
+                        </tr>
+                    </thead>
+                    <tbody ng-repeat="detail in selected.datas">
+                        <tr ng-if="!detail.isNew">
+                            <td>{{detail.jenispelanggaran }}</td>
+                            <td>{{detail.pengurangankaryawan }}</td>
+                            <td>{{detail.penguranganperusahaan}}</td>
+                            <td>{{detail.penambahanpoint}}</td>
+                            <td>
+                                <i class="fa fa-cog" ng-show="!optionShow" ng-click="optionShow= !optionShow"></i>
+                                <div class="optionItem" ng-class="{'option-show':optionShow}">
+                                    <i class="fa fa-edit text-warning" ng-click="detail.isNew=true"></i>
+                                    <i class="fa fa-trash  text-danger" ng-click="deleteDetail(detail)"></i>
+                                </div>
+
+                            </td>
+                        </tr>
+                        <tr ng-if="detail.isNew">
+                            <form>
+                                <td><input type="text" ng-model="detail.jenispelanggaran" class="form-control" required>
+                                </td>
+                                <td><input type="number" min="0" step=".1" ng-model="detail.pengurangankaryawan"
+                                        class="form-control" required></td>
+                                <td><input type="number" min="0" step=".1" ng-model="detail.penguranganperusahaan"
+                                        class="form-control" required>
+                                <td><input type="number" min="0" step=".1" ng-model="detail.penambahanpoint"
+                                        class="form-control" required>
+                                </td>
+                                <td>
+                                    <button ng-click="saveDetail(detail)" class="btn btn-outline-success" type="submit"
+                                        ng-class="{disabled:!detail.jenispelanggaran}">
+                                        <i class="fa fa-save" ng-show="!detail.proccess"></i>
+                                        <i class="fa fa-spinner fa-spin" ng-show="detail.proccess"></i>
+                                    </button>
+                            </form>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

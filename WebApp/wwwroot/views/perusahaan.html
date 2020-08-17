@@ -1,29 +1,75 @@
-<div class="header">
-    <strong>Data Perusahaan</strong><i></i>
+<div class="perusahaan">
+    <div class="perusahaan-baru " ng-class="{hidden: addItem}">
+        <div class="header">
+            <strong>Tambah Perusahaan</strong><i></i>
+        </div>
+        <div class="logo">
+            <img ng-model="model.logo"
+                src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" />
+        </div>
+        <div class="data-body">
+            <form ng-submit="save(model)">
+                <div class="form-info-group">
+                    <div class="label">Nama Perusahaan</div>
+                    <div class="nilai"><input ng-model="model.namaperusahaan" type="text" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-info-group">
+                    <div class="label">Direktur</div>
+                    <div class="nilai"><input ng-model="model.direktur" type="text" class="form-control" required></div>
+                </div>
+                <div class="form-info-group">
+                    <div class="label">Kontak</div>
+                    <div class="nilai"><input ng-model="model.kontakdirektur" type="text" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-info-group">
+                    <div class="label">Email</div>
+                    <div class="nilai"><input ng-model="model.emaildirektur" type="email" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-info-group">
+                    <div class="label">Alamat</div>
+                    <div class="nilai"><textarea id="alamatPerusahaan" ng-model="model.alamat" type="text"
+                            class="form-control" required></textarea>
+                    </div>
+                </div>
+                <div class="btn-option">
+                    <button class="btn btn-success">
+                        <i class="fa fa-save" ng-show="!isBusy"></i>
+                        <i class="fa fa-spinner fa-spin" ng-show="isBusy"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="data-perusahaan">
+        <div class="header">
+            <strong>Data Perusahaan</strong><i></i>
+            <div class="add-menu" id="close-menu" ng-click="addItem=!addItem"><i class="fa fa-plus"></i></div>
+        </div>
+        <table class="table table-dark table-hover">
+            <thead>
+                <tr>
+                    <th>Perusahaan</th>
+                    <th>Direktur</th>
+                    <th>Telepon</th>
+                    <th>Email</th>
+                    <th>Alamat</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="data in datas" ng-click="select(data)" ng-click="addItem=true">
+                    <td valign="center">{{data.namaperusahaan}}</td>
+                    <td>{{data.direktur}}</td>
+                    <td>{{data.kontakdirektur}}</td>
+                    <td>{{data.emaildirektur}}</td>
+                    <td>{{data.alamat}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
 </div>
-<table class="table table-dark table-hover">
-    <thead>
-        <tr>
-            <th>Firstname</th>
-            <th>Lastname</th>
-            <th>Email</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>John</td>
-            <td>Doe</td>
-            <td>john@example.com</td>
-        </tr>
-        <tr>
-            <td>Mary</td>
-            <td>Moe</td>
-            <td>mary@example.com</td>
-        </tr>
-        <tr>
-            <td>July</td>
-            <td>Dooley</td>
-            <td>july@example.com</td>
-        </tr>
-    </tbody>
-</table>

@@ -1,0 +1,89 @@
+<div class="profile">
+    <div class="profile-biodata">
+        <h5>PROFILE</h5>
+        <div class="profile-biodata-body">
+            <div class="photo">
+                <img
+                    src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" />
+            </div>
+
+            <hr />
+            <div class="biodata-data">
+                <div class="form-info-group">
+                    <div class="label">Nama</div>
+                    <div class="nilai">{{model.namakaryawan}}</div>
+                </div>
+                <div class="form-info-group">
+                    <div class="label">Jabatan</div>
+                    <div class="nilai">{{model.jabatan}}</div>
+                </div>
+                <div class="form-info-group">
+                    <div class="label">Nama Perusahaan</div>
+                    <div class="nilai">{{model.perusahaan.namaperusahaan}}</div>
+                </div>
+            </div>
+
+            <div class="point">
+                <div class="point-title">Poin</div>
+                <div class="chart">
+                    <canvas id="chartPoint"></canvas>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="profile-grafik">
+        <h5>GRAFIK</h5>
+    </div>
+    <div class="profile-data">
+        <h5>DAFTAR PELANGGARAN</h5>
+        <div class="profile-data-date">
+            <div class="form-info-group">
+                <div class="label">Bulan</div>
+                <div class="nilai">
+                    <select class="form-control" ng-options="bln as bln.name for bln in helper.bulans" ng-model="bulan">
+                    </select>
+                </div>
+            </div>
+            <div class="form-info-group">
+                <div class="label">Tahun</div>
+                <div class="nilai"> <select class="form-control" ng-options="thn as thn for thn in helper.tahuns()"
+                        ng-model="tahun">
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="vertical-scroll" style="height: 73vh;">
+            <table class="table table-dark table-hover table-bordered tableFixHead">
+                <thead>
+                    <tr class="tcenter">
+                        <th class="tcenter" rowspan="2">Tanggal</th>
+                        <th class="tcenter" rowspan="2">Level</th>
+                        <th class="tcenter" rowspan="2">Pelanggaran</th>
+                        <th class="tcenter" colspan="2">Pengurangan </th>
+                        <th class="tcenter" rowspan="2">Bukti</th>
+                    </tr>
+                    <tr class="trcenter">
+                        <th class="tcenter">Karyawan</th>
+                        <th class="tcenter">Perusahaan</th>
+                    </tr>
+                </thead>
+                <tbody class="vertical-scroll">
+                    <tr ng-repeat="item in pelanggarans |filter : myFilter(bulan, tahun)">
+                        <td class="tcenter">{{item.tanggal| date:'dd-MM-yyyy hh:ss'}}</td>
+                        <td>{{item.level.level}}</td>
+                        <td>{{item.jenispelanggaran.jenispelanggaran}}</td>
+                        <td class="text-center">{{item.karyawan}}</td>
+                        <td class="text-center">{{item.perusahaan}}</td>
+                        <td class="text-center"><i class="fa fa-list text-info"></i></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
