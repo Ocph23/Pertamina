@@ -11,6 +11,8 @@ namespace WebApp
         public static string ImagePath => Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/bukti/images/");
         public static string VideoPath => Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/bukti/videos/");
         public static string ThumbPath => Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/bukti/thumbs/");
+        public static string ProfilePath => Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/profiles/");
+        public static string LogoPath => Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/logo/");
 
 
         public static byte[] CreateThumb(byte[] byteArray)
@@ -27,7 +29,7 @@ namespace WebApp
                 OriginalImage = System.Drawing.Image.FromStream(ms);
 
                 // Shrink the Original Image to a thumbnail size.
-                imThumbnailImage = OriginalImage.GetThumbnailImage(75, 75, new System.Drawing.Image.GetThumbnailImageAbort(ThumbnailCallBack), IntPtr.Zero);
+                imThumbnailImage = OriginalImage.GetThumbnailImage(100, 100, new System.Drawing.Image.GetThumbnailImageAbort(ThumbnailCallBack), IntPtr.Zero);
 
                 // Save Thumbnail to Memory Stream for Conversion to Byte Array.
                 MemoryStream myMS = new MemoryStream();

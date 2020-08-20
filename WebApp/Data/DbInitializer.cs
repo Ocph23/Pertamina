@@ -7,14 +7,13 @@ namespace WebApp.Data
 {
     public class DbInitializer
     {
-
         public static async Task<bool> Initialize(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             context.Database.EnsureCreated();
             if (!context.Roles.Any())
             {
-                var admin = new IdentityRole { Name = "admin", NormalizedName = "ADMIN" };
-                context.Roles.Add(admin);
+                context.Roles.Add(new IdentityRole { Name = "administrator", NormalizedName = "ADMINISTRATOR" });
+                context.Roles.Add(new IdentityRole { Name = "admin", NormalizedName = "ADMIN" });
                 context.Roles.Add(new IdentityRole { Name = "karyawan", NormalizedName = "KARYAWAN" });
                 context.Roles.Add(new IdentityRole { Name = "manager", NormalizedName = "MANAGER" });
                 context.SaveChanges();
@@ -25,9 +24,9 @@ namespace WebApp.Data
             {
                 try
                 {
-                    var user = new IdentityUser { UserName = "admin" };
-                    var createResult = await userManager.CreateAsync(user, "Admin123#");
-                    await userManager.AddToRoleAsync(user, "admin");
+                    var user = new IdentityUser { UserName = "administrator" };
+                    var createResult = await userManager.CreateAsync(user, "Administrator123#");
+                    await userManager.AddToRoleAsync(user, "administrator");
                 }
                 catch (System.Exception ex)
                 {

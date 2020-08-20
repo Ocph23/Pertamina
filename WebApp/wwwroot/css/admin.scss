@@ -61,13 +61,14 @@
             grid-template-rows: 1fr 3fr;
             .menus-header {
                 display: flex;
+                height: 100%;
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
                 grid-row: 1/2;
                 img {
                     margin: 10px;
-                    width: 30%;
+                    width: 40%;
                     height: 50%;
                     border-radius: 50%;
                     box-shadow: 1px 1px 0px white;
@@ -253,6 +254,10 @@
     }
     .nilai {
         font-size: 14px;
+        .check-box {
+            display: flex;
+            color: white;
+        }
     }
 }
 
@@ -492,7 +497,7 @@ hr {
 
     .jenis-main {
         display: grid;
-        grid-template-columns: 1fr 3fr;
+        grid-template-columns: minmax(200px, 1fr) 3fr;
         .jenis-body {
             .jenis {
                 border-radius: 5px;
@@ -644,27 +649,93 @@ hr {
 button {
     margin-left: 3px;
 }
-i {
-    cursor: pointer;
-    color: white;
-}
 .tcenter {
     background-color: white;
     vertical-align: middle !important;
     text-align: center !important;
 }
 
-.vertical-scroll {
-    overflow-y: scroll;
+.buktishow {
+    flex-direction: column;
+    display: flex;
+    height: 60vh;
+    width: 100%;
+    position: relative;
+    padding: 10px;
+    z-index: 1;
+
+    .dropBox {
+        height: 100%;
+        width: 100%;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        display: flex;
+        video {
+            width: 100%;
+            height: 80%;
+            display: none;
+        }
+    }
+    .files {
+        bottom: 10px;
+        width: 98%;
+        height: 100px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-self: center;
+        position: absolute;
+        .thumb {
+            padding: 5px;
+            width: 75px;
+            height: 75px;
+            margin: 5px;
+            margin-top: auto;
+            margin-bottom: auto;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.562);
+            box-shadow: 1px 1px 0px #dcdcdc4d, -1px -1px 0px #d6d6d67c;
+            position: relative;
+            i {
+                display: none;
+                position: absolute;
+                right: 10px;
+                top: 10px;
+                color: rgb(148, 148, 148);
+            }
+
+            i:hover {
+                color: red;
+                font-size: 18px;
+            }
+            img {
+                width: 100%;
+                height: 100%;
+            }
+            video {
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+        .thumb:hover {
+            width: 100px;
+            height: 100px;
+            i {
+                display: block;
+            }
+        }
+    }
 }
 
-.vertical-scroll::-webkit-scrollbar {
-    display: none;
-}
-
-.vertical-scroll thead th {
-    position: sticky;
-    top: -1px;
+input[type="checkbox"],
+input[type="radio"] {
+    box-sizing: border-box;
+    padding: 0;
+    height: 19px;
+    width: 19px;
+    margin-right: 10px;
+    /* width: auto; */
 }
 
 @keyframes optionItemAnimation {

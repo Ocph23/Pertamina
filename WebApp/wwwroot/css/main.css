@@ -70,6 +70,8 @@
 
 .dashboard .today .today-container .today-item {
   margin: 5px;
+  min-width: 200px;
+  max-width: 250px;
   width: 20%;
   height: 100%;
   padding: 15px;
@@ -78,6 +80,11 @@
 .dashboard .today .today-container .today-item .today-title {
   font-size: 20px;
   color: white;
+}
+
+.dashboard .today .today-container .today-item hr {
+  margin-top: 5px;
+  margin-bottom: 2px;
 }
 
 .dashboard .today .today-container .today-item .today-content {
@@ -183,10 +190,12 @@
 
 .employes .employe {
   height: 150px;
-  margin: 10px;
+  margin: 5px;
   padding: 10px;
-  -webkit-box-shadow: 5px 5px 10px #e3e3e3, 0px 0px 10px #ffffff;
-          box-shadow: 5px 5px 10px #e3e3e3, 0px 0px 10px #ffffff;
+  border-radius: 5px;
+  background-color: #00243e7a;
+  -webkit-box-shadow: 1px 1px 0px #d6d6d656, -1px -1px 0px #d6d6d656;
+          box-shadow: 1px 1px 0px #d6d6d656, -1px -1px 0px #d6d6d656;
   display: -ms-grid;
   display: grid;
   -ms-grid-columns: 1.5fr 3fr;
@@ -195,6 +204,7 @@
 
 .employes .employe .employe-photo {
   border-radius: 3px;
+  margin-right: 10px;
 }
 
 .employes .employe .employe-photo img {
@@ -239,10 +249,9 @@
 }
 
 .employes .employe .employe-content .employe-data {
-  padding: 5px;
   height: 100%;
   width: 100%;
-  background-color: white;
+  margin-right: 10px;
   z-index: -100;
 }
 
@@ -251,11 +260,13 @@
 }
 
 .employes .employe .employe-content .employe-data .form-data .content-label {
-  font-size: 8px;
+  font-size: 10px;
+  color: silver;
 }
 
 .employes .employe .employe-content .employe-data .form-data .content-value {
-  font-size: 12px;
+  font-size: 13px;
+  color: white;
 }
 
 #item3 {

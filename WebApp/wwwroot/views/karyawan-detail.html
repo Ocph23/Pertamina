@@ -21,6 +21,16 @@
                     <div class="label">Nama Perusahaan</div>
                     <div class="nilai">{{model.perusahaan.namaperusahaan}}</div>
                 </div>
+
+                <form ng-if="profile.InRole('manager') || profile.InRole('administrator')">
+                    <div class="form-info-group">
+                        <div class="label">Roles</div>
+                        <div class="nilai"><span style="margin-right:10px" ng-repeat="item in helper.roles"><input
+                                    ng-change="onChangeRole(model,item)" type="checkbox"
+                                    ng-model="item.checked">{{item.role}}</span> </div>
+                    </div>
+                </form>
+
             </div>
 
             <div class="point">
@@ -79,11 +89,46 @@
                         <td>{{item.jenispelanggaran.jenispelanggaran}}</td>
                         <td class="text-center">{{item.karyawan}}</td>
                         <td class="text-center">{{item.perusahaan}}</td>
-                        <td class="text-center"><i class="fa fa-list text-info"></i></td>
+                        <td class="text-center"><i class="fa fa-list text-info" data-toggle="modal" data-target="#bukti"
+                                ng-click="selectBukti(item.files)"></i></td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
+    </div>
+</div>
+
+
+<div class="modal fade" id="bukti" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Bukti Pelanggaran</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="buktishow" id="filePanel">
+                    <div></div>
+                    <div class="dropBox" id="imgPelanggaran">
+                        <img id="picture" height="100%" width="100%" alt="">
+                        <video id="myvideo" height="100%" width="100%" controls>
+                        </video>
+                    </div>
+                    <div class="files">
+                        <div class="thumb" ng-repeat="file in selectedFiles">
+                            <img ng-src="/bukti/thumbs/{{file.thumb}}" ng-click="selectFile(file)">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
     </div>
 </div>

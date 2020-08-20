@@ -21,7 +21,7 @@ namespace WebApp.Models
         public double karyawan { get; set; }
 
         [DbColumn("perusahaan")]
-        public int perusahaan { get; set; }
+        public double perusahaan { get; set; }
 
         [DbColumn("tanggal")]
         public DateTime? tanggal { get; set; }

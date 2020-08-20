@@ -104,6 +104,7 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  height: 100%;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
@@ -121,7 +122,7 @@
 
 .admin .main-left .menus .menus-header img {
   margin: 10px;
-  width: 30%;
+  width: 40%;
   height: 50%;
   border-radius: 50%;
   -webkit-box-shadow: 1px 1px 0px white;
@@ -378,6 +379,13 @@
 
 .form-info-group .nilai {
   font-size: 14px;
+}
+
+.form-info-group .nilai .check-box {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  color: white;
 }
 
 hr {
@@ -704,8 +712,8 @@ hr {
 .jenis-pelanggaran .jenis-main {
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 1fr 3fr;
-      grid-template-columns: 1fr 3fr;
+  -ms-grid-columns: minmax(200px, 1fr) 3fr;
+      grid-template-columns: minmax(200px, 1fr) 3fr;
 }
 
 .jenis-pelanggaran .jenis-main .jenis-body .jenis {
@@ -895,29 +903,117 @@ button {
   margin-left: 3px;
 }
 
-i {
-  cursor: pointer;
-  color: white;
-}
-
 .tcenter {
   background-color: white;
   vertical-align: middle !important;
   text-align: center !important;
 }
 
-.vertical-scroll {
-  overflow-y: scroll;
+.buktishow {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: 60vh;
+  width: 100%;
+  position: relative;
+  padding: 10px;
+  z-index: 1;
 }
 
-.vertical-scroll::-webkit-scrollbar {
+.buktishow .dropBox {
+  height: 100%;
+  width: 100%;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.buktishow .dropBox video {
+  width: 100%;
+  height: 80%;
   display: none;
 }
 
-.vertical-scroll thead th {
-  position: -webkit-sticky;
-  position: sticky;
-  top: -1px;
+.buktishow .files {
+  bottom: 10px;
+  width: 98%;
+  height: 100px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -ms-flex-item-align: center;
+      align-self: center;
+  position: absolute;
+}
+
+.buktishow .files .thumb {
+  padding: 5px;
+  width: 75px;
+  height: 75px;
+  margin: 5px;
+  margin-top: auto;
+  margin-bottom: auto;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.562);
+  -webkit-box-shadow: 1px 1px 0px #dcdcdc4d, -1px -1px 0px #d6d6d67c;
+          box-shadow: 1px 1px 0px #dcdcdc4d, -1px -1px 0px #d6d6d67c;
+  position: relative;
+}
+
+.buktishow .files .thumb i {
+  display: none;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  color: #949494;
+}
+
+.buktishow .files .thumb i:hover {
+  color: red;
+  font-size: 18px;
+}
+
+.buktishow .files .thumb img {
+  width: 100%;
+  height: 100%;
+}
+
+.buktishow .files .thumb video {
+  width: 100%;
+  height: 100%;
+}
+
+.buktishow .files .thumb:hover {
+  width: 100px;
+  height: 100px;
+}
+
+.buktishow .files .thumb:hover i {
+  display: block;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 0;
+  height: 19px;
+  width: 19px;
+  margin-right: 10px;
+  /* width: auto; */
 }
 
 @-webkit-keyframes optionItemAnimation {

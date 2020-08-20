@@ -3,9 +3,9 @@
         <div class="header">
             <strong>Tambah Karyawan</strong><i></i>
         </div>
-        <div class="logo">
-            <img ng-model="model.logo"
-                src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" />
+        <div class="logo" id="logo">
+            <input id="fileInput" type="file" ng-files="getPhoto($files, model)" hidden>
+            <img id="photo" ng-model="model.logo" ng-src="images/profiles/{{model.photo}}" />
         </div>
         <div class="data-body">
             <form ng-submit="save(model)">
@@ -49,11 +49,11 @@
                 </div>
                 <div class="btn-option">
                     <button class="btn btn-success">
-                        <i class="fa fa-save" ng-show="!isBusy"> Simpan</i>
-                        <i class="fa fa-spinner fa-spin" ng-show="isBusy"></i>
+                        <i class="fa fa-save text-white" ng-show="!isBusy"></i>
+                        <i class="fa fa-spinner fa-spin text-white" ng-show="isBusy"></i>
                     </button>
                     <button type="button" class="btn btn-warning" ng-click="newItem()">
-                        <i class="fa fa-times"> Batal</i>
+                        <i class="fa fa-broom text-white"></i>
                     </button>
                 </div>
             </form>
@@ -79,7 +79,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="data in datas">
+                <tr ng-repeat="data in datas" ng-click="selectItem(data)">
                     <td valign="center">{{data.kodekaryawan}}</td>
                     <td>{{data.namakaryawan}}</td>
                     <td>{{data.perusahaan.namaperusahaan}}</td>

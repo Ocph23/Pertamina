@@ -1,0 +1,9 @@
+@host = https://localhost:5001/api/user
+
+
+####
+
+GET {{host}}/profile HTTP/1.1
+Content-Type: application/json
+
+####

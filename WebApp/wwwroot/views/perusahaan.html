@@ -1,11 +1,11 @@
 <div class="perusahaan">
-    <div class="perusahaan-baru " ng-class="{hidden: addItem}">
+    <div class="perusahaan-baru " ng-class="{hidden: !addItem}">
         <div class="header">
             <strong>Tambah Perusahaan</strong><i></i>
         </div>
-        <div class="logo">
-            <img ng-model="model.logo"
-                src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" />
+        <div class="logo" id="logo">
+            <input id="fileInput" type="file" ng-files="getPhoto($files, model)" hidden>
+            <img id="photo" ng-src="/images/logo/{{model.logo}}" />
         </div>
         <div class="data-body">
             <form ng-submit="save(model)">
@@ -39,6 +39,9 @@
                         <i class="fa fa-save" ng-show="!isBusy"></i>
                         <i class="fa fa-spinner fa-spin" ng-show="isBusy"></i>
                     </button>
+                    <button type="button" class="btn btn-warning" ng-click="newItem()">
+                        <i class="fa fa-broom text-white"></i>
+                    </button>
                 </div>
             </form>
         </div>
@@ -47,7 +50,7 @@
     <div class="data-perusahaan">
         <div class="header">
             <strong>Data Perusahaan</strong><i></i>
-            <div class="add-menu" id="close-menu" ng-click="addItem=!addItem"><i class="fa fa-plus"></i></div>
+            <div class="add-menu" id="close-menu" ng-click="newItem()"><i class="fa fa-plus"></i></div>
         </div>
         <table class="table table-dark table-hover">
             <thead>

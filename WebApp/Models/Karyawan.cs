@@ -41,8 +41,10 @@ namespace WebApp.Models
 
         [DbColumn("photo")]
         public string photo { get; set; }
-        
-        public Perusahaan perusahaan { get; set; }
 
+        public byte[] DataPhoto { get; set; }
+
+        public Perusahaan perusahaan { get; set; }
+        public List<string> Roles { get; set; }
     }
 }

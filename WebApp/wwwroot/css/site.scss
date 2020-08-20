@@ -33,11 +33,6 @@ a {
 html {
     font-size: 14px;
 }
-@media (min-width: 768px) {
-    html {
-        font-size: 16px;
-    }
-}
 
 .border-top {
     border-top: 1px solid #e5e5e5;
@@ -88,18 +83,106 @@ body {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    width: 100%;
 }
 
 .navbar-brand {
     height: 100%;
 }
 
-@media only screen and (max-width: 1360px) {
-    h5 {
-        font-size: 1rem;
+.hidden {
+    display: none;
+}
+
+.modal-content {
+    background-image: url("../images/src/bg.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: white;
+}
+
+.modal-body,
+.modal-footer,
+.modal-header {
+    background: linear-gradient(145deg, #00243ea8, #001f3469);
+}
+
+.account {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 75vh;
+    width: 100%;
+    .account-body {
+        width: 40%;
+        height: 70%;
+        padding: 30px;
+        border-radius: 12px;
+        background: linear-gradient(145deg, #00274288, #0375cc73);
+        box-shadow: 2px 2px 5px #000e199f, -2px -2px 5px #003a638a;
+        vertical-align: middle;
+        color: white;
     }
 }
 
-.hidden {
+.login-button {
+    margin-left: 10px;
+    margin-right: 10px;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    justify-content: space-between;
+    button,
+    form {
+        margin: 2px;
+    }
+}
+
+#forgot-password,
+#resend-email {
+    color: rgb(196, 196, 196);
+}
+
+#logo-google {
+    width: 30px;
+}
+
+.vertical-scroll {
+    overflow-y: scroll;
+}
+
+.vertical-scroll::-webkit-scrollbar {
     display: none;
+}
+
+.vertical-scroll thead th {
+    position: sticky;
+    top: -1px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+    h5 {
+        font-size: 1.5rem;
+    }
+}
+
+@media only screen and (max-width: 700px) {
+    .account {
+        .account-body {
+            width: 60%;
+            height: 60%;
+        }
+    }
+}
+
+@media only screen and (max-width: 400px) {
+    .account {
+        .account-body {
+            width: 80%;
+            height: 90%;
+        }
+    }
 }

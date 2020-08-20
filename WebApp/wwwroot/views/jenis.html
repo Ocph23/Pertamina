@@ -71,7 +71,7 @@
                                 <td><input type="number" min="0" step=".1" ng-model="detail.penguranganperusahaan"
                                         class="form-control" required>
                                 <td><input type="number" min="0" step=".1" ng-model="detail.penambahanpoint"
-                                        class="form-control" required>
+                                        ng-disabled="!profile.InRole('manager')" class="form-control" required>
                                 </td>
                                 <td>
                                     <button ng-click="saveDetail(detail)" class="btn btn-outline-success" type="submit"

@@ -7,8 +7,7 @@
         <div class="users vertical-scroll">
             <div class="user" ng-class="{'user-selected':item.userSelect}" ng-repeat="item in datas | filter : search"
                 id="user{{item.idkaryawan}}" ng-click="selectUser(item)">
-                <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-                    alt="">
+                <img src="/images/profiles/{{item.photo}}" alt="">
                 <div class="user-body">
                     <div class="form-info-group">
                         <div class="label">Nama</div>

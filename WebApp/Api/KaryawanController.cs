@@ -31,33 +31,68 @@ namespace WebApp.Api
 
         // GET: api/Employees
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult Get()
         {
             using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
             {
-                 var result = from a in db.Karyawan.Select()
+                var result = from a in db.Karyawan.Select()
                              join b in db.Perusahaan.Select() on a.idperusahaan equals b.idperusahaan
-                             select new Karyawan { idkaryawan = a.idkaryawan,kodekaryawan=a.kodekaryawan, namakaryawan=a.namakaryawan, perusahaan=b, 
-                               jabatan=a.jabatan, kontak=a.kontak, email=a.email, alamat=a.alamat
+                             select new Karyawan
+                             {
+                                 idkaryawan = a.idkaryawan,
+                                 kodekaryawan = a.kodekaryawan,
+                                 namakaryawan = a.namakaryawan,
+                                 perusahaan = b,
+                                 jabatan = a.jabatan,
+                                 kontak = a.kontak,
+                                 email = a.email,
+                                 alamat = a.alamat,
+                                 photo = a.photo
                              };
-                                
+
+
                 return Ok(result.ToList());
             }
         }
 
         // GET: api/Employees/5
         [HttpGet("{id}")]
-        public IActionResult GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
             using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
             {
-                var result = from a in db.Karyawan.Where(x=>x.idkaryawan==id)
+                var result = from a in db.Karyawan.Where(x => x.idkaryawan == id)
                              join b in db.Perusahaan.Select() on a.idperusahaan equals b.idperusahaan
-                             select new Karyawan { idkaryawan = a.idkaryawan, kodekaryawan=a.kodekaryawan, namakaryawan=a.namakaryawan, perusahaan=b, 
-                               jabatan=a.jabatan, kontak=a.kontak, email=a.email, alamat=a.alamat
+                             select new Karyawan
+                             {
+                                 idkaryawan = a.idkaryawan,
+                                 kodekaryawan = a.kodekaryawan,
+                                 namakaryawan = a.namakaryawan,
+                                 perusahaan = b,
+                                 jabatan = a.jabatan,
+                                 kontak = a.kontak,
+                                 email = a.email,
+                                 alamat = a.alamat,
+                                 photo = a.photo
                              };
-                                
-                return Ok(result.FirstOrDefault());
+                var karyawan = result.FirstOrDefault();
+                var user = await _userManager.FindByNameAsync(karyawan.kodekaryawan);
+                karyawan.Roles = await _userManager.GetRolesAsync(user) as List<string>;
+                return Ok(karyawan);
+            }
+        }
+
+        [HttpGet("roles/{id}")]
+        public async Task<IActionResult> GetRoles(int id)
+        {
+            using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
+            {
+                var karyawan = db.Karyawan.Where(x => x.idkaryawan == id).FirstOrDefault();
+                var user = await _userManager.FindByNameAsync(karyawan.kodekaryawan);
+                karyawan.Roles = await _userManager.GetRolesAsync(user) as List<string>;
+                return Ok(karyawan.Roles.ToList());
             }
         }
 
@@ -75,6 +110,11 @@ namespace WebApp.Api
                     value.userid = user.Id;
                     using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
                     {
+                        if (value.DataPhoto != null && value.DataPhoto.Length > 0)
+                        {
+                            value.photo = Helpers.CreateFileName("image");
+                            System.IO.File.WriteAllBytes(Helpers.ProfilePath + value.photo, Helpers.CreateThumb(value.DataPhoto));
+                        }
                         value.idkaryawan = db.Karyawan.InsertAndGetLastID(value);
                         if (value.idkaryawan <= 0)
                             throw new SystemException("Data Karyawan  Tidak Berhasil Disimpan !");
@@ -98,10 +138,15 @@ namespace WebApp.Api
             {
                 using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
                 {
-                    var updated = db.Karyawan.Update(x => new { x.idperusahaan, x.jabatan, x.kontak, x.namakaryawan, x.photo }, value, x => x.idkaryawan == value.idkaryawan);
+                    if (value.DataPhoto != null && value.DataPhoto.Length > 0)
+                    {
+                        value.photo = Helpers.CreateFileName("image");
+                        System.IO.File.WriteAllBytes(Helpers.ProfilePath + value.photo, Helpers.CreateThumb(value.DataPhoto));
+                    }
+                    var updated = db.Karyawan.Update(x => new { x.idperusahaan, x.jabatan, x.kontak, x.namakaryawan, x.photo },
+                    value, x => x.idkaryawan == value.idkaryawan);
                     if (!updated)
                         throw new SystemException("Data Karyawan  Tidak Berhasil Disimpan !");
-
                     return Ok(value);
                 }
             }
@@ -131,5 +176,63 @@ namespace WebApp.Api
                 return BadRequest(ex.Message);
             }
         }
+
+
+
+        [HttpPost("changerole")]
+        public async Task<IActionResult> changerole([FromBody] RoleModel value)
+        {
+
+            try
+            {
+                using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
+                {
+                    var karyawan = db.Karyawan.Where(x => x.idkaryawan == value.IdKaryawan).FirstOrDefault();
+                    var user = await _userManager.FindByNameAsync(karyawan.kodekaryawan);
+                    if (value.Checked)
+                    {
+                        var result = await _userManager.AddToRoleAsync(user, value.Role);
+
+                        if (result.Succeeded)
+                        {
+                            return Ok(true);
+                        }
+                        else
+                        {
+                            throw new SystemException("Gagal Diubah !");
+                        }
+                    }
+                    else
+                    {
+                        var result = await _userManager.RemoveFromRoleAsync(user, value.Role);
+
+                        if (result.Succeeded)
+                        {
+                            return Ok(true);
+                        }
+                        else
+                        {
+                            throw new SystemException("Gagal Diubah !");
+                        }
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+
+
+        }
+    }
+
+
+
+    public class RoleModel
+    {
+        public int IdKaryawan { get; set; }
+        public string Role { get; set; }
+        public bool Checked { get; set; }
     }
 }
