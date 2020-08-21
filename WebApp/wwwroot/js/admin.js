@@ -352,7 +352,9 @@ function jenisController($scope, JenisService, UserService) {
 	};
 
 	$scope.createNewDetail = () => {
-		if ($scope.selected) var emptyExists = $scope.items.find((x) => x.isNew);
+		if ($scope.selected) {
+			var emptyExists = $scope.items.find((x) => x.isNew);
+		}
 		if (!emptyExists)
 			$scope.items.push({
 				nama: '',
@@ -365,9 +367,13 @@ function jenisController($scope, JenisService, UserService) {
 
 	$scope.selectItem = (item) => {
 		var selectExists = $scope.items.find((x) => x.select);
-		if (selectExists) selectExists.select = false;
+		if (selectExists) {
+			selectExists.select = false;
+		}
 		$scope.selected = item;
 		$scope.selected.select = true;
+		if ($scope.selected) {
+		}
 	};
 
 	$scope.saveJenis = (model) => {
@@ -383,6 +389,8 @@ function jenisController($scope, JenisService, UserService) {
 						});
 						model.isNew = false;
 						model.idlevel = x.idlevel;
+						$scope.selected = model;
+						$scope.selected.selected = true;
 						$scope.createNew();
 					},
 					(e) => {}
@@ -429,8 +437,13 @@ function jenisController($scope, JenisService, UserService) {
 
 	$scope.addDetail = () => {
 		if ($scope.selected) {
+			if (!$scope.selected.datas) {
+				$scope.selected.datas = [];
+			}
 			var emptyExist = $scope.selected.datas.find((x) => x.isNew);
-			if (!emptyExist) $scope.selected.datas.push({ nama: '', point: 0, deskripsi: '', isNew: true });
+			if (!emptyExist) {
+				$scope.selected.datas.push({ nama: '', point: 0, deskripsi: '', isNew: true });
+			}
 		}
 	};
 

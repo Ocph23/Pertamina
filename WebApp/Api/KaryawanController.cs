@@ -133,6 +133,7 @@ namespace WebApp.Api
                         value.photo = Helpers.CreateFileName("image");
                         System.IO.File.WriteAllBytes(Helpers.ProfilePath + value.photo, Helpers.CreateThumb(value.DataPhoto));
                     }
+                    value.perusahaan = null;
                     _context.Karyawan.Add(value);
                     _context.SaveChanges();
                     if (value.idkaryawan <= 0)
@@ -144,6 +145,7 @@ namespace WebApp.Api
             }
             catch (System.Exception ex)
             {
+
                 return BadRequest(ex.Message);
             }
         }

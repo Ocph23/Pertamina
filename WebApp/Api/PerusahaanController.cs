@@ -48,7 +48,7 @@ namespace WebApp.Api
                 if (value.DataPhoto != null && value.DataPhoto.Length > 0)
                 {
                     value.logo = Helpers.CreateFileName("image");
-                    System.IO.File.WriteAllBytes(Helpers.ProfilePath + value.logo, Helpers.CreateThumb(value.DataPhoto));
+                    System.IO.File.WriteAllBytes(Helpers.LogoPath + value.logo, Helpers.CreateThumb(value.DataPhoto));
                 }
                 _context.Perusahaan.Add(value);
                 var saved = _context.SaveChanges();
