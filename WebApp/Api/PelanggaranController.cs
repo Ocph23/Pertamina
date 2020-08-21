@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace WebApp.Api
 {
+
     [Route("api/[controller]")]
     [ApiController]
     public class PelanggaranController : ControllerBase
@@ -47,21 +48,6 @@ namespace WebApp.Api
         {
             using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
             {
-
-                // var sql = @"SELECT
-                //     `buktipelanggaran`.`Id`,
-                //     `buktipelanggaran`.`filetype`,
-                //     `buktipelanggaran`.`filename`,
-                //     `buktipelanggaran`.`thumb`,
-                //     `buktipelanggaran`.`idpelanggaran`
-                //     FROM
-                //     `pelanggaran`
-                //     Right JOIN `buktipelanggaran` ON `pelanggaran`.`idpelanggaran` =
-                //     `buktipelanggaran`.`idpelanggaran`
-                //     where idkaryawan = " + id;
-
-                // var result = db.Query<DataFile>(sql);
-
                 var datas = _context.Pelanggaran.Where(x => x.idkaryawan == id)
                 .Include(x => x.Files)
                 .Include(z => z.Jenispelanggaran);
@@ -80,11 +66,6 @@ namespace WebApp.Api
                                  tanggal = a.tanggal,
                                  Level = c
                              };
-
-
-
-
-
                 return Ok(result.ToList());
             }
 
