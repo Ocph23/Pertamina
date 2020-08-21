@@ -364,6 +364,7 @@ function KaryawanService($http, $q) {
 		var def = $q.defer();
 		$http({ url: controller, method: 'POST', data: model }).then(
 			(response) => {
+				datas.push(response.data);
 				def.resolve(response.data);
 			},
 			(err) => {

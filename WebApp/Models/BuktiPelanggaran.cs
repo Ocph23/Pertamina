@@ -1,11 +1,11 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApp.Models
 {
 
     // [TableName("buktipelanggaran")]
-    public class DataFile
+    public class BuktiPelanggaran
     {
         // [PrimaryKey("Id")]
         // [DbColumn("Id")]
@@ -13,6 +13,8 @@ namespace WebApp.Models
         public int Id { get; set; }
 
         // [DbColumn("idpelanggaran")]
+
+
         public int IdPelanggaran { get; set; }
 
         // [DbColumn("filetype")]

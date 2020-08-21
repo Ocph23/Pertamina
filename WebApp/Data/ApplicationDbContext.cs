@@ -21,7 +21,7 @@ namespace WebApp.Data
         public DbSet<Pointperusahaan> Pointperusahaan { get; set; }
         public DbSet<Absen> Absen { get; set; }
         public DbSet<Pelanggaran> Pelanggaran { get; set; }
-        public DbSet<DataFile> BuktiPelanggaran { get; set; }
+        public DbSet<BuktiPelanggaran> BuktiPelanggaran { get; set; }
         public DbSet<Pemenang> Pemenang { get; set; }
         public DbSet<Pengaduan> Pengaduan { get; set; }
         public DbSet<Terlapor> Terlapor { get; set; }
