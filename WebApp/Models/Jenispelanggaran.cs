@@ -1,31 +1,40 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Ocph.DAL;
+//using Ocph.DAL;
 
-namespace WebApp.Models {
-     [TableName ("Jenispelanggaran")]
-     public class Jenispelanggaran {
-          [PrimaryKey ("idjenispelanggaran")]
-          [DbColumn ("idjenispelanggaran")]
-          public int idjenispelanggaran { get; set; }
+namespace WebApp.Models
+{
+    // [TableName("Jenispelanggaran")]
+    public class Jenispelanggaran
+    {
+        //   [PrimaryKey ("idjenispelanggaran")]
+        // [DbColumn ("idjenispelanggaran")]
 
-          [DbColumn ("idlevel")]
-          public int idlevel { get; set; }
+        [Key]
+        public int idjenispelanggaran { get; set; }
 
-          [DbColumn ("jenispelanggaran")]
-          public string jenispelanggaran { get; set; }
+        //[DbColumn("idlevel")]
+        public int idlevel { get; set; }
 
-          [DbColumn ("pengurangankaryawan")]
-          public double pengurangankaryawan { get; set; }
+        // [DbColumn("jenispelanggaran")]
+        public string jenispelanggaran { get; set; }
 
-          [DbColumn ("penguranganperusahaan")]
-          public double penguranganperusahaan { get; set; }
+        //[DbColumn("pengurangankaryawan")]
+        public double pengurangankaryawan { get; set; }
 
-          [DbColumn ("penambahanpoint")]
-          public double penambahanpoint { get; set; }
+        //[DbColumn("penguranganperusahaan")]
+        public double penguranganperusahaan { get; set; }
 
-     }
+        //[DbColumn("penambahanpoint")]
+        public double penambahanpoint { get; set; }
+
+
+
+
+    }
 }

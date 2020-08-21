@@ -1,32 +1,31 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Ocph.DAL;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApp.Models
 {
 
-    [TableName("buktipelanggaran")]
+    // [TableName("buktipelanggaran")]
     public class DataFile
     {
-        [PrimaryKey("Id")]
-        [DbColumn("Id")]
+        // [PrimaryKey("Id")]
+        // [DbColumn("Id")]
+        [Key]
         public int Id { get; set; }
 
-        [DbColumn("idpelanggaran")]
+        // [DbColumn("idpelanggaran")]
         public int IdPelanggaran { get; set; }
 
-        [DbColumn("filetype")]
+        // [DbColumn("filetype")]
         public string FileType { get; set; }
 
-        [DbColumn("filename")]
+        // [DbColumn("filename")]
         public string FileName { get; set; }
 
 
-        [DbColumn("thumb")]
+        // [DbColumn("thumb")]
         public string Thumb { get; set; }
+
+        [NotMapped]
 
         public byte[] Data { get; set; }
 

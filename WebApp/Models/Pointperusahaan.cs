@@ -1,25 +1,31 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Ocph.DAL;
 
-namespace WebApp.Models {
-     [TableName ("Pointperusahaan")]
-     public class Pointperusahaan {
-          [PrimaryKey ("idpointperusahaan")]
-          [DbColumn ("idpointperusahaan")]
-          public int idpointperusahaan { get; set; }
+namespace WebApp.Models
+{
+    // [TableName ("Pointperusahaan")]
+    public class Pointperusahaan
+    {
+        // [PrimaryKey ("idpointperusahaan")]
+        // [DbColumn ("idpointperusahaan")]
+        [Key]
+        public int idpointperusahaan { get; set; }
 
-          [DbColumn ("idperusahaan")]
-          public int idperusahaan { get; set; }
+        // [DbColumn ("idperusahaan")]
+        [ForeignKey("Perusahaan")]
+        public int idperusahaan { get; set; }
 
-          [DbColumn ("idperiode")]
-          public int idperiode { get; set; }
+        [ForeignKey("Periode")]
+        // [DbColumn ("idperiode")]
+        public int idperiode { get; set; }
 
-          [DbColumn ("point")]
-          public double point { get; set; }
+        // [DbColumn ("point")]
+        public double point { get; set; }
 
-     }
+    }
 }

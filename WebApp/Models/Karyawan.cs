@@ -1,50 +1,53 @@
-using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Ocph.DAL;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApp.Models
 {
-    [TableName("Karyawan")]
+    // [TableName("Karyawan")]
     public class Karyawan
     {
-
-        [PrimaryKey("idkaryawan")]
-        [DbColumn("idkaryawan")]
+        [Key]
+        // [PrimaryKey("idkaryawan")]
+        // [DbColumn("idkaryawan")]
         public int idkaryawan { get; set; }
 
-        [DbColumn("idperusahaan")]
+        // [DbColumn("idperusahaan")]
+
         public int idperusahaan { get; set; }
 
-        [DbColumn("kodekaryawan")]
+        // [DbColumn("kodekaryawan")]
         public string kodekaryawan { get; set; }
 
-        [DbColumn("namakaryawan")]
+        // [DbColumn("namakaryawan")]
         public string namakaryawan { get; set; }
 
-        [DbColumn("jabatan")]
+        // [DbColumn("jabatan")]
         public string jabatan { get; set; }
 
-        [DbColumn("alamat")]
+        // [DbColumn("alamat")]
         public string alamat { get; set; }
 
-        [DbColumn("kontak")]
+        // [DbColumn("kontak")]
         public string kontak { get; set; }
 
-        [DbColumn("email")]
+        // [DbColumn("email")]
         public string email { get; set; }
 
-        [DbColumn("userid")]
+        // [DbColumn("userid")]
+
         public string userid { get; set; }
 
-        [DbColumn("photo")]
+        // [DbColumn("photo")]
         public string photo { get; set; }
 
+        [NotMapped]
         public byte[] DataPhoto { get; set; }
 
+        [ForeignKey("idperusahaan")]
         public Perusahaan perusahaan { get; set; }
+
+        [NotMapped]
         public List<string> Roles { get; set; }
     }
 }

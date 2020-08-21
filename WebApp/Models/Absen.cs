@@ -1,19 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Ocph.DAL;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace WebApp.Models {
-     [TableName ("Absen")]
-     public class Absen {
-          [PrimaryKey ("idabsen")]
-          [DbColumn ("idabsen")]
-          public int idabsen { get; set; }
+namespace WebApp.Models
+{
+    public class Absen
+    {
+        [Key]
+        public int idabsen { get; set; }
 
-          [DbColumn ("idkaryawan")]
-          public int idkaryawan { get; set; }
+        [ForeignKey("Karyawan")]
+        public int idkaryawan { get; set; }
 
-     }
+    }
 }

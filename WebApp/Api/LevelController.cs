@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using WebApp.Data;
 using WebApp.Models;
 
 namespace WebApp.Api
 {
-
     [Route("api/[controller]")]
     [ApiController]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -19,25 +20,27 @@ namespace WebApp.Api
     public class LevelController : ControllerBase
     {
         private IConfiguration _config;
+        private ApplicationDbContext _context;
 
-        public LevelController(IConfiguration config)
+        public LevelController(IConfiguration config, ApplicationDbContext dbcontext)
         {
             _config = config;
+            _context = dbcontext;
         }
 
         // GET: api/Employees
         [HttpGet]
         public IActionResult Get()
         {
-            using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
+            try
             {
-
-                var results = from a in db.Level.Select()
-                              join b in db.JenisPelanggaran.Select() on a.idlevel equals b.idlevel into c
-
-                              select new Level { idlevel = a.idlevel, level = a.level, Datas = c.ToList() };
+                var results = _context.Level.Include(x => x.Datas);
 
                 return Ok(results.ToList());
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
 
@@ -45,11 +48,15 @@ namespace WebApp.Api
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
+            try
             {
-                return Ok(db.Level.Where(x => x.idlevel == id).FirstOrDefault());
+                var result = _context.Level.Where(x => x.idlevel == id).FirstOrDefault();
+                return Ok(result);
             }
-
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // POST: api/Employees
@@ -58,13 +65,12 @@ namespace WebApp.Api
         {
             try
             {
-                using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
-                {
-                    value.idlevel = db.Level.InsertAndGetLastID(value);
-                    if (value.idlevel <= 0)
-                        throw new SystemException("Data Perusahaan  Tidak Berhasil Disimpan !");
-                    return Ok(value);
-                }
+                _context.Level.Add(value);
+                _context.SaveChanges();
+
+                if (value.idlevel <= 0)
+                    throw new SystemException("Data Perusahaan  Tidak Berhasil Disimpan !");
+                return Ok(value);
             }
             catch (System.Exception ex)
             {
@@ -78,17 +84,13 @@ namespace WebApp.Api
         {
             try
             {
-                using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
-                {
-                    var updated = db.Level.Update(x => new
-                    {
-                        x.level
-                    }, value, x => x.idlevel == value.idlevel);
-                    if (!updated)
-                        throw new SystemException("Data Perusahaan  Tidak Berhasil Disimpan !");
+                var result = _context.Level.Where(x => x.idlevel == value.idlevel).FirstOrDefault();
+                result.level = value.level;
+                var saved = _context.SaveChanges();
+                if (saved <= 0)
+                    throw new SystemException("Data Perusahaan  Tidak Berhasil Disimpan !");
 
-                    return Ok(value);
-                }
+                return Ok(value);
             }
             catch (System.Exception ex)
             {
@@ -103,14 +105,14 @@ namespace WebApp.Api
         {
             try
             {
-                using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
-                {
-                    var deleted = db.Level.Delete(x => x.idlevel == id);
-                    if (!deleted)
-                        throw new SystemException("Data Perusahaan  Tidak Berhasil Disimpan !");
+                var result = _context.Level.Where(x => x.idlevel == id).FirstOrDefault();
+                _context.Level.Remove(result);
 
-                    return Ok(true);
-                }
+                var saved = _context.SaveChanges();
+                if (saved <= 0)
+                    throw new SystemException("Data Perusahaan  Tidak Berhasil Disimpan !");
+
+                return Ok(true);
             }
             catch (System.Exception ex)
             {

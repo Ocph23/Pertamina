@@ -5,82 +5,100 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using WebApp.Data;
 using WebApp.Models;
 
-namespace WebApp.Api {
-    [Route ("api/[controller]")]
+namespace WebApp.Api
+{
+    [Route("api/[controller]")]
     [ApiController]
-    public class JenisPelanggaranController : ControllerBase {
+    public class JenisPelanggaranController : ControllerBase
+    {
         private IConfiguration _config;
+        private ApplicationDbContext _context;
 
-        public JenisPelanggaranController (IConfiguration config) {
+        public JenisPelanggaranController(IConfiguration config, ApplicationDbContext dbcontext)
+        {
             _config = config;
+            _context = dbcontext;
         }
 
         // GET: api/Employees
         [HttpGet]
-        public IActionResult Get () {
-            using (var db = new OcphDbContext (_config.GetConnectionString ("DefaultConnection"))) {
-                return Ok (db.JenisPelanggaran.Select ());
+        public IActionResult Get()
+        {
+            try
+            {
+                var data = _context.JenisPelanggaran.ToList();
+                return Ok(data);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
 
         // GET: api/Employees/5
-        [HttpGet ("{id}")]
-        public IActionResult GetById (int id) {
-            using (var db = new OcphDbContext (_config.GetConnectionString ("DefaultConnection"))) {
-                return Ok (db.JenisPelanggaran.Where (x => x.idjenispelanggaran == id).FirstOrDefault ());
-            }
-
+        [HttpGet("{id}")]
+        public IActionResult GetById(int id)
+        {
+            var data = _context.JenisPelanggaran.FirstOrDefault();
+            return Ok(data);
         }
 
         // POST: api/Employees
         [HttpPost]
-        public IActionResult Post ([FromBody] Jenispelanggaran value) {
-            try {
-                using (var db = new OcphDbContext (_config.GetConnectionString ("DefaultConnection"))) {
-                    value.idjenispelanggaran = db.JenisPelanggaran.InsertAndGetLastID (value);
-                    if (value.idjenispelanggaran <= 0)
-                        throw new SystemException ("Data Perusahaan  Tidak Berhasil Disimpan !");
-                    return Ok (value);
-                }
-            } catch (System.Exception ex) {
-                return BadRequest (ex.Message);
+        public IActionResult Post([FromBody] Jenispelanggaran value)
+        {
+            try
+            {
+                _context.JenisPelanggaran.Add(value);
+                _context.SaveChanges();
+                return Ok(value);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
 
         // PUT: api/Employees/5
-        [HttpPut ("{id}")]
-        public IActionResult Put (int id, [FromBody] Jenispelanggaran value) {
-            try {
-                using (var db = new OcphDbContext (_config.GetConnectionString ("DefaultConnection"))) {
-                    var updated = db.JenisPelanggaran.Update (x => new {
-                        x.idlevel, x.jenispelanggaran, x.penambahanpoint, x.pengurangankaryawan, x.penguranganperusahaan
-                    }, value, x => x.idjenispelanggaran == value.idjenispelanggaran);
-                    if (!updated)
-                        throw new SystemException ("Data Perusahaan  Tidak Berhasil Disimpan !");
-
-                    return Ok (value);
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, [FromBody] Jenispelanggaran value)
+        {
+            try
+            {
+                var data = _context.JenisPelanggaran.Where(x => x.idjenispelanggaran == value.idjenispelanggaran).FirstOrDefault();
+                if (data != null)
+                {
+                    data.jenispelanggaran = value.jenispelanggaran;
+                    data.penambahanpoint = value.penambahanpoint;
+                    data.pengurangankaryawan = value.pengurangankaryawan;
+                    data.penguranganperusahaan = value.penguranganperusahaan;
                 }
-            } catch (System.Exception ex) {
-
-                return BadRequest (ex.Message);
+                _context.SaveChanges();
+                return Ok(value);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
 
         // DELETE: api/ApiWithActions/5
-        [HttpDelete ("{id}")]
-        public IActionResult Delete (int id) {
-            try {
-                using (var db = new OcphDbContext (_config.GetConnectionString ("DefaultConnection"))) {
-                    var deleted = db.JenisPelanggaran.Delete (x => x.idjenispelanggaran == id);
-                    if (!deleted)
-                        throw new SystemException ("Data Perusahaan  Tidak Berhasil Disimpan !");
-
-                    return Ok (true);
-                }
-            } catch (System.Exception ex) {
-                return BadRequest (ex.Message);
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                var data = _context.JenisPelanggaran.Where(x => x.idjenispelanggaran == id).FirstOrDefault();
+                _context.JenisPelanggaran.Remove(data);
+                _context.SaveChanges();
+                return Ok(true);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
 
         }

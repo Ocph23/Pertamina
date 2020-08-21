@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using WebApp.Data;
 using WebApp.Models;
 
 namespace WebApp.Api
@@ -14,20 +15,28 @@ namespace WebApp.Api
     public class PeriodeController : ControllerBase
     {
         private IConfiguration _config;
-        TimeZoneInfo nzTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time");
+        private ApplicationDbContext _context;
+        TimeZoneInfo nzTimeZone = TimeZoneInfo.GetSystemTimeZones().Any(x => x.Id == "Tokyo Standard Time") ?
+        TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time") : TimeZoneInfo.FindSystemTimeZoneById("Asia/Tokyo");
 
-        public PeriodeController(IConfiguration config)
+        public PeriodeController(IConfiguration config, ApplicationDbContext context)
         {
             _config = config;
+            _context = context;
         }
 
         // GET: api/Employees
         [HttpGet]
         public IActionResult Get()
         {
-            using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
+            try
             {
-                return Ok(db.Periode.Select().OrderByDescending(x => x.tanggalmulai));
+                var data = _context.Periode.ToList();
+                return Ok(data);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
 
@@ -35,9 +44,15 @@ namespace WebApp.Api
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
+
+
+            try
             {
-                return Ok(db.Periode.Where(x => x.idperiode == id).FirstOrDefault());
+                return Ok(_context.Periode.Where(x => x.idperiode == id).FirstOrDefault());
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
 
         }
@@ -46,9 +61,17 @@ namespace WebApp.Api
         [HttpGet("active")]
         public IActionResult Active()
         {
-            using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
+            try
             {
-                return Ok(db.Periode.Where(x => x.status == true).FirstOrDefault());
+                using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
+                {
+                    return Ok(_context.Periode.Where(x => x.status == true).FirstOrDefault());
+                }
+            }
+            catch (System.Exception ex)
+            {
+
+                return BadRequest(ex.Message);
             }
 
         }
@@ -57,34 +80,26 @@ namespace WebApp.Api
         [HttpPost]
         public IActionResult Post([FromBody] Periode value)
         {
-            value.tanggalmulai = TimeZoneInfo.ConvertTimeFromUtc(value.tanggalmulai, nzTimeZone);
-            value.tanggalselesai = TimeZoneInfo.ConvertTimeFromUtc(value.tanggalselesai, nzTimeZone);
-            value.tanggalundian = TimeZoneInfo.ConvertTimeFromUtc(value.tanggalundian, nzTimeZone);
-            value.status = true;
-
-
-
-
 
             try
             {
-                using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
+                value.tanggalmulai = TimeZoneInfo.ConvertTimeFromUtc(value.tanggalmulai, nzTimeZone);
+                value.tanggalselesai = TimeZoneInfo.ConvertTimeFromUtc(value.tanggalselesai, nzTimeZone);
+                value.tanggalundian = TimeZoneInfo.ConvertTimeFromUtc(value.tanggalundian, nzTimeZone);
+                value.status = true;
+                var active = _context.Periode.Where(x => x.status == true).FirstOrDefault();
+                if (active != null)
                 {
-
-                    var active = db.Periode.Where(x => x.status).FirstOrDefault();
-                    if (active != null)
-                    {
-                        if (value.tanggalmulai < active.tanggalselesai)
-                            throw new SystemException("Tanggal Mulai Harus Lebih Besar dari Tanggal Akhir Periode Lalu");
-                    }
-
-
-                    var result = db.Periode.Update(x => new { x.status }, new Periode { status = false }, x => x.status == true);
-                    value.idperiode = db.Periode.InsertAndGetLastID(value);
-                    if (value.idperiode <= 0)
-                        throw new SystemException("Data Perusahaan  Tidak Berhasil Disimpan !");
-                    return Ok(value);
+                    if (value.tanggalmulai < active.tanggalselesai)
+                        throw new SystemException("Tanggal Mulai Harus Lebih Besar dari Tanggal Akhir Periode Lalu");
+                    active.status = false;
                 }
+                _context.Periode.Add(value);
+
+                var saved = _context.SaveChanges();
+                if (saved <= 0)
+                    throw new SystemException("Data Periode  Tidak Berhasil Disimpan !");
+                return Ok(value);
             }
             catch (System.Exception ex)
             {
@@ -101,20 +116,17 @@ namespace WebApp.Api
                 value.tanggalmulai = TimeZoneInfo.ConvertTimeFromUtc(value.tanggalmulai, nzTimeZone);
                 value.tanggalselesai = TimeZoneInfo.ConvertTimeFromUtc(value.tanggalselesai, nzTimeZone);
                 value.tanggalundian = TimeZoneInfo.ConvertTimeFromUtc(value.tanggalundian, nzTimeZone);
-                using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
-                {
-                    var updated = db.Periode.Update(x => new
-                    {
-                        x.idperiode,
-                        x.tanggalmulai,
-                        x.tanggalselesai,
-                        x.tanggalundian
-                    }, value, x => x.idperiode == value.idperiode);
-                    if (!updated)
-                        throw new SystemException("Data Perusahaan  Tidak Berhasil Disimpan !");
+                var periode = _context.Periode.Where(x => x.idperiode == value.idperiode).FirstOrDefault();
+                periode.idperiode = value.idperiode;
+                periode.tanggalmulai = value.tanggalmulai;
+                periode.tanggalselesai = value.tanggalselesai;
+                periode.tanggalundian = value.tanggalundian;
 
-                    return Ok(value);
-                }
+                var updated = _context.SaveChanges();
+                if (updated <= 0)
+                    throw new SystemException("Data Perusahaan  Tidak Berhasil Disimpan !");
+
+                return Ok(value);
             }
             catch (System.Exception ex)
             {
@@ -129,14 +141,13 @@ namespace WebApp.Api
         {
             try
             {
-                using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
-                {
-                    var deleted = db.Periode.Delete(x => x.idperiode == id);
-                    if (!deleted)
-                        throw new SystemException("Data Perusahaan  Tidak Berhasil Disimpan !");
+                var deleted = _context.Periode.Where(x => x.idperiode == id).FirstOrDefault();
+                _context.Periode.Remove(deleted);
+                var result = _context.SaveChanges();
+                if (result <= 0)
+                    throw new SystemException("Data Perusahaan  Tidak Berhasil Disimpan !");
 
-                    return Ok(true);
-                }
+                return Ok(true);
             }
             catch (System.Exception ex)
             {

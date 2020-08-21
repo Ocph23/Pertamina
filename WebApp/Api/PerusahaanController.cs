@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using WebApp.Data;
 using WebApp.Models;
 
 namespace WebApp.Api
@@ -15,29 +16,26 @@ namespace WebApp.Api
     {
         private IConfiguration _config;
 
-        public PerusahaanController(IConfiguration config)
+        public ApplicationDbContext _context { get; private set; }
+
+        public PerusahaanController(IConfiguration config, ApplicationDbContext context)
         {
             _config = config;
+            _context = context;
         }
 
         // GET: api/Employees
         [HttpGet]
         public IActionResult Get()
         {
-            using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
-            {
-                return Ok(db.Perusahaan.Select());
-            }
+            return Ok(_context.Perusahaan.ToList());
         }
 
         // GET: api/Employees/5
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
-            {
-                return Ok(db.Perusahaan.Where(x => x.idperusahaan == id).FirstOrDefault());
-            }
+            return Ok(_context.Perusahaan.Where(x => x.idperusahaan == id).FirstOrDefault());
 
         }
 
@@ -47,19 +45,16 @@ namespace WebApp.Api
         {
             try
             {
-                using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
+                if (value.DataPhoto != null && value.DataPhoto.Length > 0)
                 {
-                    if (value.DataPhoto != null && value.DataPhoto.Length > 0)
-                    {
-                        value.logo = Helpers.CreateFileName("image");
-                        System.IO.File.WriteAllBytes(Helpers.ProfilePath + value.logo, Helpers.CreateThumb(value.DataPhoto));
-                    }
-                    value.idperusahaan = db.Perusahaan.InsertAndGetLastID(value);
-
-                    if (value.idperusahaan <= 0)
-                        throw new SystemException("Data Perusahaan  Tidak Berhasil Disimpan !");
-                    return Ok(value);
+                    value.logo = Helpers.CreateFileName("image");
+                    System.IO.File.WriteAllBytes(Helpers.ProfilePath + value.logo, Helpers.CreateThumb(value.DataPhoto));
                 }
+                _context.Perusahaan.Add(value);
+                var saved = _context.SaveChanges();
+                if (value.idperusahaan <= 0)
+                    throw new SystemException("Data Perusahaan  Tidak Berhasil Disimpan !");
+                return Ok(value);
             }
             catch (System.Exception ex)
             {
@@ -73,28 +68,26 @@ namespace WebApp.Api
         {
             try
             {
-                using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
+                if (value.DataPhoto != null && value.DataPhoto.Length > 0)
                 {
-                    if (value.DataPhoto != null && value.DataPhoto.Length > 0)
-                    {
-                        value.logo = Helpers.CreateFileName("image");
-                        System.IO.File.WriteAllBytes(Helpers.LogoPath + value.logo, Helpers.CreateThumb(value.DataPhoto));
-                    }
-                    var updated = db.Perusahaan.Update(x => new
-                    {
-                        x.idperusahaan,
-                        x.alamat,
-                        x.direktur,
-                        x.emaildirektur,
-                        x.kontakdirektur,
-                        x.logo,
-                        x.namaperusahaan
-                    }, value, x => x.idperusahaan == value.idperusahaan);
-                    if (!updated)
-                        throw new SystemException("Data Perusahaan  Tidak Berhasil Disimpan !");
-
-                    return Ok(value);
+                    value.logo = Helpers.CreateFileName("image");
+                    System.IO.File.WriteAllBytes(Helpers.LogoPath + value.logo, Helpers.CreateThumb(value.DataPhoto));
                 }
+                var x = _context.Perusahaan.Where(x => x.idperusahaan == value.idperusahaan).FirstOrDefault();
+                x.idperusahaan = value.idperusahaan;
+                x.alamat = value.alamat;
+                x.direktur = value.direktur;
+                x.emaildirektur = value.emaildirektur;
+                x.kontakdirektur = value.kontakdirektur;
+                x.logo = value.logo;
+                x.namaperusahaan = value.namaperusahaan;
+
+                var saved = _context.SaveChanges();
+
+                if (saved <= 0)
+                    throw new SystemException("Data Perusahaan  Tidak Berhasil Disimpan !");
+
+                return Ok(value);
             }
             catch (System.Exception ex)
             {
@@ -109,14 +102,15 @@ namespace WebApp.Api
         {
             try
             {
-                using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
-                {
-                    var deleted = db.Perusahaan.Delete(x => x.idperusahaan == id);
-                    if (!deleted)
-                        throw new SystemException("Data Perusahaan  Tidak Berhasil Disimpan !");
+                var item = _context.Perusahaan.Where(x => x.idperusahaan == id).FirstOrDefault();
 
-                    return Ok(true);
-                }
+                _context.Perusahaan.Remove(item);
+                var saved = _context.SaveChanges();
+
+                if (saved <= 0)
+                    throw new SystemException("Data Perusahaan  Tidak Berhasil Disimpan !");
+
+                return Ok(true);
             }
             catch (System.Exception ex)
             {

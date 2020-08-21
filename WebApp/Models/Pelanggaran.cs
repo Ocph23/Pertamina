@@ -1,35 +1,44 @@
 using System;
 using System.Collections.Generic;
-using Ocph.DAL;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApp.Models
 {
-    [TableName("Pelanggaran")]
+    // [TableName("Pelanggaran")]
     public class Pelanggaran
     {
-        [PrimaryKey("idpelanggaran")]
-        [DbColumn("idpelanggaran")]
+        [Key]
+
+        // [PrimaryKey("idpelanggaran")]
+        // [DbColumn("idpelanggaran")]
         public int idpelanggaran { get; set; }
 
-        [DbColumn("idjenispelanggaran")]
+        // [DbColumn("idjenispelanggaran")]
         public int idjenispelanggaran { get; set; }
 
-        [DbColumn("idkaryawan")]
+        // [DbColumn("idkaryawan")]
+
         public int idkaryawan { get; set; }
 
-        [DbColumn("karyawan")]
+        // [DbColumn("karyawan")]
         public double karyawan { get; set; }
 
-        [DbColumn("perusahaan")]
+        // [DbColumn("perusahaan")]
         public double perusahaan { get; set; }
 
-        [DbColumn("tanggal")]
+        // [DbColumn("tanggal")]
         public DateTime? tanggal { get; set; }
 
-        public Level Level { get; set; }
+
+        [ForeignKey("idjenispelanggaran")]
         public Jenispelanggaran Jenispelanggaran { get; set; }
 
+        [ForeignKey("IdPelanggaran")]
         public List<DataFile> Files { get; set; }
+
+        [NotMapped]
+        public Level Level { get; set; }
 
     }
 }

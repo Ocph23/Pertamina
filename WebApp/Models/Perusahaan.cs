@@ -1,38 +1,40 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Ocph.DAL;
 
 namespace WebApp.Models
 {
-    [TableName("Perusahaan")]
+    // [TableName("Perusahaan")]
     public class Perusahaan
     {
-        [PrimaryKey("idperusahaan")]
-        [DbColumn("idperusahaan")]
+        // [PrimaryKey("idperusahaan")]
+        // [DbColumn("idperusahaan")]
+        [Key]
         public int idperusahaan { get; set; }
 
-        [DbColumn("namaperusahaan")]
+        // [DbColumn("namaperusahaan")]
         public string namaperusahaan { get; set; }
 
-        [DbColumn("alamat")]
+        // [DbColumn("alamat")]
         public string alamat { get; set; }
 
-        [DbColumn("direktur")]
+        // [DbColumn("direktur")]
         public string direktur { get; set; }
 
-        [DbColumn("kontakdirektur")]
+        // [DbColumn("kontakdirektur")]
         public string kontakdirektur { get; set; }
 
-        [DbColumn("emaildirektur")]
+        // [DbColumn("emaildirektur")]
         public string emaildirektur { get; set; }
 
-        [DbColumn("logo")]
+        // [DbColumn("logo")]
         public string logo { get; set; }
 
-
+        [NotMapped]
         public byte[] DataPhoto { get; set; }
 
     }

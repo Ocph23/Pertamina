@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using WebApp.Models;
 using Newtonsoft.Json;
+using WebApp.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApp.Api
 {
@@ -17,31 +19,26 @@ namespace WebApp.Api
     public class PelanggaranController : ControllerBase
     {
         private IConfiguration _config;
+        private ApplicationDbContext _context;
 
-        public PelanggaranController(IConfiguration config)
+        public PelanggaranController(IConfiguration config, ApplicationDbContext dbcontext)
         {
             _config = config;
+            _context = dbcontext;
         }
 
         // GET: api/Employees
         [HttpGet]
         public IActionResult Get()
         {
-            using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
-            {
-                return Ok(db.Pelanggaran.Select());
-            }
+            return Ok(_context.Pelanggaran.ToList());
         }
 
         // GET: api/Employees/5
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
-            {
-                return Ok(db.Level.Where(x => x.idlevel == id).FirstOrDefault());
-            }
-
+            return Ok(_context.Pelanggaran.FirstOrDefault());
         }
 
 
@@ -51,39 +48,44 @@ namespace WebApp.Api
             using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
             {
 
-                var sql = @"SELECT
-                    `buktipelanggaran`.`Id`,
-                    `buktipelanggaran`.`filetype`,
-                    `buktipelanggaran`.`filename`,
-                    `buktipelanggaran`.`thumb`,
-                    `buktipelanggaran`.`idpelanggaran`
-                    FROM
-                    `pelanggaran`
-                    Right JOIN `buktipelanggaran` ON `pelanggaran`.`idpelanggaran` =
-                    `buktipelanggaran`.`idpelanggaran`
-                    where idkaryawan = " + id;
+                // var sql = @"SELECT
+                //     `buktipelanggaran`.`Id`,
+                //     `buktipelanggaran`.`filetype`,
+                //     `buktipelanggaran`.`filename`,
+                //     `buktipelanggaran`.`thumb`,
+                //     `buktipelanggaran`.`idpelanggaran`
+                //     FROM
+                //     `pelanggaran`
+                //     Right JOIN `buktipelanggaran` ON `pelanggaran`.`idpelanggaran` =
+                //     `buktipelanggaran`.`idpelanggaran`
+                //     where idkaryawan = " + id;
 
-                var result = db.Query<DataFile>(sql);
+                // var result = db.Query<DataFile>(sql);
 
-                var datas = from a in db.Pelanggaran.Where(x => x.idkaryawan == id)
-                            join d in db.JenisPelanggaran.Select() on a.idjenispelanggaran equals d.idjenispelanggaran
-                            join f in db.Level.Select() on d.idlevel equals f.idlevel
-                            join c in result on a.idpelanggaran equals c.IdPelanggaran into gbukti
-                            select new Pelanggaran
-                            {
-                                Level = f,
-                                Jenispelanggaran = d,
-                                idjenispelanggaran = a.idjenispelanggaran,
-                                idkaryawan = a.idkaryawan,
-                                idpelanggaran = a.idpelanggaran,
-                                karyawan = a.karyawan,
-                                perusahaan = a.perusahaan,
-                                tanggal = a.tanggal,
-                                Files = gbukti.ToList()
-                            };
+                var datas = _context.Pelanggaran.Where(x => x.idkaryawan == id)
+                .Include(x => x.Files)
+                .Include(z => z.Jenispelanggaran);
+
+                var result = from a in datas
+                             join c in _context.Level on a.Jenispelanggaran.idlevel equals c.idlevel
+                             select new Pelanggaran
+                             {
+                                 Files = a.Files,
+                                 idjenispelanggaran = a.idjenispelanggaran,
+                                 idkaryawan = a.idkaryawan,
+                                 idpelanggaran = a.idpelanggaran,
+                                 Jenispelanggaran = a.Jenispelanggaran,
+                                 karyawan = a.karyawan,
+                                 perusahaan = a.perusahaan,
+                                 tanggal = a.tanggal,
+                                 Level = c
+                             };
 
 
-                return Ok(datas.ToList());
+
+
+
+                return Ok(result.ToList());
             }
 
         }
@@ -93,56 +95,47 @@ namespace WebApp.Api
         public IActionResult Post([FromBody] Pelanggaran value)
         {
 
-            using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
+            try
             {
-                var trans = db.BeginTransaction();
-                try
-                {
-                    value.idpelanggaran = db.Pelanggaran.InsertAndGetLastID(value);
-                    if (value.idpelanggaran <= 0)
-                        throw new SystemException("Data Perusahaan  Tidak Berhasil Disimpan !");
+                _context.Pelanggaran.Add(value);
+                if (value.idpelanggaran <= 0)
+                    throw new SystemException("Data Perusahaan  Tidak Berhasil Disimpan !");
 
-                    foreach (var item in value.Files)
-                    {
-                        var path = Helpers.GetPath(item.FileType);
-                        item.FileName = Helpers.CreateFileName(item.FileType);
-                        item.Thumb = Helpers.CreateFileName("image");
-                        System.IO.File.WriteAllBytes(path + item.FileName, item.Data);
-                        System.IO.File.WriteAllBytes(Helpers.ThumbPath + item.Thumb, Helpers.CreateThumb(item.Data));
-                        item.Data = null;
-                        item.IdPelanggaran = value.idpelanggaran;
-                        item.Id = db.BuktiPelanggaran.InsertAndGetLastID(item);
-                    }
-                    trans.Commit();
-                    return Ok(value);
-                }
-                catch (System.Exception ex)
+                foreach (var item in value.Files)
                 {
-                    trans.Rollback();
-                    return BadRequest(ex.Message);
+                    var path = Helpers.GetPath(item.FileType);
+                    item.FileName = Helpers.CreateFileName(item.FileType);
+                    item.Thumb = Helpers.CreateFileName("image");
+                    System.IO.File.WriteAllBytes(path + item.FileName, item.Data);
+                    System.IO.File.WriteAllBytes(Helpers.ThumbPath + item.Thumb, Helpers.CreateThumb(item.Data));
+                    item.Data = null;
+                    item.IdPelanggaran = value.idpelanggaran;
+                    _context.BuktiPelanggaran.Add(item);
                 }
-
+                var result = _context.SaveChanges();
+                return Ok(value);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
 
         }
 
         // PUT: api/Employees/5
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] Level value)
+        public IActionResult Put(int id, [FromBody] Pelanggaran value)
         {
             try
             {
-                using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
-                {
-                    var updated = db.Level.Update(x => new
-                    {
-                        x.level
-                    }, value, x => x.idlevel == value.idlevel);
-                    if (!updated)
-                        throw new SystemException("Data Perusahaan  Tidak Berhasil Disimpan !");
-
-                    return Ok(value);
-                }
+                var pelanggaran = _context.Pelanggaran.Where(x => x.idjenispelanggaran == value.idpelanggaran).FirstOrDefault();
+                pelanggaran.idjenispelanggaran = value.idjenispelanggaran;
+                pelanggaran.idkaryawan = value.idpelanggaran;
+                pelanggaran.Jenispelanggaran = value.Jenispelanggaran;
+                pelanggaran.karyawan = value.karyawan;
+                pelanggaran.perusahaan = value.perusahaan;
+                pelanggaran.tanggal = value.tanggal;
+                return Ok(value);
             }
             catch (System.Exception ex)
             {
@@ -157,14 +150,13 @@ namespace WebApp.Api
         {
             try
             {
-                using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
-                {
-                    var deleted = db.Level.Delete(x => x.idlevel == id);
-                    if (!deleted)
-                        throw new SystemException("Data Perusahaan  Tidak Berhasil Disimpan !");
+                var item = _context.Pelanggaran.Where(x => x.idpelanggaran == id).FirstOrDefault();
+                _context.Pelanggaran.Remove(item);
+                var saved = _context.SaveChanges();
+                if (saved <= 0)
+                    throw new SystemException("Data Perusahaan  Tidak Berhasil Disimpan !");
 
-                    return Ok(true);
-                }
+                return Ok(true);
             }
             catch (System.Exception ex)
             {

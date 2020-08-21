@@ -5,18 +5,20 @@ using System.Text;
 using System.Threading.Tasks;
 using Ocph.DAL;
 
-namespace WebApp.Models {
-     [TableName ("Listpengaduan")]
-     public class Listpengaduan {
-          [PrimaryKey ("idlistpengaduan")]
-          [DbColumn ("idlistpengaduan")]
-          public int idlistpengaduan { get; set; }
+namespace WebApp.Models
+{
+    [TableName("Listpengaduan")]
+    public class Listpengaduan
+    {
+        // [PrimaryKey ("idlistpengaduan")]
+        // [DbColumn ("idlistpengaduan")]
+        public int idlistpengaduan { get; set; }
 
-          [DbColumn ("penambahanpoint")]
-          public double penambahanpoint { get; set; }
+        // [DbColumn ("penambahanpoint")]
+        public double penambahanpoint { get; set; }
 
-          [DbColumn ("namapengaduan")]
-          public string namapengaduan { get; set; }
+        // [DbColumn ("namapengaduan")]
+        public string namapengaduan { get; set; }
 
-     }
+    }
 }

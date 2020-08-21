@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity.UI.V3.Pages.Account.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using WebApp.Data;
 using WebApp.Models;
 
 namespace WebApp.Api
@@ -20,13 +21,16 @@ namespace WebApp.Api
     {
         private IConfiguration _config;
         private UserManager<IdentityUser> _userManager;
+        private ApplicationDbContext _context;
+
         public KaryawanController(IConfiguration config, SignInManager<IdentityUser> signInManager,
             ILogger<LoginModel> logger,
-            UserManager<IdentityUser> userManager,
+            UserManager<IdentityUser> userManager, ApplicationDbContext dbcontext,
             IEmailSender emailSender)
         {
             _config = config;
             _userManager = userManager;
+            _context = dbcontext;
         }
 
         // GET: api/Employees
@@ -35,10 +39,11 @@ namespace WebApp.Api
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult Get()
         {
-            using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
+            try
             {
-                var result = from a in db.Karyawan.Select()
-                             join b in db.Perusahaan.Select() on a.idperusahaan equals b.idperusahaan
+
+                var result = from a in _context.Karyawan
+                             join b in _context.Perusahaan on a.idperusahaan equals b.idperusahaan
                              select new Karyawan
                              {
                                  idkaryawan = a.idkaryawan,
@@ -55,16 +60,21 @@ namespace WebApp.Api
 
                 return Ok(result.ToList());
             }
+            catch (System.Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
         }
 
         // GET: api/Employees/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
+            try
             {
-                var result = from a in db.Karyawan.Where(x => x.idkaryawan == id)
-                             join b in db.Perusahaan.Select() on a.idperusahaan equals b.idperusahaan
+                var result = from a in _context.Karyawan
+                             join b in _context.Perusahaan on a.idperusahaan equals b.idperusahaan
                              select new Karyawan
                              {
                                  idkaryawan = a.idkaryawan,
@@ -82,17 +92,27 @@ namespace WebApp.Api
                 karyawan.Roles = await _userManager.GetRolesAsync(user) as List<string>;
                 return Ok(karyawan);
             }
+            catch (System.Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("roles/{id}")]
         public async Task<IActionResult> GetRoles(int id)
         {
-            using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
+            try
             {
-                var karyawan = db.Karyawan.Where(x => x.idkaryawan == id).FirstOrDefault();
+                var karyawan = _context.Karyawan.Where(x => x.idkaryawan == id).FirstOrDefault();
                 var user = await _userManager.FindByNameAsync(karyawan.kodekaryawan);
                 karyawan.Roles = await _userManager.GetRolesAsync(user) as List<string>;
                 return Ok(karyawan.Roles.ToList());
+            }
+            catch (System.Exception ex)
+            {
+
+                return BadRequest(ex.Message);
             }
         }
 
@@ -108,19 +128,17 @@ namespace WebApp.Api
                 if (result.Succeeded)
                 {
                     value.userid = user.Id;
-                    using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
+                    if (value.DataPhoto != null && value.DataPhoto.Length > 0)
                     {
-                        if (value.DataPhoto != null && value.DataPhoto.Length > 0)
-                        {
-                            value.photo = Helpers.CreateFileName("image");
-                            System.IO.File.WriteAllBytes(Helpers.ProfilePath + value.photo, Helpers.CreateThumb(value.DataPhoto));
-                        }
-                        value.idkaryawan = db.Karyawan.InsertAndGetLastID(value);
-                        if (value.idkaryawan <= 0)
-                            throw new SystemException("Data Karyawan  Tidak Berhasil Disimpan !");
-                        var addUserResult = await _userManager.AddToRoleAsync(user, "Karyawan");
-                        return Ok(value);
+                        value.photo = Helpers.CreateFileName("image");
+                        System.IO.File.WriteAllBytes(Helpers.ProfilePath + value.photo, Helpers.CreateThumb(value.DataPhoto));
                     }
+                    _context.Karyawan.Add(value);
+                    _context.SaveChanges();
+                    if (value.idkaryawan <= 0)
+                        throw new SystemException("Data Karyawan  Tidak Berhasil Disimpan !");
+                    var addUserResult = await _userManager.AddToRoleAsync(user, "Karyawan");
+                    return Ok(value);
                 }
                 throw new SystemException("User Tidak Berhasil Dibuat");
             }
@@ -136,19 +154,20 @@ namespace WebApp.Api
         {
             try
             {
-                using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
+                if (value.DataPhoto != null && value.DataPhoto.Length > 0)
                 {
-                    if (value.DataPhoto != null && value.DataPhoto.Length > 0)
-                    {
-                        value.photo = Helpers.CreateFileName("image");
-                        System.IO.File.WriteAllBytes(Helpers.ProfilePath + value.photo, Helpers.CreateThumb(value.DataPhoto));
-                    }
-                    var updated = db.Karyawan.Update(x => new { x.idperusahaan, x.jabatan, x.kontak, x.namakaryawan, x.photo },
-                    value, x => x.idkaryawan == value.idkaryawan);
-                    if (!updated)
-                        throw new SystemException("Data Karyawan  Tidak Berhasil Disimpan !");
-                    return Ok(value);
+                    value.photo = Helpers.CreateFileName("image");
+                    System.IO.File.WriteAllBytes(Helpers.ProfilePath + value.photo, Helpers.CreateThumb(value.DataPhoto));
                 }
+                var data = _context.Karyawan.Where(x => x.idkaryawan == value.idkaryawan).FirstOrDefault();
+                data.idperusahaan = value.idperusahaan;
+                data.alamat = value.alamat;
+                data.jabatan = value.jabatan;
+                data.kontak = value.kontak;
+                data.namakaryawan = value.namakaryawan;
+                data.photo = value.photo;
+                _context.SaveChanges();
+                return Ok(value);
             }
             catch (System.Exception ex)
             {
@@ -163,13 +182,12 @@ namespace WebApp.Api
         {
             try
             {
-                using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
-                {
-                    var deleted = db.Karyawan.Delete(x => x.idkaryawan == id);
-                    if (!deleted)
-                        throw new SystemException("Data Karyawan  Tidak Berhasil Disimpan !");
-                    return Ok(true);
-                }
+                var data = _context.Karyawan.Where(x => x.idkaryawan == id).FirstOrDefault();
+                _context.Karyawan.Remove(data);
+                var deleted = _context.SaveChanges();
+                if (deleted <= 0)
+                    throw new SystemException("Data Karyawan  Tidak Berhasil Disimpan !");
+                return Ok(true);
             }
             catch (System.Exception ex)
             {
@@ -185,35 +203,32 @@ namespace WebApp.Api
 
             try
             {
-                using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
+                var karyawan = _context.Karyawan.Where(x => x.idkaryawan == value.IdKaryawan).FirstOrDefault();
+                var user = await _userManager.FindByNameAsync(karyawan.kodekaryawan);
+                if (value.Checked)
                 {
-                    var karyawan = db.Karyawan.Where(x => x.idkaryawan == value.IdKaryawan).FirstOrDefault();
-                    var user = await _userManager.FindByNameAsync(karyawan.kodekaryawan);
-                    if (value.Checked)
-                    {
-                        var result = await _userManager.AddToRoleAsync(user, value.Role);
+                    var result = await _userManager.AddToRoleAsync(user, value.Role);
 
-                        if (result.Succeeded)
-                        {
-                            return Ok(true);
-                        }
-                        else
-                        {
-                            throw new SystemException("Gagal Diubah !");
-                        }
+                    if (result.Succeeded)
+                    {
+                        return Ok(true);
                     }
                     else
                     {
-                        var result = await _userManager.RemoveFromRoleAsync(user, value.Role);
+                        throw new SystemException("Gagal Diubah !");
+                    }
+                }
+                else
+                {
+                    var result = await _userManager.RemoveFromRoleAsync(user, value.Role);
 
-                        if (result.Succeeded)
-                        {
-                            return Ok(true);
-                        }
-                        else
-                        {
-                            throw new SystemException("Gagal Diubah !");
-                        }
+                    if (result.Succeeded)
+                    {
+                        return Ok(true);
+                    }
+                    else
+                    {
+                        throw new SystemException("Gagal Diubah !");
                     }
                 }
             }

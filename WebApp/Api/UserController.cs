@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using WebApp.Data;
 using WebApp.Models;
 
 namespace WebApp.Api
@@ -19,17 +20,19 @@ namespace WebApp.Api
     public class UserController : ControllerBase
     {
         private IConfiguration _config;
+        private ApplicationDbContext _context;
         private UserManager<IdentityUser> _userManager;
         private SignInManager<IdentityUser> _signInManager;
         private RoleManager<IdentityRole> _roleManager;
 
         public UserController(IConfiguration config, SignInManager<IdentityUser> signInManager,
-            UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+            UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext dbcontext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _config = config;
+            _context = dbcontext;
         }
 
         // GET: api/Employees
@@ -39,15 +42,15 @@ namespace WebApp.Api
         [HttpGet("profile")]
         public async Task<IActionResult> profile()
         {
-            var user = await _userManager.GetUserAsync(User);
-            var roles = await _userManager.GetRolesAsync(user);
-            user.PasswordHash = null;
-            user.SecurityStamp = null;
-            user.ConcurrencyStamp = null;
-            using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
+            try
             {
+                var user = await _userManager.GetUserAsync(User);
+                var roles = await _userManager.GetRolesAsync(user);
+                user.PasswordHash = null;
+                user.SecurityStamp = null;
+                user.ConcurrencyStamp = null;
                 var nama = user.UserName;
-                var karyawan = db.Karyawan.Where(x => x.userid == user.Id).FirstOrDefault();
+                var karyawan = _context.Karyawan.Where(x => x.userid == user.Id).FirstOrDefault();
                 if (karyawan != null)
                 {
                     nama = karyawan.namakaryawan;
@@ -55,8 +58,12 @@ namespace WebApp.Api
                 }
 
                 return Ok(new { UserName = nama, User = user, Roles = roles, Karyawan = karyawan });
-            }
 
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
 
 
