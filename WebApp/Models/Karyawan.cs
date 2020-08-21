@@ -49,5 +49,8 @@ namespace WebApp.Models
 
         [NotMapped]
         public List<string> Roles { get; set; }
+
+        [NotMapped]
+        public List<Pelanggaran> Pelanggaran { get; set; }
     }
 }

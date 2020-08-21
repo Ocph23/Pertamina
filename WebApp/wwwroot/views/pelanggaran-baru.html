@@ -30,7 +30,9 @@
                         ng-options="itemName as itemName.jenispelanggaran for itemName in item.selectedJenis.datas">
                     </select>
                     <button class="btn btn-success" ng-click="save(item, files)"
-                        ng-disabled="!files || files.length<=0">Simpan</button>
+                        ng-disabled="!files || files.length<=0"> <i class="fa fa-save text-white"></i></button>
+                    <button class="btn btn-warning" ng-click="cancelUser(item)"> <i
+                            class="fa fa-broom text-white"></i></button>
                 </div>
             </div>
         </div>

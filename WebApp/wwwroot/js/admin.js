@@ -76,7 +76,7 @@ angular
 				name: 'home',
 				url: '/home',
 				controller: 'homeController',
-				template: 'Home'
+				templateUrl: './views/home.html'
 			})
 			.state({
 				name: 'jenis',
@@ -231,7 +231,18 @@ function pelanggaranBaru($scope, KaryawanService, JenisService, PelanggaranServi
 	});
 
 	$scope.selectUser = (data) => {
+		$scope.datas.forEach((x) => {
+			x.userSelect = false;
+		});
 		data.userSelect = true;
+	};
+
+	$scope.cancelUser = (data) => {
+		setTimeout((x) => {
+			$scope.$apply((x) => {
+				data.userSelect = false;
+			});
+		}, 300);
 	};
 
 	$scope.save = (item, files) => {
@@ -675,9 +686,10 @@ function detailKaryawanController(
 
 			PelanggaranService.getById(x.idkaryawan).then((pelanggaran) => {
 				$scope.pelanggarans = pelanggaran;
+				$scope.model.pelanggaran = pelanggaran;
 
 				PeriodeService.active().then((active) => {
-					PointService.setPelanggaran(pelanggaran, active);
+					var total = PointService.point($scope.model, active);
 
 					// write text plugin
 					Chart.pluginService.register({
@@ -692,7 +704,7 @@ function detailKaryawanController(
 							ctx.fillStyle = 'white';
 							ctx.textBaseline = 'middle';
 
-							var text = PointService.point(),
+							var text = total,
 								textX = Math.round((width - ctx.measureText(text).width) / 2),
 								textY = height / 2;
 
@@ -706,7 +718,7 @@ function detailKaryawanController(
 						data: {
 							datasets: [
 								{
-									data: [ PointService.point(), PointService.pengurangan ],
+									data: [ total, $scope.model.pengurangan ],
 									backgroundColor: [ '#84c125', '#d9241b' ]
 								}
 							],

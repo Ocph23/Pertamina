@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Undian";
+}
+          
+ <div class="undian" ng-app="undian" ng-controller="undianController">
+       <div class="nama-karyawan"><h2>UNDIAN KARYAWAN TERBAIK</h2></div>
+       <div class="nama-karyawan"><h4>PERIODE</h4></div>
+    <div class="employee">
+             <div id=winner></div>
+            <img width="200" height="200" src="/images/profiles/noimage.png" id="undian" src="" alt="">
+            <div class="nama-karyawan"><h4 id="nama">{{model.kodekaryawan}}</h4></div>
+            <div class="kode-karyawan"><h6 id="kode">{{model.kodekaryawan}}</h6></div>
+    </div>
+         <audio  id='audio' controls autoplay   loop hidden>
+            <source src="./Sounds/Soft-electronic-track-loop.mp3" type="audio/mp3" />
+            Your browser does not support the audio element.
+          </audio>
+
+          <button ng-click="start()" class="btn btn-success" ng-show="isPlay==false">Start</button>
+          <button ng-click="stop()" class="btn btn-danger" ng-show="isPlay==true">Stop</button>
+    </div>
+
+   

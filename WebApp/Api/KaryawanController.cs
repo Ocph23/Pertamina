@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Identity.UI.V3.Pages.Account.Internal;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using WebApp.Data;
@@ -42,23 +43,52 @@ namespace WebApp.Api
             try
             {
 
-                var result = from a in _context.Karyawan
-                             join b in _context.Perusahaan on a.idperusahaan equals b.idperusahaan
-                             select new Karyawan
-                             {
-                                 idkaryawan = a.idkaryawan,
-                                 kodekaryawan = a.kodekaryawan,
-                                 namakaryawan = a.namakaryawan,
-                                 perusahaan = b,
-                                 jabatan = a.jabatan,
-                                 kontak = a.kontak,
-                                 email = a.email,
-                                 alamat = a.alamat,
-                                 photo = a.photo
-                             };
+                var active = _context.Periode.Where(x => x.status == true).FirstOrDefault();
+
+                if (active != null)
+                {
+                    var result = (from a in _context.Karyawan
+                                  join b in _context.Perusahaan on a.idperusahaan equals b.idperusahaan
+                                  select new Karyawan
+                                  {
+                                      idkaryawan = a.idkaryawan,
+                                      kodekaryawan = a.kodekaryawan,
+                                      namakaryawan = a.namakaryawan,
+                                      perusahaan = b,
+                                      jabatan = a.jabatan,
+                                      kontak = a.kontak,
+                                      email = a.email,
+                                      alamat = a.alamat,
+                                      photo = a.photo,
+                                  }).ToList();
 
 
-                return Ok(result.ToList());
+
+                    var pelanggarans = _context.Pelanggaran.Where(x => x.tanggal >= active.tanggalmulai && x.tanggal <= active.tanggalselesai).ToList();
+
+
+
+                    var datas = from a in result
+                                join b in pelanggarans on a.idkaryawan equals b.idkaryawan into gg
+                                select new Karyawan
+                                {
+                                    idkaryawan = a.idkaryawan,
+                                    kodekaryawan = a.kodekaryawan,
+                                    namakaryawan = a.namakaryawan,
+                                    perusahaan = a.perusahaan,
+                                    jabatan = a.jabatan,
+                                    kontak = a.kontak,
+                                    email = a.email,
+                                    alamat = a.alamat,
+                                    photo = a.photo,
+                                    Pelanggaran = gg.DefaultIfEmpty().ToList()
+                                };
+
+
+
+                    return Ok(datas.ToList());
+                }
+                throw new SystemException("Periode Aktif Belum Ada !");
             }
             catch (System.Exception ex)
             {

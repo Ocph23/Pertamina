@@ -1,5 +1,5 @@
 ﻿angular
-	.module('dashboard', [])
+	.module('dashboard', [ 'service' ])
 	.factory('DataService', dataService)
 	.controller('dashboard.controller', dashboardController);
 
@@ -35,7 +35,7 @@ function dataService($http, $q) {
 
 	return service;
 }
-function dashboardController($scope, DataService) {
+function dashboardController($scope, DataService, PointService, PeriodeService) {
 	$scope.datas = [];
 	DataService.jenis().then((x) => {
 		$scope.datas = x.datas;
@@ -62,7 +62,8 @@ function dashboardController($scope, DataService) {
 				responsive: true,
 				maintainAspectRatio: false,
 				legend: {
-					display: false
+					display: true,
+					position: 'bottom'
 				},
 
 				animation: {
@@ -72,51 +73,134 @@ function dashboardController($scope, DataService) {
 			}
 		});
 
-		DataService.get('api/karyawan').then((data) => {
-			$scope.source = data;
-			var ctx = document.getElementById('myChart').getContext('2d');
-			var myChart = new Chart(ctx, {
-				type: 'bar',
-				data: {
-					labels: [ 'Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange' ],
-					datasets: [
+		var ctx = document.getElementById('myChart').getContext('2d');
+		var myChart = new Chart(ctx, {
+			type: 'bar',
+			data: {
+				labels: x.perusahhan.map((x) => {
+					return x.perusahaan.namaperusahaan;
+				}),
+				datasets: [
+					{
+						label: '',
+						data: x.perusahhan.map((x) => {
+							return x.total;
+						}),
+						backgroundColor: [
+							'rgba(255, 99, 132, 0.5)',
+							'rgba(54, 162, 235, 0.5)',
+							'rgba(255, 206, 86, 0.5)',
+							'rgba(75, 192, 192, 0.5)',
+							'rgba(153, 102, 255, 0.5)',
+							'rgba(255, 159, 64, 0.5)'
+						],
+						borderColor: [
+							'rgba(255, 99, 132, 1)',
+							'rgba(54, 162, 235, 1)',
+							'rgba(255, 206, 86, 1)',
+							'rgba(75, 192, 192, 1)',
+							'rgba(153, 102, 255, 1)',
+							'rgba(255, 159, 64, 1)'
+						],
+						borderWidth: 1
+					}
+				]
+			},
+			options: {
+				responsive: true,
+				legend: {
+					display: false
+				},
+				maintainAspectRatio: false,
+				scales: {
+					yAxes: [
 						{
-							label: '# of Votes',
-							data: [ 12, 19, 3, 5, 2, 3 ],
-							backgroundColor: [
-								'rgba(255, 99, 132, 0.2)',
-								'rgba(54, 162, 235, 0.2)',
-								'rgba(255, 206, 86, 0.2)',
-								'rgba(75, 192, 192, 0.2)',
-								'rgba(153, 102, 255, 0.2)',
-								'rgba(255, 159, 64, 0.2)'
-							],
-							borderColor: [
-								'rgba(255, 99, 132, 1)',
-								'rgba(54, 162, 235, 1)',
-								'rgba(255, 206, 86, 1)',
-								'rgba(75, 192, 192, 1)',
-								'rgba(153, 102, 255, 1)',
-								'rgba(255, 159, 64, 1)'
-							],
-							borderWidth: 1
+							ticks: {
+								beginAtZero: true
+							}
 						}
 					]
-				},
-				options: {
-					responsive: true,
-					maintainAspectRatio: false,
-					scales: {
-						yAxes: [
-							{
-								ticks: {
-									beginAtZero: true
-								}
-							}
-						]
-					}
 				}
+			}
+		});
+
+		PeriodeService.active().then((active) => {
+			DataService.get('api/karyawan').then((data) => {
+				data.forEach((element) => {
+					element.total = PointService.point(element, active);
+				});
+
+				$scope.source = data.filter((x) => x.total >= 105);
 			});
 		});
 	});
+}
+
+angular.module('undian', []).controller('undianController', undianController);
+function undianController($scope, $http) {
+	var timer = null;
+	$scope.isPlay = false;
+	$scope.model = {};
+	$http({ method: 'get', url: 'api/karyawan' }).then(
+		(response) => {
+			$scope.datas = response.data;
+			sound('../Sounds/Soft-electronic-track-loop.mp3');
+		},
+		(err) => {
+			defer.reject(err);
+		}
+	);
+
+	$scope.start = () => {
+		$scope.isPlay = true;
+		setTimeout(() => {
+			$scope.sound.play();
+
+			timerStart(100);
+		}, 100);
+	};
+
+	function timerStart(interval) {
+		clearInterval(timer);
+
+		if (interval) {
+			timer = setInterval(radomEmployee, interval);
+		} else {
+			clearInterval(timer);
+		}
+	}
+
+	function sound(src) {
+		$scope.sound = document.getElementById('audio');
+	}
+
+	$scope.play = function() {
+		$scope.sound.play();
+	};
+	$scope.stop = function() {
+		$scope.isPlay = 'hide';
+		setTimeout(() => {
+			timerStart(500);
+		}, 5000);
+		setTimeout(() => {
+			timerStart(2000);
+		}, 1000);
+		setTimeout(() => {
+			clearInterval(timer);
+			var win = document.getElementById('winner');
+			win.innerHTML = 'PEMENANG';
+			$scope.sound.pause();
+		}, 15000);
+	};
+
+	function radomEmployee() {
+		var randomItem = $scope.datas[Math.floor(Math.random() * $scope.datas.length)];
+		$scope.model = randomItem;
+		var img = document.getElementById('undian');
+		var nama = document.getElementById('nama');
+		var kode = document.getElementById('kode');
+		nama.innerHTML = randomItem.namakaryawan;
+		kode.innerHTML = randomItem.kodekaryawan;
+		img.src = 'images/profiles/' + randomItem.photo;
+	}
 }

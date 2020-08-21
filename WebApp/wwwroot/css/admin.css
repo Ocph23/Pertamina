@@ -193,7 +193,9 @@
 }
 
 .admin .main-left .menus .menus-body ul li img {
-  margin-right: 10px;
+  margin-right: 5px;
+  max-height: 32px;
+  max-width: 32px;
 }
 
 .admin .main-left .menus .menus-body ul li .menu-icon {

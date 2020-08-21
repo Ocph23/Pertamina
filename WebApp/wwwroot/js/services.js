@@ -553,33 +553,38 @@ function HelperService() {
 function PointService() {
 	var date = new Date();
 	var service = {};
-	service.tahun = date.getFullYear();
-	service.bulan = date.getMonth();
-	service.defaultPoint = 100;
 
-	service.setPelanggaran = (datas, active) => {
-		var items = datas.filter(
-			(x) =>
-				new Date(x.tanggal) >= new Date(active.tanggalmulai) &&
-				new Date(x.tanggal) <= new Date(active.tanggalselesai)
-		);
-		service.pengurangan = items.reduce(function(a, item) {
-			return item.karyawan + a;
-		}, 0);
+	service.point = (karyawan, periode) => {
+		karyawan.point = 100;
+		karyawan.pengurangan = 0;
+		var currentdate = new Date();
+		var tglawal = new Date(periode.tanggalmulai);
+		var tglcompare = angular.copy(tglawal);
+		var tglselesai = new Date(periode.tanggalselesai);
+		var miliday = 24 * 60 * 60 * 1000;
+		var rr = Math.abs(new Date(2020, 7, 30) - currentdate.getDate()) / miliday;
+		for (var index = 0; index < currentdate.getDate() - tglawal.getDate(); index++) {
+			tglcompare.setDate(tglcompare.getDate() + (index == 0 ? 0 : 1));
+			if (tglawal.getDate() + index <= currentdate.getDate() && currentdate.getDate() <= tglselesai.getDate()) {
+				var pelanggaran = false;
+				karyawan.pelanggaran.forEach((element) => {
+					if (element && new Date(element.tanggal).toLocaleDateString() == tglcompare.toLocaleDateString()) {
+						pelanggaran = true;
+						karyawan.pengurangan += element.karyawan;
+					}
+				});
+
+				if (!pelanggaran && karyawan.point < 110) {
+					karyawan.point += 0.5;
+				}
+			}
+		}
+		if (karyawan.point > 110) {
+			karyawan.point = 110;
+		}
+
+		return karyawan.point - karyawan.pengurangan;
 	};
-
-	service.penambahan = () => {
-		return date.getDate() * 0.5;
-	};
-
-	service.point = () => {
-		return service.defaultPoint + service.penambahan();
-	};
-
-	service.totalPoint = () => {
-		return service.point() - service.pengurangan;
-	};
-
 	return service;
 }
 

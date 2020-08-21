@@ -3,8 +3,7 @@
         <h5>PROFILE</h5>
         <div class="profile-biodata-body">
             <div class="photo">
-                <img
-                    src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" />
+                <img id="photo" ng-model="model.photo" ng-src="images/profiles/{{model.photo}}" />
             </div>
 
             <hr />
@@ -83,7 +82,7 @@
                     </tr>
                 </thead>
                 <tbody class="vertical-scroll">
-                    <tr ng-repeat="item in pelanggarans |filter : myFilter(bulan, tahun)">
+                    <tr ng-repeat="item in model.pelanggaran |filter : myFilter(bulan, tahun)">
                         <td class="tcenter">{{item.tanggal| date:'dd-MM-yyyy hh:ss'}}</td>
                         <td>{{item.level.level}}</td>
                         <td>{{item.jenispelanggaran.jenispelanggaran}}</td>
