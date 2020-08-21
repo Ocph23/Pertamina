@@ -35,7 +35,7 @@ namespace WebApp.Models
         public Jenispelanggaran Jenispelanggaran { get; set; }
 
         [ForeignKey("IdPelanggaran")]
-        public List<DataFile> Files { get; set; }
+        public List<BuktiPelanggaran> Files { get; set; }
 
         [NotMapped]
         public Level Level { get; set; }

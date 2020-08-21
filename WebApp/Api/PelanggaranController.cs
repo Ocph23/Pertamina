@@ -76,32 +76,38 @@ namespace WebApp.Api
         public IActionResult Post([FromBody] Pelanggaran value)
         {
 
-            try
+            using (var transaction = _context.Database.BeginTransaction())
             {
-                _context.Pelanggaran.Add(value);
-                if (value.idpelanggaran <= 0)
-                    throw new SystemException("Data Perusahaan  Tidak Berhasil Disimpan !");
-
-                foreach (var item in value.Files)
+                try
                 {
-                    var path = Helpers.GetPath(item.FileType);
-                    item.FileName = Helpers.CreateFileName(item.FileType);
-                    item.Thumb = Helpers.CreateFileName("image");
-                    System.IO.File.WriteAllBytes(path + item.FileName, item.Data);
-                    System.IO.File.WriteAllBytes(Helpers.ThumbPath + item.Thumb, Helpers.CreateThumb(item.Data));
-                    item.Data = null;
-                    item.IdPelanggaran = value.idpelanggaran;
-                    _context.BuktiPelanggaran.Add(item);
-                }
-                var result = _context.SaveChanges();
-                return Ok(value);
-            }
-            catch (System.Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+                    foreach (var item in value.Files)
+                    {
+                        var path = Helpers.GetPath(item.FileType);
+                        item.FileName = Helpers.CreateFileName(item.FileType);
+                        item.Thumb = Helpers.CreateFileName("image");
+                        System.IO.File.WriteAllBytes(path + item.FileName, item.Data);
+                        System.IO.File.WriteAllBytes(Helpers.ThumbPath + item.Thumb, Helpers.CreateThumb(item.Data));
+                        item.Data = null;
+                    }
+                    _context.Pelanggaran.Add(value);
+                    var saved = _context.SaveChanges();
+                    if (value.idpelanggaran <= 0)
+                        throw new SystemException("Data Perusahaan  Tidak Berhasil Disimpan !");
 
+
+                    transaction.Commit();
+
+                    return Ok(value);
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    return BadRequest(ex.Message);
+                }
+            }
         }
+
+
 
         // PUT: api/Employees/5
         [HttpPut("{id}")]

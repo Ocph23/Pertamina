@@ -120,10 +120,10 @@ namespace WebApp.Api
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Karyawan value)
         {
+            value.idperusahaan = value.perusahaan.idperusahaan;
+            var user = new IdentityUser { UserName = value.kodekaryawan };
             try
             {
-                value.idperusahaan = value.perusahaan.idperusahaan;
-                var user = new IdentityUser { UserName = value.kodekaryawan };
                 var result = await _userManager.CreateAsync(user, "Id" + value.kodekaryawan + "#");
                 if (result.Succeeded)
                 {
@@ -145,7 +145,10 @@ namespace WebApp.Api
             }
             catch (System.Exception ex)
             {
-
+                if (user.Id != string.Empty)
+                {
+                    await _userManager.DeleteAsync(user);
+                }
                 return BadRequest(ex.Message);
             }
         }
