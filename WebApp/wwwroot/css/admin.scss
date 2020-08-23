@@ -1,3 +1,15 @@
+%box-border {
+    background: linear-gradient(145deg, #275a7ea8, #001f34a8);
+    box-shadow: 1px 1px 0px #fffb007a, -1px -1px 0px #ff4a4a60;
+    border-radius: 5px;
+}
+
+main {
+    height: 100%;
+    width: 100%;
+    grid-row: 2/3;
+}
+
 .close-menu {
     width: 50px;
     height: 50px;
@@ -43,7 +55,7 @@
 }
 
 .admin {
-    height: 92vh;
+    height: 100%;
     display: grid;
     grid-template-columns: auto 1fr;
     color: black;
@@ -102,6 +114,7 @@
                     margin-top: 20px;
                     padding: 0px;
                     li {
+                        max-height: 32px;
                         border-radius: 0px;
                         border-bottom: 1px solid grey;
                         padding-top: 10px;
@@ -115,8 +128,7 @@
                         align-items: center;
                         img {
                             margin-right: 5px;
-                            max-height: 32px;
-                            max-width: 32px;
+                            max-width: 20px;
                         }
                         .menu-icon {
                             margin-right: 20px;
@@ -134,9 +146,8 @@
     .main-right {
         height: 100%;
         grid-column: 2/3;
-        padding: 5px;
-        padding-left: 20px;
-
+        padding: 2px;
+        padding-left: 10px;
         table {
             color: black;
             border-radius: 6px;
@@ -159,10 +170,10 @@
 }
 
 .profile {
-    height: 91vh;
+    height: 100%;
     display: grid;
     grid-template-columns: minmax(300px, 1fr) 3fr;
-    grid-template-rows: 3fr 2fr;
+    grid-template-rows: auto 1fr;
     grid-gap: 5px;
 
     .profile-biodata,
@@ -183,7 +194,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            height: 100%;
             width: 100%;
             .photo {
                 display: flex;
@@ -269,7 +279,7 @@ hr {
 }
 
 .pelanggaran {
-    height: 91vh;
+    height: 100%;
     display: grid;
     grid-template-columns: 1.5fr 3fr;
     grid-gap: 5px;
@@ -277,11 +287,8 @@ hr {
     .add-pelanggaran {
         width: 100%;
         height: 100%;
-
         color: white;
-        border-radius: 5px;
-        background: linear-gradient(145deg, #00243ea8, #001f34a8);
-        box-shadow: 1px 1px 0px #dcdcdc, -1px -1px 0px #d6d6d6;
+        @extend %box-border;
     }
 
     .add-pelanggaran {
@@ -289,7 +296,6 @@ hr {
         display: flex;
         height: 100%;
         width: 100%;
-        max-height: 91vh;
         position: relative;
         padding: 10px;
         z-index: 1;
@@ -308,6 +314,15 @@ hr {
         }
         input {
             display: none;
+        }
+        .message {
+            text-align: center;
+            bottom: 30px;
+            height: 100%;
+            button {
+                color: white;
+                padding: 20px;
+            }
         }
         .files {
             bottom: 10px;
@@ -366,10 +381,9 @@ hr {
     }
 
     .user-bg {
-        max-height: 91vh;
         min-width: 300px;
         display: flex;
-        padding: 25px;
+        padding: 15px;
         align-items: stretch;
         flex-direction: column;
         img {
@@ -380,34 +394,37 @@ hr {
             display: flex;
             border-radius: 5px;
             background-color: #00243e25;
-            box-shadow: 1px 1px 0px #d6d6d656, -1px -1px 0px #d6d6d656;
+            box-shadow: 1px 1px 0px #d6d6d6, -1px -1px 0px #d6d6d6;
             padding: 10px;
         }
 
         .users {
-            scrollbar-width: none;
+            max-height: 80vh;
             .user {
                 margin-bottom: 10px;
-                padding: 10px;
-                display: flex;
-                flex-direction: row;
+                padding: 15px;
                 border-radius: 5px;
                 background-color: #00243e25;
                 box-shadow: 1px 1px 0px #d6d6d656, -1px -1px 0px #d6d6d656;
-
-                img {
-                    width: 100px;
-                    height: 120px;
-                    margin-right: 10px;
-                }
-                .user-body {
-                    .form-info-group {
-                        margin-bottom: 5px;
+                .userbody {
+                    display: flex;
+                    flex-direction: row;
+                    img {
+                        width: 100px;
+                        height: 120px;
+                        margin-right: 10px;
+                    }
+                    .user-body {
+                        .form-info-group {
+                            margin-bottom: 5px;
+                        }
                     }
                 }
+
                 .user-input {
                     display: none;
                     width: 100%;
+                    margin-top: 10px;
                     .form-info-group {
                         margin-bottom: 5px;
                     }
@@ -415,16 +432,17 @@ hr {
             }
 
             .user-selected {
-                background-color: #00243e86;
-                clip-path: polygon(1% 0%, 100% 0%, 100% 0%, 90% 10%, 100% 8%, 100% 100%, 1% 100%);
-                .user-body {
-                    display: none;
-                }
+                background-color: #00243ea1;
                 .user-input {
                     display: block;
                     select {
                         margin-bottom: 2px;
                     }
+                }
+                .user-input-btns {
+                    margin-top: 5px;
+                    display: flex;
+                    justify-content: flex-end;
                 }
             }
         }
@@ -433,7 +451,7 @@ hr {
 
 .perusahaan {
     display: flex;
-    height: 91vh;
+    height: 100%;
 
     .perusahaan-baru,
     .data-perusahaan {
@@ -488,16 +506,15 @@ hr {
 }
 
 .jenis-pelanggaran {
-    height: 91vh;
-    background: linear-gradient(145deg, #00243ea8, #001f34a8);
-    box-shadow: 1px 1px 0px #dcdcdc, -1px -1px 0px #d6d6d6;
-    border-radius: 10px;
+    height: 100%;
+    @extend %box-border;
     padding: 30px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 
     .jenis-main {
+        height: 100%;
         display: grid;
         grid-template-columns: minmax(200px, 1fr) 3fr;
         .jenis-body {
@@ -660,7 +677,6 @@ button {
 .buktishow {
     flex-direction: column;
     display: flex;
-    height: 60vh;
     width: 100%;
     position: relative;
     padding: 10px;
@@ -743,5 +759,122 @@ input[type="radio"] {
 @keyframes optionItemAnimation {
     to {
         width: auto;
+    }
+}
+
+.navbar-nav {
+    display: none;
+}
+
+#close-left {
+    display: none;
+}
+
+@media only screen and (max-width: 500px) {
+    .navbar-nav {
+        display: flex;
+    }
+    .main-left {
+        display: none;
+    }
+    .main-right {
+        padding-left: 0px !important;
+    }
+
+    .pelanggaran {
+        grid-template-columns: 1fr;
+
+        .add-pelanggaran {
+            position: relative;
+            min-height: 300px;
+            .dropBox {
+                height: 100%;
+                width: 100%;
+                background-size: 100% 100%;
+                background-repeat: no-repeat;
+                display: flex;
+                video {
+                    width: 100%;
+                    height: 80%;
+                    display: none;
+                }
+            }
+            input {
+                display: none;
+            }
+            .message {
+                text-align: center;
+                bottom: 30px;
+                height: 100%;
+                button {
+                    color: white;
+                    padding: 20px;
+                }
+            }
+            .files {
+                position: absolute;
+                height: 100px;
+                .thumb,
+                video {
+                    width: 50px;
+                    height: 50px;
+                }
+
+                .thumb {
+                    position: relative;
+                    i {
+                        display: none;
+                        position: absolute;
+                        right: 10px;
+                        top: 10px;
+                        color: rgb(148, 148, 148);
+                    }
+
+                    i:hover {
+                        color: red;
+                        font-size: 18px;
+                    }
+                }
+
+                .thumb:hover {
+                    width: 75px;
+                    height: 75px;
+                    i {
+                        display: block;
+                    }
+                }
+                video:hover {
+                    width: 75px;
+                    height: 75px;
+                }
+            }
+        }
+
+        .user-bg {
+            height: 65vh;
+        }
+    }
+    #close-left {
+        display: flex;
+    }
+
+    .perusahaan {
+        flex-flow: column !important;
+        .perusahaan-baru {
+            width: 100%;
+            height: 100vh;
+        }
+    }
+    .jenis-pelanggaran {
+        padding: 5px;
+        .jenis-main {
+            grid-template-columns: 1fr !important;
+        }
+    }
+
+    .profile {
+        display: flex !important;
+        flex-flow: column;
+        width: 100%;
     }
 }

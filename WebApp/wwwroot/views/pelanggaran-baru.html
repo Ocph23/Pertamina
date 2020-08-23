@@ -7,45 +7,54 @@
         <div class="users vertical-scroll">
             <div class="user" ng-class="{'user-selected':item.userSelect}" ng-repeat="item in datas | filter : search"
                 id="user{{item.idkaryawan}}" ng-click="selectUser(item)">
-                <img src="/images/profiles/{{item.photo}}" alt="">
-                <div class="user-body">
-                    <div class="form-info-group">
-                        <div class="label">Nama</div>
-                        <div class="nilai">{{item.namakaryawan}}</div>
-                    </div>
-                    <div class="form-info-group">
-                        <div class="label">Jabatan</div>
-                        <div class="nilai">{{item.jabatan}}</div>
-                    </div>
-                    <div class="form-info-group">
-                        <div class="label">Nama Perusahaan</div>
-                        <div class="nilai">{{item.perusahaan.namaperusahaan}}</div>
+                <div class="userbody">
+                    <img src="/images/profiles/{{item.photo}}" alt="">
+                    <div class="user-body">
+                        <div class="form-info-group">
+                            <div class="label">Nama</div>
+                            <div class="nilai">{{item.namakaryawan}}</div>
+                        </div>
+                        <div class="form-info-group">
+                            <div class="label">Jabatan</div>
+                            <div class="nilai">{{item.jabatan}}</div>
+                        </div>
+                        <div class="form-info-group">
+                            <div class="label">Nama Perusahaan</div>
+                            <div class="nilai">{{item.perusahaan.namaperusahaan}}</div>
+                        </div>
                     </div>
                 </div>
-                <div class="user-input">
+                <form class="user-input" ng-submit="save(item, files)">
                     <select class="form-control" ng-model="item.selectedJenis"
                         ng-options="level as level.level for level in datajenis">
                     </select>
                     <select class="form-control" ng-model="item.jenis"
                         ng-options="itemName as itemName.jenispelanggaran for itemName in item.selectedJenis.datas">
                     </select>
-                    <button class="btn btn-success" ng-click="save(item, files)"
-                        ng-disabled="!files || files.length<=0"> <i class="fa fa-save text-white"></i></button>
-                    <button class="btn btn-warning" ng-click="cancelUser(item)"> <i
-                            class="fa fa-broom text-white"></i></button>
-                </div>
+                    <div class="user-input-btns">
+                        <button type="submit" class="btn btn-success"
+                            ng-disabled="!files ||!item.jenis || files.length<=0"> <i
+                                class="fa fa-save text-white"></i></button>
+                        <button class="btn btn-warning" ng-click="cancelUser(item)"> <i
+                                class="fa fa-broom text-white"></i></button>
+                    </div>
+                </form>
             </div>
         </div>
 
     </div>
 
     <div class="add-pelanggaran" id="filePanel">
-        <div></div>
         <div class="dropBox" id="imgPelanggaran">
             <video id="myVideo" controls>
             </video>
         </div>
         <input id="fileInput" type="file" multiple ng-files="getFiles($files)">
+        <div class="message" ng-show="!files">
+            <button id="btnAddFile" class="btn btn-outline-warning">Click / Drop Files Here ..!</button>
+        </div>
+
+
         <div class="files">
             <div class="thumb" ng-repeat="item in files">
                 <i class="fa fa-times" ng-click="removeFile(item)"></i>

@@ -230,3 +230,67 @@
 #item1 {
     background-color: #788d00;
 }
+
+@media only screen and (max-width: 500px) {
+    h5,
+    h4 {
+        font-size: 15px;
+    }
+
+    body {
+        height: 100%;
+        background-repeat: no-repeat;
+        background-size: auto;
+    }
+
+    main {
+        height: 100%;
+    }
+    .footer {
+        position: relative;
+    }
+    .dashboard {
+        display: flex;
+        margin: 10px;
+        flex-direction: column;
+        padding: 0px;
+
+        .best-perform {
+            padding-top: 20px;
+            padding-bottom: 10px;
+            grid-row: 2/4;
+            grid-column: 3/4;
+            .employes {
+                max-height: 310px;
+            }
+        }
+
+        .today {
+            color: black;
+            grid-column: 1/3;
+            .today-container {
+                display: flex;
+                flex-direction: column;
+                .today-item {
+                    margin: 5px;
+                    width: 100%;
+                    height: 100%;
+                    padding: 15px;
+                    .today-title {
+                        font-size: 20px;
+                        color: white;
+                    }
+                    hr {
+                        margin-top: 5px;
+                        margin-bottom: 2px;
+                    }
+                    .today-content {
+                        font-size: 30px;
+                        text-align: center;
+                        color: white;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,15 +1,14 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -40,7 +39,9 @@ namespace WebApp
                options.UseMySql(
                    Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddScoped<IEmailSender, EmailService>();
+
+            services.AddTransient<IEmailSender, EmailService>();
+
             services.AddDefaultIdentity<IdentityUser>(options =>
                  options.SignIn.RequireConfirmedAccount = true
              ).AddRoles<IdentityRole>()
@@ -54,6 +55,20 @@ namespace WebApp
                     options.ClientId = "505524341439-7uau390b9vq18qb11r0lcuh3h9cdeiup.apps.googleusercontent.com";
                     options.ClientSecret = "A47I0Zppy1ifj5XvmWEuKDzf";
                     options.SignInScheme = IdentityConstants.ExternalScheme;
+                    options.UserInformationEndpoint = "https://www.googleapis.com/oauth2/v2/userinfo";
+                    options.ClaimActions.Clear();
+                    options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
+                    options.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
+                    options.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
+                    options.ClaimActions.MapJsonKey(ClaimTypes.Surname, "family_name");
+                    options.ClaimActions.MapJsonKey("urn:google:profile", "link");
+                    options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
+                    options.ClaimActions.MapJsonKey("image", "picture");
+
+                    options.Events = new OAuthEvents()
+                    {
+                        OnCreatingTicket = HandleOnCreatingTicket
+                    };
                 });
 
 
@@ -91,6 +106,18 @@ namespace WebApp
         });
 
             services.AddCors();
+        }
+
+        private async Task HandleOnCreatingTicket(OAuthCreatingTicketContext context)
+        {
+            var user = context.Identity;
+
+            if (user.Claims.FirstOrDefault(m => m.Type == ClaimTypes.Email).Value != "MY ACCOUNT")
+            {
+                // How to reject authorization?
+            }
+
+            await Task.CompletedTask;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

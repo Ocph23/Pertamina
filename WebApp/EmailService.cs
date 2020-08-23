@@ -9,24 +9,34 @@ namespace WebApp
     {
         public Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
-            var smtpClient = new SmtpClient("smtp.gmail.com")
+            try
             {
-                Port = 587,
-                Credentials = new NetworkCredential("ocph23test@gmail.com", "Alpharian@7777"),
-                EnableSsl = true,
-            };
+                var smtpClient = new SmtpClient()
+                {
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    Credentials = new NetworkCredential("ocph23.test@gmail.com", "Sony@7777"),
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network
+                };
 
-            var mailMessage = new MailMessage
+                var mailMessage = new MailMessage
+                {
+                    From = new MailAddress("ocph23.test@gmail.com", "Pertamina"),
+                    Subject = subject,
+                    Body = htmlMessage,
+                    IsBodyHtml = true,
+                    Priority = MailPriority.High
+                };
+                mailMessage.To.Add(email);
+
+                smtpClient.Send(mailMessage);
+                return Task.CompletedTask;
+            }
+            catch (System.Exception ex)
             {
-                From = new MailAddress("ocph23test@gmail.com"),
-                Subject = subject,
-                Body = htmlMessage,
-                IsBodyHtml = true,
-            };
-            mailMessage.To.Add(email);
-
-            smtpClient.Send(mailMessage);
-            return Task.CompletedTask;
+                return Task.CompletedTask;
+            }
         }
     }
 }

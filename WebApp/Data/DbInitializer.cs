@@ -12,6 +12,7 @@ namespace WebApp.Data
             context.Database.EnsureCreated();
             if (!context.Roles.Any())
             {
+
                 context.Roles.Add(new IdentityRole { Name = "administrator", NormalizedName = "ADMINISTRATOR" });
                 context.Roles.Add(new IdentityRole { Name = "admin", NormalizedName = "ADMIN" });
                 context.Roles.Add(new IdentityRole { Name = "karyawan", NormalizedName = "KARYAWAN" });

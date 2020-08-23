@@ -86,7 +86,7 @@ namespace WebApp.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User logged in.");
                     if (User.IsInRole("admin"))
-                        return LocalRedirect(returnUrl + "admin");
+                        return Redirect("/Admin");
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)

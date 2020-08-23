@@ -12,6 +12,7 @@ namespace WebApp.Data
         {
 
         }
+
         public DbSet<Periode> Periode { get; set; }
         public DbSet<Level> Level { get; set; }
         public DbSet<Karyawan> Karyawan { get; set; }

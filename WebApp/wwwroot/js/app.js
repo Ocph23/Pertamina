@@ -142,7 +142,14 @@ function undianController($scope, $http) {
 	$http({ method: 'get', url: 'api/karyawan' }).then(
 		(response) => {
 			$scope.datas = response.data;
-			sound('../Sounds/Soft-electronic-track-loop.mp3');
+			$http({ method: 'get', url: 'api/periode/active' }).then(
+				(response) => {
+					$scope.active = response.data;
+				},
+				(err) => {
+					defer.reject(err);
+				}
+			);
 		},
 		(err) => {
 			defer.reject(err);
@@ -152,8 +159,8 @@ function undianController($scope, $http) {
 	$scope.start = () => {
 		$scope.isPlay = true;
 		setTimeout(() => {
+			sound('../Sounds/Soft-electronic-track-loop.mp3');
 			$scope.sound.play();
-
 			timerStart(100);
 		}, 100);
 	};
@@ -170,6 +177,7 @@ function undianController($scope, $http) {
 
 	function sound(src) {
 		$scope.sound = document.getElementById('audio');
+		$scope.sound.src = src;
 	}
 
 	$scope.play = function() {
@@ -181,8 +189,8 @@ function undianController($scope, $http) {
 			timerStart(500);
 		}, 5000);
 		setTimeout(() => {
-			timerStart(2000);
-		}, 1000);
+			timerStart(1500);
+		}, 10000);
 		setTimeout(() => {
 			clearInterval(timer);
 			var win = document.getElementById('winner');

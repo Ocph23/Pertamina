@@ -138,6 +138,8 @@ function homeController($scope, UserService) {
 }
 
 function periodeController($scope, PeriodeService) {
+	var e = document.getElementById('close-left');
+
 	PeriodeService.get().then((data) => {
 		$scope.datas = data;
 	});
@@ -181,6 +183,10 @@ function periodeController($scope, PeriodeService) {
 		$scope.addItem = true;
 	};
 
+	$scope.closeAddItem = () => {
+		$scope.addItem = false;
+	};
+
 	$scope.newItem = () => {
 		$scope.addItem = true;
 		$scope.model = { photo: 'noimage.png' };
@@ -198,9 +204,18 @@ function periodeController($scope, PeriodeService) {
 
 function pelanggaranBaru($scope, KaryawanService, JenisService, PelanggaranService) {
 	var dropbox = document.getElementById('imgPelanggaran');
-	dropbox.addEventListener('dragenter', dragenter, false);
-	dropbox.addEventListener('dragover', dragover, false);
-	dropbox.addEventListener('drop', drop, false);
+	var btndropbox = document.getElementById('btnAddFile');
+
+	setFilesContainer(dropbox);
+	setFilesContainer(btndropbox);
+	function setFilesContainer(e) {
+		e.addEventListener('click', (x) => {
+			$('#fileInput').click();
+		});
+		e.addEventListener('dragenter', dragenter, false);
+		e.addEventListener('dragover', dragover, false);
+		e.addEventListener('drop', drop, false);
+	}
 
 	function drop(e) {
 		e.stopPropagation();
@@ -218,10 +233,6 @@ function pelanggaranBaru($scope, KaryawanService, JenisService, PelanggaranServi
 		e.stopPropagation();
 		e.preventDefault();
 	}
-
-	dropbox.addEventListener('click', (x) => {
-		$('#fileInput').click();
-	});
 
 	KaryawanService.get().then((x) => {
 		$scope.datas = x;

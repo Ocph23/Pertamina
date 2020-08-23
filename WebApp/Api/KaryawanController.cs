@@ -103,7 +103,7 @@ namespace WebApp.Api
         {
             try
             {
-                var result = from a in _context.Karyawan
+                var result = from a in _context.Karyawan.Where(x => x.idkaryawan == id)
                              join b in _context.Perusahaan on a.idperusahaan equals b.idperusahaan
                              select new Karyawan
                              {

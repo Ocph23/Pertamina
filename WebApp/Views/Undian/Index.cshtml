@@ -4,7 +4,7 @@
           
  <div class="undian" ng-app="undian" ng-controller="undianController">
        <div class="nama-karyawan"><h2>UNDIAN KARYAWAN TERBAIK</h2></div>
-       <div class="nama-karyawan"><h4>PERIODE</h4></div>
+       <div class="nama-karyawan"><h4>PERIODE {{active.tanggalmulai|date:'dd/MM/yyyy'}} - {{active.tanggalselesai|date:'dd/MM/yyyy'}}</h4></div>
     <div class="employee">
              <div id=winner></div>
             <img width="200" height="200" src="/images/profiles/noimage.png" id="undian" src="" alt="">
@@ -12,7 +12,7 @@
             <div class="kode-karyawan"><h6 id="kode">{{model.kodekaryawan}}</h6></div>
     </div>
          <audio  id='audio' controls autoplay   loop hidden>
-            <source src="./Sounds/Soft-electronic-track-loop.mp3" type="audio/mp3" />
+            <source src="" type="audio/mp3" />
             Your browser does not support the audio element.
           </audio>
 

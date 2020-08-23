@@ -13,23 +13,26 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using WebApp.Data;
 
 namespace WebApp.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class ExternalLoginModel : PageModel
     {
+        private readonly ApplicationDbContext _context;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger<ExternalLoginModel> _logger;
 
-        public ExternalLoginModel(
+        public ExternalLoginModel(ApplicationDbContext context,
             SignInManager<IdentityUser> signInManager,
             UserManager<IdentityUser> userManager,
             ILogger<ExternalLoginModel> logger,
             IEmailSender emailSender)
         {
+            _context = context;
             _signInManager = signInManager;
             _userManager = userManager;
             _logger = logger;
@@ -72,7 +75,7 @@ namespace WebApp.Areas.Identity.Pages.Account
             if (remoteError != null)
             {
                 ErrorMessage = $"Error from external provider: {remoteError}";
-                return RedirectToPage("./Login", new {ReturnUrl = returnUrl });
+                return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
             }
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)
@@ -82,11 +85,22 @@ namespace WebApp.Areas.Identity.Pages.Account
             }
 
             // Sign in the user with this external login provider if the user already has a login.
-            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor : true);
+            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
             if (result.Succeeded)
             {
-                _logger.LogInformation("{Name} logged in with {LoginProvider} provider.", info.Principal.Identity.Name, info.LoginProvider);
-                return LocalRedirect(returnUrl);
+                var userLogin = _context.UserLogins.Where(x => x.ProviderKey == info.ProviderKey).FirstOrDefault();
+                if (userLogin != null)
+                {
+                    var user = await _userManager.FindByIdAsync(userLogin.UserId);
+                    if (user != null && string.IsNullOrEmpty(user.Email))
+                    {
+                        user.Email = info.Principal.FindFirst(ClaimTypes.Email).Value;
+                        await _userManager.UpdateAsync(user);
+                    }
+                }
+
+                return Redirect("/Admin");
+
             }
             if (result.IsLockedOut)
             {
@@ -96,15 +110,8 @@ namespace WebApp.Areas.Identity.Pages.Account
             {
                 // If the user does not have an account, then ask the user to create an account.
                 ReturnUrl = returnUrl;
-                LoginProvider = info.LoginProvider;
-                if (info.Principal.HasClaim(c => c.Type == ClaimTypes.Email))
-                {
-                    Input = new InputModel
-                    {
-                        Email = info.Principal.FindFirstValue(ClaimTypes.Email)
-                    };
-                }
-                return Page();
+                ErrorMessage = "Anda Belum Menguhubungkan Account Anda Dengan Email Google";
+                return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
             }
         }
 

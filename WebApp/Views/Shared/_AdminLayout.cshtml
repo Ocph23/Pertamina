@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/admin.css" />
 </head>
-<body>
+<body  ng-app="admin">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
             <div class="nav-container">
@@ -23,25 +23,23 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+                        <li class="nav-item"  ui-sref="home" ><a class="nav-link text-dark" >Home</a></li>
+                        <li class="nav-item"  ui-sref="periode" ><a class="nav-link text-dark" >Periode</a></li>
+                        <li class="nav-item"  ui-sref="jenis" ><a class="nav-link text-dark" >Jenis Pelanggaran</a></li>
+                        <li class="nav-item"  ui-sref="perusahaan" ><a class="nav-link text-dark" >Perusahaan</a></li>
+                        <li class="nav-item"  ui-sref="karyawan" ><a class="nav-link text-dark" >Karyawan</a></li>
+                        <li class="nav-item"  ui-sref="pelanggaran-baru" ><a class="nav-link text-dark" >Pelanggaran Baru</a></li>
+                      
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div>
-        <main role="main" >
+     <main role="main" >
             @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted" style="margin-left: 20px;">
-        &copy; 2020 - Pertamina - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </main>
+    <footer class="border-top footer text-muted">
+            &copy; 2020 - Pertamin - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/Chartjs/Chart.js"></script>
@@ -49,11 +47,11 @@
       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/angularjs/angular.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/lib/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="~/js/services.js" asp-append-version="true"></script>
     <script src="~/js/ng-files.js" asp-append-version="true"></script>
     <script src="~/js/admin.js" asp-append-version="true"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/swipe.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>

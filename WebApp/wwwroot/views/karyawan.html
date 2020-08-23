@@ -7,7 +7,7 @@
             <input id="fileInput" type="file" ng-files="getPhoto($files, model)" hidden>
             <img id="photo" ng-model="model.photo" ng-src="images/profiles/{{model.photo}}" />
         </div>
-        <div class="data-body">
+        <div class="data-body vertical-scroll">
             <form ng-submit="save(model)">
                 <div class="form-info-group">
                     <div class="label">ID Karyawan</div>

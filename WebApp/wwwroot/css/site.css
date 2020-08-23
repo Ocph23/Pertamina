@@ -59,19 +59,23 @@ button.accept-policy {
   -------------------------------------------------- */
 html {
   position: relative;
-  min-height: 100%;
+  min-height: 106vh;
 }
 
 body {
   /* Margin bottom by footer height */
-  margin-bottom: 60px;
   background-image: url("../images/src/bg.png");
   background-repeat: no-repeat;
   background-size: cover;
+  min-height: 106vh;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: auto 1fr auto;
+      grid-template-rows: auto 1fr auto;
 }
 
 .footer {
-  position: absolute;
+  position: static;
   bottom: 0;
   width: 100%;
   white-space: nowrap;
@@ -81,7 +85,7 @@ body {
 
 .brand {
   height: 100%;
-  margin-right: 10px;
+  padding-right: 10px;
   background-size: cover;
 }
 
@@ -130,14 +134,13 @@ body {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  height: 75vh;
+  height: 85vh;
   width: 100%;
 }
 
 .account .account-body {
   width: 40%;
-  height: 70%;
-  padding: 30px;
+  padding: 30px 35px;
   border-radius: 12px;
   background: linear-gradient(145deg, #00274288, #0375cc73);
   -webkit-box-shadow: 2px 2px 5px #000e199f, -2px -2px 5px #003a638a;
@@ -203,13 +206,6 @@ body {
   }
 }
 
-@media only screen and (max-width: 400px) {
-  .account .account-body {
-    width: 80%;
-    height: 90%;
-  }
-}
-
 .undian {
   width: 100%;
   height: 90vh;
@@ -272,5 +268,56 @@ body {
   font-size: 25px;
   font-weight: bold;
   color: red;
+}
+
+@media only screen and (max-width: 500px) {
+  .account .account-body {
+    width: 80%;
+    height: 90%;
+  }
+  .navbar-brand span {
+    display: none;
+  }
+  .navbar-collapse {
+    margin-left: 10px;
+  }
+  .undian {
+    width: 100%;
+    height: 90vh;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    color: white;
+  }
+  .undian .employee {
+    width: 90%;
+    height: 60%;
+  }
+  .undian .employee img {
+    margin: 20px;
+    border-radius: 10px;
+  }
+  .undian .employee .nama-karyawan,
+  .undian .employee .kode-karyawan {
+    color: white;
+  }
+  .undian button {
+    width: 150px;
+    height: 50px;
+    font-size: 20px;
+  }
+  h2 {
+    font-size: 20px !important;
+  }
 }
 /*# sourceMappingURL=site.css.map */
