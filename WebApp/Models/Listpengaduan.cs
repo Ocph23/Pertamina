@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Ocph.DAL;
 
 namespace WebApp.Models
 {
-    [TableName("Listpengaduan")]
     public class Listpengaduan
     {
         // [PrimaryKey ("idlistpengaduan")]

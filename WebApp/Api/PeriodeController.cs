@@ -63,10 +63,7 @@ namespace WebApp.Api
         {
             try
             {
-                using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
-                {
-                    return Ok(_context.Periode.Where(x => x.status == true).FirstOrDefault());
-                }
+                return Ok(_context.Periode.Where(x => x.status == true).FirstOrDefault());
             }
             catch (System.Exception ex)
             {

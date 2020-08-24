@@ -46,28 +46,25 @@ namespace WebApp.Api
         [HttpGet("karyawan/{id}")]
         public IActionResult GetByKaryawanId(int id)
         {
-            using (var db = new OcphDbContext(_config.GetConnectionString("DefaultConnection")))
-            {
-                var datas = _context.Pelanggaran.Where(x => x.idkaryawan == id)
-                .Include(x => x.Files)
-                .Include(z => z.Jenispelanggaran);
+            var datas = _context.Pelanggaran.Where(x => x.idkaryawan == id)
+                 .Include(x => x.Files)
+                 .Include(z => z.Jenispelanggaran);
 
-                var result = from a in datas
-                             join c in _context.Level on a.Jenispelanggaran.idlevel equals c.idlevel
-                             select new Pelanggaran
-                             {
-                                 Files = a.Files,
-                                 idjenispelanggaran = a.idjenispelanggaran,
-                                 idkaryawan = a.idkaryawan,
-                                 idpelanggaran = a.idpelanggaran,
-                                 Jenispelanggaran = a.Jenispelanggaran,
-                                 karyawan = a.karyawan,
-                                 perusahaan = a.perusahaan,
-                                 tanggal = a.tanggal,
-                                 Level = c
-                             };
-                return Ok(result.ToList());
-            }
+            var result = from a in datas
+                         join c in _context.Level on a.Jenispelanggaran.idlevel equals c.idlevel
+                         select new Pelanggaran
+                         {
+                             Files = a.Files,
+                             idjenispelanggaran = a.idjenispelanggaran,
+                             idkaryawan = a.idkaryawan,
+                             idpelanggaran = a.idpelanggaran,
+                             Jenispelanggaran = a.Jenispelanggaran,
+                             karyawan = a.karyawan,
+                             perusahaan = a.perusahaan,
+                             tanggal = a.tanggal,
+                             Level = c
+                         };
+            return Ok(result.ToList());
 
         }
 
