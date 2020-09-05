@@ -1,56 +1,65 @@
+using System.Linq;
+using System.Collections;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
+
 namespace WebApp.Models
 {
-    // [TableName("Karyawan")]
     public class Karyawan
     {
+
         [Key]
-        // [PrimaryKey("idkaryawan")]
-        // [DbColumn("idkaryawan")]
-        public int idkaryawan { get; set; }
+        public int Id { get; set; }
+        public string KodeKaryawan { get; set; }
 
-        // [DbColumn("idperusahaan")]
+        public string NamaKaryawan { get; set; }
 
-        public int idperusahaan { get; set; }
+        public string Alamat { get; set; }
 
-        // [DbColumn("kodekaryawan")]
-        public string kodekaryawan { get; set; }
+        public string Kontak { get; set; }
 
-        // [DbColumn("namakaryawan")]
-        public string namakaryawan { get; set; }
+        public string Email { get; set; }
 
-        // [DbColumn("jabatan")]
-        public string jabatan { get; set; }
+        public string UserId { get; set; }
 
-        // [DbColumn("alamat")]
-        public string alamat { get; set; }
+        public string Photo { get; set; }
 
-        // [DbColumn("kontak")]
-        public string kontak { get; set; }
-
-        // [DbColumn("email")]
-        public string email { get; set; }
-
-        // [DbColumn("userid")]
-
-        public string userid { get; set; }
-
-        // [DbColumn("photo")]
-        public string photo { get; set; }
+        public bool Status { get; set; } = true;
 
         [NotMapped]
         public byte[] DataPhoto { get; set; }
 
-        [ForeignKey("idperusahaan")]
-        public Perusahaan perusahaan { get; set; }
+        [NotMapped]
+        public PerusahaanKaryawan PerusahaanKaryawan
+        {
+            get
+            {
+                if (_perusahaan != null)
+                {
+                    return _perusahaan;
+                }
+
+                if (Perusahaans != null && Perusahaans.Count > 0)
+                {
+                    return Perusahaans.Last();
+                }
+
+                return _perusahaan;
+            }
+            set { _perusahaan = value; }
+        }
 
         [NotMapped]
-        public List<string> Roles { get; set; }
+        public virtual ICollection<string> Roles { get; set; }
 
-        [NotMapped]
-        public List<Pelanggaran> Pelanggaran { get; set; }
+        public virtual ICollection<Pelanggaran> Pelanggarans { get; set; }
+
+        public virtual ICollection<Absen> Absens { get; set; }
+
+        public ICollection<PerusahaanKaryawan> Perusahaans { get; set; } = new List<PerusahaanKaryawan>();
+
+        private PerusahaanKaryawan _perusahaan;
     }
 }

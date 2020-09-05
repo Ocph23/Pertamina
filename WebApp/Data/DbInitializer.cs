@@ -27,6 +27,8 @@ namespace WebApp.Data
                 {
                     var user = new IdentityUser { UserName = "administrator" };
                     var createResult = await userManager.CreateAsync(user, "Administrator123#");
+                    var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                    await userManager.ConfirmEmailAsync(user, code);
                     await userManager.AddToRoleAsync(user, "administrator");
                 }
                 catch (System.Exception ex)

@@ -1,28 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Identity.UI.V3.Pages.Account.Internal;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using WebApp.Data;
+using WebApp.Middlewares;
 using WebApp.Models;
 
 namespace WebApp.Api
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class KaryawanController : ControllerBase
     {
         private IConfiguration _config;
         private UserManager<IdentityUser> _userManager;
         private ApplicationDbContext _context;
+        private IEmailSender _emailSender;
 
         public KaryawanController(IConfiguration config, SignInManager<IdentityUser> signInManager,
             ILogger<LoginModel> logger,
@@ -32,6 +37,7 @@ namespace WebApp.Api
             _config = config;
             _userManager = userManager;
             _context = dbcontext;
+            _emailSender = emailSender;
         }
 
         // GET: api/Employees
@@ -43,50 +49,21 @@ namespace WebApp.Api
             try
             {
 
-                var active = _context.Periode.Where(x => x.status == true).FirstOrDefault();
+                var active = _context.Periode.Where(x => x.Status == true).FirstOrDefault();
 
                 if (active != null)
                 {
-                    var result = (from a in _context.Karyawan
-                                  join b in _context.Perusahaan on a.idperusahaan equals b.idperusahaan
-                                  select new Karyawan
-                                  {
-                                      idkaryawan = a.idkaryawan,
-                                      kodekaryawan = a.kodekaryawan,
-                                      namakaryawan = a.namakaryawan,
-                                      perusahaan = b,
-                                      jabatan = a.jabatan,
-                                      kontak = a.kontak,
-                                      email = a.email,
-                                      alamat = a.alamat,
-                                      photo = a.photo,
-                                  }).ToList();
+                    var result = _context.Karyawan
+                       .Include(x => x.Perusahaans)
+                    .ThenInclude(x => x.Perusahaan)
+                .Include(x => x.Pelanggarans)
+                    .ThenInclude(z => z.DataPerusahaan)
+                .Include(x => x.Pelanggarans)
+                    .ThenInclude(x => x.Files)
+                .Include(x => x.Pelanggarans)
+                    .ThenInclude(x => x.Jenispelanggaran).ThenInclude(x => x.Level);
 
-
-
-                    var pelanggarans = _context.Pelanggaran.Where(x => x.tanggal >= active.tanggalmulai && x.tanggal <= active.tanggalselesai).ToList();
-
-
-
-                    var datas = from a in result
-                                join b in pelanggarans on a.idkaryawan equals b.idkaryawan into gg
-                                select new Karyawan
-                                {
-                                    idkaryawan = a.idkaryawan,
-                                    kodekaryawan = a.kodekaryawan,
-                                    namakaryawan = a.namakaryawan,
-                                    perusahaan = a.perusahaan,
-                                    jabatan = a.jabatan,
-                                    kontak = a.kontak,
-                                    email = a.email,
-                                    alamat = a.alamat,
-                                    photo = a.photo,
-                                    Pelanggaran = gg.DefaultIfEmpty().ToList()
-                                };
-
-
-
-                    return Ok(datas.ToList());
+                    return Ok(result.ToList());
                 }
                 throw new SystemException("Periode Aktif Belum Ada !");
             }
@@ -103,23 +80,21 @@ namespace WebApp.Api
         {
             try
             {
-                var result = from a in _context.Karyawan.Where(x => x.idkaryawan == id)
-                             join b in _context.Perusahaan on a.idperusahaan equals b.idperusahaan
-                             select new Karyawan
-                             {
-                                 idkaryawan = a.idkaryawan,
-                                 kodekaryawan = a.kodekaryawan,
-                                 namakaryawan = a.namakaryawan,
-                                 perusahaan = b,
-                                 jabatan = a.jabatan,
-                                 kontak = a.kontak,
-                                 email = a.email,
-                                 alamat = a.alamat,
-                                 photo = a.photo
-                             };
-                var karyawan = result.FirstOrDefault();
-                var user = await _userManager.FindByNameAsync(karyawan.kodekaryawan);
+                var karyawans = _context.Karyawan.Where(x => x.Id == id)
+                .Include(x => x.Perusahaans)
+                    .ThenInclude(x => x.Perusahaan)
+                .Include(x => x.Pelanggarans)
+                    .ThenInclude(z => z.DataPerusahaan)
+                .Include(x => x.Pelanggarans)
+                    .ThenInclude(x => x.Files)
+                .Include(x => x.Pelanggarans)
+                    .ThenInclude(x => x.Jenispelanggaran).ThenInclude(x => x.Level);
+
+                var karyawan = karyawans.FirstOrDefault();
+                var user = await _userManager.FindByNameAsync(karyawan.KodeKaryawan);
                 karyawan.Roles = await _userManager.GetRolesAsync(user) as List<string>;
+
+
                 return Ok(karyawan);
             }
             catch (System.Exception ex)
@@ -134,8 +109,8 @@ namespace WebApp.Api
         {
             try
             {
-                var karyawan = _context.Karyawan.Where(x => x.idkaryawan == id).FirstOrDefault();
-                var user = await _userManager.FindByNameAsync(karyawan.kodekaryawan);
+                var karyawan = _context.Karyawan.Where(x => x.Id == id).FirstOrDefault();
+                var user = await _userManager.FindByNameAsync(karyawan.KodeKaryawan);
                 karyawan.Roles = await _userManager.GetRolesAsync(user) as List<string>;
                 return Ok(karyawan.Roles.ToList());
             }
@@ -150,36 +125,57 @@ namespace WebApp.Api
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Karyawan value)
         {
-            value.idperusahaan = value.perusahaan.idperusahaan;
-            var user = new IdentityUser { UserName = value.kodekaryawan };
-            try
+            var user = new IdentityUser { UserName = value.KodeKaryawan };
+            using (var transaction = _context.Database.BeginTransaction())
             {
-                var result = await _userManager.CreateAsync(user, "Id" + value.kodekaryawan + "#");
-                if (result.Succeeded)
+                try
                 {
-                    value.userid = user.Id;
-                    if (value.DataPhoto != null && value.DataPhoto.Length > 0)
+                    var password = "Pwd" + value.KodeKaryawan + "#";
+                    var result = await _userManager.CreateAsync(user, password);
+                    if (result.Succeeded)
                     {
-                        value.photo = Helpers.CreateFileName("image");
-                        System.IO.File.WriteAllBytes(Helpers.ProfilePath + value.photo, Helpers.CreateThumb(value.DataPhoto));
+                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                        if (!string.IsNullOrEmpty(user.Email))
+                        {
+                            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                            var callbackUrl = Url.Page(
+                                "/Account/ConfirmEmail",
+                                pageHandler: null,
+                                values: new { area = "Identity", userid = user.Id, code = code },
+                                protocol: Request.Scheme);
+
+                            await _emailSender.SendEmailAsync(user.Email, "Confirm your email",
+                                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>. <hr/> <strong>Password : {password}</strong> ");
+                        }
+                        else
+                        {
+                            await _userManager.ConfirmEmailAsync(user, code);
+                        }
+
+                        value.UserId = user.Id;
+                        if (value.DataPhoto != null && value.DataPhoto.Length > 0)
+                        {
+                            value.Photo = Helpers.CreateFileName("image");
+                            System.IO.File.WriteAllBytes(Helpers.ProfilePath + value.Photo, Helpers.CreateThumb(value.DataPhoto));
+                        }
+
+                        value.Perusahaans.Add(value.PerusahaanKaryawan);
+                        _context.Karyawan.Add(value);
+                        _context.SaveChanges();
+                        if (value.Id <= 0)
+                            throw new SystemException("Data Karyawan  Tidak Berhasil Disimpan !");
+                        var addUserResult = await _userManager.AddToRoleAsync(user, "Karyawan");
+                        transaction.Commit();
+                        return Ok(value);
                     }
-                    value.perusahaan = null;
-                    _context.Karyawan.Add(value);
-                    _context.SaveChanges();
-                    if (value.idkaryawan <= 0)
-                        throw new SystemException("Data Karyawan  Tidak Berhasil Disimpan !");
-                    var addUserResult = await _userManager.AddToRoleAsync(user, "Karyawan");
-                    return Ok(value);
+                    throw new SystemException("User Tidak Berhasil Dibuat");
                 }
-                throw new SystemException("User Tidak Berhasil Dibuat");
-            }
-            catch (System.Exception ex)
-            {
-                if (user.Id != string.Empty)
+                catch (System.Exception ex)
                 {
                     await _userManager.DeleteAsync(user);
+                    transaction.Rollback();
+                    return BadRequest(ex.Message);
                 }
-                return BadRequest(ex.Message);
             }
         }
 
@@ -191,16 +187,22 @@ namespace WebApp.Api
             {
                 if (value.DataPhoto != null && value.DataPhoto.Length > 0)
                 {
-                    value.photo = Helpers.CreateFileName("image");
-                    System.IO.File.WriteAllBytes(Helpers.ProfilePath + value.photo, Helpers.CreateThumb(value.DataPhoto));
+                    value.Photo = Helpers.CreateFileName("image");
+                    System.IO.File.WriteAllBytes(Helpers.ProfilePath + value.Photo, Helpers.CreateThumb(value.DataPhoto));
                 }
-                var data = _context.Karyawan.Where(x => x.idkaryawan == value.idkaryawan).FirstOrDefault();
-                data.idperusahaan = value.idperusahaan;
-                data.alamat = value.alamat;
-                data.jabatan = value.jabatan;
-                data.kontak = value.kontak;
-                data.namakaryawan = value.namakaryawan;
-                data.photo = value.photo;
+                var data = _context.Karyawan.Where(x => x.Id == value.Id).Include(x => x.Perusahaans).FirstOrDefault();
+
+                if (data.PerusahaanKaryawan != null && data.PerusahaanKaryawan.PerusahaanId != value.PerusahaanKaryawan.PerusahaanId)
+                {
+                    value.PerusahaanKaryawan.Id = 0;
+                    data.Status = false;
+                    data.Perusahaans.Add(value.PerusahaanKaryawan);
+                }
+                data.PerusahaanKaryawan.SelesaiKerja = DateTime.Now;
+                data.Alamat = value.Alamat;
+                data.Kontak = value.Kontak;
+                data.NamaKaryawan = value.NamaKaryawan;
+                data.Photo = value.Photo;
                 _context.SaveChanges();
                 return Ok(value);
             }
@@ -217,7 +219,7 @@ namespace WebApp.Api
         {
             try
             {
-                var data = _context.Karyawan.Where(x => x.idkaryawan == id).FirstOrDefault();
+                var data = _context.Karyawan.Where(x => x.Id == id).FirstOrDefault();
                 _context.Karyawan.Remove(data);
                 var deleted = _context.SaveChanges();
                 if (deleted <= 0)
@@ -238,8 +240,8 @@ namespace WebApp.Api
 
             try
             {
-                var karyawan = _context.Karyawan.Where(x => x.idkaryawan == value.IdKaryawan).FirstOrDefault();
-                var user = await _userManager.FindByNameAsync(karyawan.kodekaryawan);
+                var karyawan = _context.Karyawan.Where(x => x.Id == value.IdKaryawan).FirstOrDefault();
+                var user = await _userManager.FindByNameAsync(karyawan.KodeKaryawan);
                 if (value.Checked)
                 {
                     var result = await _userManager.AddToRoleAsync(user, value.Role);

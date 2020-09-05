@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Data;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OAuth;
@@ -15,6 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WebApp.Data;
+using WebApp.Middlewares;
 
 namespace WebApp
 {
@@ -30,17 +32,23 @@ namespace WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
 
             services.Configure<ForwardedHeadersOptions>(options =>
             {
                 options.KnownProxies.Add(IPAddress.Parse("36.94.6.214"));
             });
+
             services.AddDbContext<ApplicationDbContext>(options =>
                options.UseMySql(
                    Configuration.GetConnectionString("DefaultConnection")));
 
 
             services.AddTransient<IEmailSender, EmailService>();
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+
+            services.AddScoped<IUserService, UserService>();
 
             services.AddDefaultIdentity<IdentityUser>(options =>
                  options.SignIn.RequireConfirmedAccount = true
@@ -64,48 +72,44 @@ namespace WebApp
                     options.ClaimActions.MapJsonKey("urn:google:profile", "link");
                     options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
                     options.ClaimActions.MapJsonKey("image", "picture");
-
-                    options.Events = new OAuthEvents()
-                    {
-                        OnCreatingTicket = HandleOnCreatingTicket
-                    };
                 });
 
 
             services.ConfigureApplicationCookie(options =>
-        {
-            options.Events = new CookieAuthenticationEvents()
             {
-                OnRedirectToLogin = (ctx) =>
+                options.Events = new CookieAuthenticationEvents()
                 {
-                    if (ctx.Request.Path.StartsWithSegments("/api") && ctx.Response.StatusCode == 200)
+                    OnRedirectToLogin = (ctx) =>
                     {
-                        ctx.Response.StatusCode = 401;
-                    }
-                    else
-                    {
-                        ctx.Response.Redirect(ctx.RedirectUri);
-                    }
+                        if (ctx.Request.Path.StartsWithSegments("/api") && ctx.Response.StatusCode == 200)
+                        {
+                            ctx.Response.StatusCode = 401;
+                        }
+                        else
+                        {
+                            ctx.Response.Redirect(ctx.RedirectUri);
+                        }
 
-                    return Task.CompletedTask;
-                },
-                OnRedirectToAccessDenied = (ctx) =>
-                {
-                    if (ctx.Request.Path.StartsWithSegments("/api") && ctx.Response.StatusCode == 200)
+                        return Task.CompletedTask;
+                    },
+                    OnRedirectToAccessDenied = (ctx) =>
                     {
-                        ctx.Response.StatusCode = 403;
-                    }
-                    else
-                    {
-                        ctx.Response.Redirect(ctx.RedirectUri);
-                    }
+                        if (ctx.Request.Path.StartsWithSegments("/api") && ctx.Response.StatusCode == 200)
+                        {
+                            ctx.Response.StatusCode = 403;
+                        }
+                        else
+                        {
+                            ctx.Response.Redirect(ctx.RedirectUri);
+                        }
 
-                    return Task.CompletedTask;
-                }
-            };
-        });
+                        return Task.CompletedTask;
+                    }
+                };
+            });
 
             services.AddCors();
+            services.AddControllers();
         }
 
         private async Task HandleOnCreatingTicket(OAuthCreatingTicketContext context)
@@ -151,12 +155,15 @@ namespace WebApp
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseMiddleware<JwtMiddleware>();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
+                endpoints.MapControllers();
             });
         }
     }

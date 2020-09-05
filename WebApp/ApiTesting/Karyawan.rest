@@ -1,4 +1,4 @@
-@host = http://36.94.6.214/api/karyawan
+@host = https://localhost:5001/api/karyawan
 
 
 ####
@@ -13,14 +13,23 @@ POST {{host}} HTTP/1.1
 Content-Type: application/json
 
 {
-    "idkaryawan": 0,
-    "idperusahaan": 1,
+    "Id": 0,
+    "kodekaryawan": 123456,
+    "perusahaanid": 1,
     "namakaryawan": "Aji Latuperisa",
     "jabatan": "Driver",
     "alamat": null,
     "kontak": null,
     "email": null,
-    "userid": null
+    "userid": null, 
+    "perusahaanKaryawan":{
+        "jabatan":"Manager",
+        "mulaiKerja":"2020-08-1-1",
+        "selesaiKerja":null,
+        "KaryawanId": 1,
+        "PerusahaanId": 1,
+
+    }
  }
 
 ####

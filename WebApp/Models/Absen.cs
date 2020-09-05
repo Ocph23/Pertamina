@@ -1,15 +1,22 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using WebApp.Data;
 
 namespace WebApp.Models
 {
     public class Absen
     {
         [Key]
-        public int idabsen { get; set; }
+        public int Id { get; set; }
 
-        [ForeignKey("Karyawan")]
-        public int idkaryawan { get; set; }
+        public AbsenType AbsenType { get; set; }
+
+        public DateTime? Masuk { get; set; }
+
+        public DateTime? Pulang { get; set; }
+
+        public virtual Karyawan Karyawan { get; set; }
 
     }
 }

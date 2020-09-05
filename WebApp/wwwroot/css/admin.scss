@@ -1,8 +1,4 @@
-%box-border {
-    background: linear-gradient(145deg, #275a7ea8, #001f34a8);
-    box-shadow: 1px 1px 0px #fffb007a, -1px -1px 0px #ff4a4a60;
-    border-radius: 5px;
-}
+@import "./variable";
 
 main {
     height: 100%;
@@ -14,9 +10,8 @@ main {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background: #143655;
-    box-shadow: inset 5px 5px 10px #081622, inset -5px -5px 10px #205688;
-    color: white;
+    @extend %box-border-in;
+    color: $color;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -33,9 +28,9 @@ main {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background: #143655;
-    box-shadow: inset 5px 5px 10px #081622, inset -5px -5px 10px #205688;
-    color: white;
+    @extend %box-border-out;
+    background: #62a000;
+    color: $color;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -44,13 +39,14 @@ main {
 
 .add-menu:hover {
     background: #62a000;
-    box-shadow: inset 5px 5px 10px #263d00, inset -5px -5px 10px #406800;
+    @extend %box-border-in;
+    border-radius: 50%;
     transition: box-shadow 200ms ease-in-out;
 }
 .header {
-    color: white;
+    color: $color;
     display: flex;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
     justify-content: space-between;
 }
 
@@ -63,8 +59,7 @@ main {
     .main-left {
         position: relative;
         grid-column: 1/2;
-        background: rgba(0, 34, 58, 0.59);
-        box-shadow: 5px 5px 10px #a1a1a1c5, 0px 0px 10px #ffffffa4;
+        @extend %box-border-out;
         width: 220px;
         height: 100%;
         .menus {
@@ -82,18 +77,18 @@ main {
                     margin: 10px;
                     width: 40%;
                     height: 50%;
+                    @extend %box-border-out;
                     border-radius: 50%;
-                    box-shadow: 1px 1px 0px white;
                 }
                 .user-name {
                     margin-top: 15px;
                     font-size: 15px;
-                    color: white;
+                    color: $color;
                     text-decoration: underline;
                     font-weight: bold;
                 }
                 .user-job {
-                    color: white;
+                    color: $color;
                     font-size: 10px;
                 }
             }
@@ -101,8 +96,8 @@ main {
             .menus-body {
                 grid-row: 2/3;
                 background: rgba(0, 34, 58, 0.59);
+                @extend %box-border-out;
                 border-radius: 40px 40px 0px 0px;
-                box-shadow: -2px -2px 6px #5f7788;
                 padding: 10%;
                 margin-top: 20px;
                 display: flex;
@@ -120,18 +115,22 @@ main {
                         padding-top: 10px;
                         padding-bottom: 10px;
                         margin: 2px;
-                        margin-bottom: 10px;
+                        margin-bottom: 20px;
                         font-size: 14px;
-                        color: white;
+                        color: $color;
                         display: flex;
                         flex-direction: row;
                         align-items: center;
                         img {
                             margin-right: 5px;
-                            max-width: 20px;
+                            max-width: 25px;
                         }
                         .menu-icon {
                             margin-right: 20px;
+                            cursor: pointer;
+                        }
+                        .menu-text {
+                            cursor: pointer;
                         }
                     }
 
@@ -148,25 +147,13 @@ main {
         grid-column: 2/3;
         padding: 2px;
         padding-left: 10px;
-        table {
-            color: black;
-            border-radius: 6px;
-            background: linear-gradient(145deg, #f0f0f0, #ffffff);
-            //box-shadow: 5px 5px 17px #354d0f, -5px -5px 17px #d3ff3b;
-            padding: 10px;
-            tr {
-                margin-top: 10px;
-                th,
-                td {
-                    border-top: 0.5px solid #dee2e6;
-                    border-bottom: 0.5px solid grey;
-                }
-            }
-            tr:hover {
-                color: #84c125;
-            }
-        }
     }
+}
+
+.active {
+    border-bottom: 2px solid rgb(255, 2, 2) !important;
+    font-weight: bold;
+    padding-bottom: 15px !important ;
 }
 
 .profile {
@@ -180,7 +167,7 @@ main {
     .profile-grafik,
     .profile-data {
         padding: 25px;
-        color: white;
+        color: $color;
         border-radius: 10px;
         background: linear-gradient(145deg, #00243ea8, #001f34a8);
         box-shadow: 1px 1px 0px #dcdcdc, -1px -1px 0px #d6d6d6;
@@ -198,12 +185,19 @@ main {
             .photo {
                 display: flex;
                 width: 100%;
-                height: 25% !important;
                 justify-content: center;
-                img {
-                    border-radius: 5px;
-                    width: 50%;
-                    height: 100%;
+                .photo-body {
+                    margin-top: 10px;
+                    @extend %box-border-out;
+                    border-radius: 10px;
+                    width: 40%;
+                    height: 35% !important;
+                    padding: 1px;
+                    img {
+                        border-radius: 5px;
+                        width: 100%;
+                        height: 100%;
+                    }
                 }
             }
 
@@ -214,7 +208,7 @@ main {
                     .label {
                         font-size: 11px;
                         font-style: italic;
-                        color: #94b4ca;
+                        color: $color-dark;
                     }
                     .nilai {
                         font-size: 14px;
@@ -225,17 +219,16 @@ main {
             .point {
                 width: 90%;
                 height: 30%;
-                border-radius: 23px;
-                background: linear-gradient(145deg, #00243ea8, #001f34a8);
-                box-shadow: 1px 1px 0px #00243ea8, -1px -1px 0px #00243ea8;
+                border-radius: 10px;
+                @extend %box-border-out;
                 .point-title {
                     position: absolute;
                     margin: 10px;
                 }
                 .chart {
                     margin: 20px;
-                    #chartPoint {
-                        width: 100%;
+                    canvas {
+                        width: 100% !important;
                     }
                 }
             }
@@ -244,12 +237,34 @@ main {
     .profile-grafik {
         grid-row: 2/3;
         grid-column: 1/2;
+        display: flex;
+        flex-direction: column;
+        button {
+            margin-top: 10px;
+        }
     }
     .profile-data {
         grid-row: 1/3;
         grid-column: 2/3;
 
         .profile-data-date {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: row;
+        }
+    }
+}
+
+.pelanggaran-data {
+    @extend %box-border-out;
+    background-color: $bg-box;
+    .profile-data {
+        padding: 25px;
+        color: $color;
+        border-radius: 10px;
+        box-shadow: 1px 1px 0px #dcdcdc, -1px -1px 0px #d6d6d6;
+        .profile-data-date {
+            margin-top: 15px;
             display: flex;
             flex-direction: row;
         }
@@ -257,18 +272,19 @@ main {
 }
 
 .form-info-group {
-    margin-bottom: 15px;
+    margin-bottom: 6px;
     margin-right: 2px;
     .label {
         font-size: 11px;
         font-style: italic;
-        color: #94b4ca;
+        color: $color-dark;
+        margin-bottom: 2px;
     }
     .nilai {
         font-size: 14px;
         .check-box {
             display: flex;
-            color: white;
+            color: $color;
         }
     }
 }
@@ -281,14 +297,15 @@ hr {
 .pelanggaran {
     height: 100%;
     display: grid;
-    grid-template-columns: 1.5fr 3fr;
+    grid-template-columns: 1fr 3fr;
     grid-gap: 5px;
+    @extend %box-border-out;
+    background-color: $bg-box;
     .user-bg,
     .add-pelanggaran {
         width: 100%;
         height: 100%;
-        color: white;
-        @extend %box-border;
+        color: $color;
     }
 
     .add-pelanggaran {
@@ -320,7 +337,7 @@ hr {
             bottom: 30px;
             height: 100%;
             button {
-                color: white;
+                color: $color;
                 padding: 20px;
             }
         }
@@ -381,6 +398,8 @@ hr {
     }
 
     .user-bg {
+        @extend %box-border-out;
+        box-shadow: 10px 3px 15px #13222c79, -2px -2px 5px #92bad379;
         min-width: 300px;
         display: flex;
         padding: 15px;
@@ -392,32 +411,26 @@ hr {
         .search {
             margin-bottom: 20px;
             display: flex;
-            border-radius: 5px;
-            background-color: #00243e25;
-            box-shadow: 1px 1px 0px #d6d6d6, -1px -1px 0px #d6d6d6;
-            padding: 10px;
+            @extend %box-border-out;
+            margin: 10px;
         }
 
         .users {
+            padding: 10px;
             max-height: 80vh;
             .user {
                 margin-bottom: 10px;
                 padding: 15px;
                 border-radius: 5px;
-                background-color: #00243e25;
-                box-shadow: 1px 1px 0px #d6d6d656, -1px -1px 0px #d6d6d656;
+                @extend %box-border-out;
                 .userbody {
                     display: flex;
                     flex-direction: row;
                     img {
+                        @extend %box-border-out;
                         width: 100px;
-                        height: 120px;
+                        height: 130px;
                         margin-right: 10px;
-                    }
-                    .user-body {
-                        .form-info-group {
-                            margin-bottom: 5px;
-                        }
                     }
                 }
 
@@ -425,14 +438,11 @@ hr {
                     display: none;
                     width: 100%;
                     margin-top: 10px;
-                    .form-info-group {
-                        margin-bottom: 5px;
-                    }
                 }
             }
 
             .user-selected {
-                background-color: #00243ea1;
+                background-color: #00243e52;
                 .user-input {
                     display: block;
                     select {
@@ -440,7 +450,7 @@ hr {
                     }
                 }
                 .user-input-btns {
-                    margin-top: 5px;
+                    margin-top: 10px;
                     display: flex;
                     justify-content: flex-end;
                 }
@@ -456,28 +466,37 @@ hr {
     .perusahaan-baru,
     .data-perusahaan {
         border-radius: 10px;
-        background: linear-gradient(145deg, #00243ea8, #001f34a8);
-        box-shadow: 1px 1px 0px #dcdcdc, -1px -1px 0px #d6d6d6;
+        @extend %box-border-out;
+        background-color: $bg-box;
         padding: 20px;
     }
 
     .perusahaan-baru {
         width: 35%;
         min-width: 300px;
+        margin-right: 8px;
         .logo {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             margin: 5px;
+            margin-top: 15px;
             width: 100%;
-            height: 17%;
+            height: 15%;
 
-            img {
+            .logo-body {
+                @extend %box-border-out;
                 border-radius: 10px;
                 width: 40%;
                 height: 100%;
-                object-fit: cover;
+                padding: 1px;
+                img {
+                    border-radius: 10px;
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
             }
         }
 
@@ -485,6 +504,7 @@ hr {
             padding: 20px;
             display: flex;
             flex-direction: column;
+            height: 65vh;
             .btn-option {
                 display: flex;
                 justify-content: flex-end;
@@ -507,7 +527,8 @@ hr {
 
 .jenis-pelanggaran {
     height: 100%;
-    @extend %box-border;
+    @extend %box-border-out;
+    background-color: $bg-box;
     padding: 30px;
     display: flex;
     flex-direction: column;
@@ -519,14 +540,13 @@ hr {
         grid-template-columns: minmax(200px, 1fr) 3fr;
         .jenis-body {
             .jenis {
-                border-radius: 5px;
-                margin: 5px;
-                background-color: #001f34a8;
+                margin: 15px;
+                @extend %box-border-out;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
                 .jenis-text {
-                    color: white;
+                    color: $color;
                     padding: 20px;
                     width: 100%;
                     cursor: pointer;
@@ -600,20 +620,16 @@ hr {
                             display: flex;
                             flex-direction: row;
                             justify-content: space-between;
-                            button {
-                                margin-left: 5px;
-                            }
                         }
                     }
                 }
             }
         }
         .detail-body {
-            background: linear-gradient(145deg, #00243ea8, #001f34a8);
-            box-shadow: 1px 1px 0px #001f34a8, -1px -1px 0px #001f34a8;
-            border-radius: 10px;
+            @extend %box-border-out;
             height: 100%;
             padding: 20px;
+            margin-top: 15px;
             .detail-table {
                 height: 50vh;
             }
@@ -626,12 +642,12 @@ hr {
         margin-bottom: 10px;
         margin-right: 2px;
         .label {
-            font-size: 8px;
+            //font-size: 8px;
             font-style: italic;
-            color: #94b4ca;
+            color: $color-dark;
         }
         .nilai {
-            font-size: 10px;
+            //font-size: 10px;
         }
     }
 
@@ -651,12 +667,9 @@ hr {
 .optionItem {
     display: none;
     width: auto;
-    i {
-        margin-left: 10px;
-    }
 }
 .option-show {
-    display: block;
+    display: flex;
     animation: optionItemAnimation 100ms;
     animation-fill-mode: forwards;
 }
@@ -668,15 +681,20 @@ hr {
 button {
     margin-left: 3px;
 }
+
 .tcenter {
-    background-color: white;
     vertical-align: middle !important;
     text-align: center !important;
+}
+.tright {
+    vertical-align: middle !important;
+    text-align: right !important;
 }
 
 .buktishow {
     flex-direction: column;
     display: flex;
+    height: 70vh;
     width: 100%;
     position: relative;
     padding: 10px;
@@ -755,7 +773,6 @@ input[type="radio"] {
     margin-right: 10px;
     /* width: auto; */
 }
-
 @keyframes optionItemAnimation {
     to {
         width: auto;
@@ -783,7 +800,6 @@ input[type="radio"] {
 
     .pelanggaran {
         grid-template-columns: 1fr;
-
         .add-pelanggaran {
             position: relative;
             min-height: 300px;
@@ -807,7 +823,7 @@ input[type="radio"] {
                 bottom: 30px;
                 height: 100%;
                 button {
-                    color: white;
+                    color: $color;
                     padding: 20px;
                 }
             }

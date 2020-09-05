@@ -1,6 +1,6 @@
 <div class="jenis-pelanggaran">
     <div class="header">
-        <h5>Jenis Pelanggaran</h5>
+        <strong class="header-title">JENIS PELANGGARAN</strong>
     </div>
     <div class="jenis-main">
         <div class="jenis-body vertical-scroll">
@@ -31,33 +31,41 @@
         </div>
         <div class="detail-body">
             <div class="header">
-                <h5>Detail Pelanggaran</h5>
+                <strong class="header-title">Detail Pelanggaran</strong>
                 <div ng-show="selected" class="add-menu" id="close-menu" ng-click="addDetail()"><i
                         class="fa fa-plus"></i></div>
 
             </div>
-            <div class="vertical-scroll" style="height: 65vh;">
-                <table class="table" ng-show="selected">
+            <div class="vertical-scroll" style="height: 60vh;">
+                <table class="table" ng-show="selected" datatable="ng" dt-options="showCase.dtOptions"
+                    dt-column-defs="showCase.dtColumnDefs">
                     <thead>
                         <tr>
                             <th style="min-width: 200px;">Nama Pelanggaran</th>
-                            <th style="width: auto;">Karyawan</th>
-                            <th style="width: auto;">Perusahaan</th>
-                            <th style="width: auto;">Melaporkan</th>
-                            <th style="width: 100px;" class="text-center"></th>
+                            <th class="tcenter">Karyawan</th>
+                            <th class="tcenter">Perusahaan</th>
+                            <th class="tcenter">Melaporkan</th>
+                            <th class="text-center"></th>
                         </tr>
                     </thead>
                     <tbody ng-repeat="detail in selected.datas">
                         <tr ng-if="!detail.isNew">
                             <td>{{detail.jenispelanggaran }}</td>
-                            <td>{{detail.pengurangankaryawan }}</td>
-                            <td>{{detail.penguranganperusahaan}}</td>
-                            <td>{{detail.penambahanpoint}}</td>
+                            <td class="tcenter">{{detail.pengurangankaryawan }}</td>
+                            <td class="tcenter">{{detail.penguranganperusahaan}}</td>
+                            <td class="tcenter">{{detail.penambahanpoint}}</td>
                             <td>
-                                <i class="fa fa-cog" ng-show="!optionShow" ng-click="optionShow= !optionShow"></i>
+                                <button class="btn btn-info" ng-show="!optionShow" ng-click="optionShow= !optionShow">
+                                    <i class="fa fa-cog"></i>
+                                </button>
                                 <div class="optionItem" ng-class="{'option-show':optionShow}">
-                                    <i class="fa fa-edit text-warning" ng-click="detail.isNew=true"></i>
-                                    <i class="fa fa-trash  text-danger" ng-click="deleteDetail(detail)"></i>
+                                    <button class="btn btn-warning" ng-click="detail.isNew=true">
+                                        <i class="fa fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-danger" ng-click="deleteDetail(detail)">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+
                                 </div>
 
                             </td>

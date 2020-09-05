@@ -4,11 +4,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - WebApp</title>
+    @* <link  rel="stylesheet" href="~/lib/Montserrat/Montserrat-Regular.css?fonts=roboto-regular" type="text/css" /> *@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/lib/fontawesome5/css/all.css" />
     <link rel="stylesheet" href="~/lib/Chartjs/Chart.css"/>
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/admin.css" />
+    <link rel="stylesheet" href="~/lib/datatable/css/datatable.css">
+    <link rel="stylesheet" href="~/lib/angular-datatables/css/angular-datatables.css">
 </head>
 <body  ng-app="admin">
     <header>
@@ -42,11 +45,13 @@
             &copy; 2020 - Pertamin - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/datatables.net/jquery.dataTables.js"></script>
     <script src="~/lib/Chartjs/Chart.js"></script>
       <script src="~/lib/animejs/anime.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/angularjs/angular.min.js"></script>
+    <script src="~/lib/angular-datatables/angular-datatables.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/lib/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="~/js/services.js" asp-append-version="true"></script>

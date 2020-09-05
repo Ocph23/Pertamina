@@ -2,7 +2,7 @@
     <div class="user-bg">
         <div class="search">
             <input class="form-control" style="margin-right: 3px;" ng-model="search" />
-            <button class="btn btn-danger">Search</button>
+            <button class="btn btn-danger" style="margin:0px"><i class="fa fa-search"></i></button>
         </div>
         <div class="users vertical-scroll">
             <div class="user" ng-class="{'user-selected':item.userSelect}" ng-repeat="item in datas | filter : search"
@@ -16,11 +16,11 @@
                         </div>
                         <div class="form-info-group">
                             <div class="label">Jabatan</div>
-                            <div class="nilai">{{item.jabatan}}</div>
+                            <div class="nilai">{{item.perusahaanKaryawan.jabatan}}</div>
                         </div>
                         <div class="form-info-group">
                             <div class="label">Nama Perusahaan</div>
-                            <div class="nilai">{{item.perusahaan.namaperusahaan}}</div>
+                            <div class="nilai">{{item.perusahaanKaryawan.perusahaan.namaperusahaan}}</div>
                         </div>
                     </div>
                 </div>

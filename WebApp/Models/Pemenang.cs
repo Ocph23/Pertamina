@@ -8,23 +8,17 @@ using System.Threading.Tasks;
 
 namespace WebApp.Models
 {
-    // [TableName ("Pemenang")]
 
     public class Pemenang
     {
         [Key]
-        // [PrimaryKey ("idpemenang")]
-        // [DbColumn ("idpemenang")]
-        public int idpemenang { get; set; }
+        public int Id { get; set; }
 
-        // [DbColumn ("idkaryawan")]
-        [ForeignKey("Karyawan")]
-        public int idkaryawan { get; set; }
+        public int PeriodeId { get; set; }
+        public Periode Periode { get; set; }
 
-
-        [ForeignKey("Periode")]
-        // [DbColumn ("idperiode")]
-        public int idperiode { get; set; }
+        public int KaryawanId { get; set; }
+        public Karyawan Karyawan{get;set;}
 
     }
 }

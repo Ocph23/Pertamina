@@ -1,44 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using WebApp.Data;
-using WebApp.Models;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using WebApp.Middlewares;
 
 namespace WebApp.Api
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class UserController : ControllerBase
     {
-        private IConfiguration _config;
         private ApplicationDbContext _context;
+        private IUserService _userService;
         private UserManager<IdentityUser> _userManager;
-        private SignInManager<IdentityUser> _signInManager;
         private RoleManager<IdentityRole> _roleManager;
+        private IConfiguration _config;
 
-        public UserController(IConfiguration config, SignInManager<IdentityUser> signInManager,
+        public UserController(IConfiguration config,
+                IUserService userService,
             UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext dbcontext)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
             _roleManager = roleManager;
             _config = config;
             _context = dbcontext;
+            _userService = userService;
         }
 
         // GET: api/Employees
 
 
         // GET: api/Employees/5
+        [Authorize]
         [HttpGet("profile")]
         public async Task<IActionResult> profile()
         {
@@ -50,10 +46,10 @@ namespace WebApp.Api
                 user.SecurityStamp = null;
                 user.ConcurrencyStamp = null;
                 var nama = user.UserName;
-                var karyawan = _context.Karyawan.Where(x => x.userid == user.Id).FirstOrDefault();
+                var karyawan = _context.Karyawan.Where(x => x.UserId == user.Id).FirstOrDefault();
                 if (karyawan != null)
                 {
-                    nama = karyawan.namakaryawan;
+                    nama = karyawan.NamaKaryawan;
 
                 }
 
@@ -64,11 +60,22 @@ namespace WebApp.Api
             {
                 return BadRequest(ex.Message);
             }
-
-
-
         }
 
-
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login([FromBody] UserLogin user)
+        {
+            try
+            {
+                var response = await _userService.Authenticate(user);
+                if (response == null)
+                    return BadRequest(new { message = "Username or password is incorrect" });
+                return Ok(response);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

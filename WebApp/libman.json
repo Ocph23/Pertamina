@@ -1,11 +1,25 @@
 {
-	"version": "1.0",
-	"defaultProvider": "cdnjs",
-	"libraries": [
-		{
-			"library": "angular.js@1.8.0",
-			"destination": "wwwroot/lib/angularjs/",
-			"files": [ "angular.min.js" ]
-		}
-	]
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "angular.js@1.8.0",
+      "destination": "wwwroot/lib/angularjs/",
+      "files": [
+        "angular.min.js"
+      ]
+    },
+    {
+      "library": "angular-datatables@0.6.4",
+      "destination": "wwwroot/lib/angular-datatables/"
+    },
+    {
+      "library": "datatable@2.0.1",
+      "destination": "wwwroot/lib/datatable/"
+    },
+    {
+      "library": "datatables.net@1.10.21",
+      "destination": "wwwroot/lib/datatables.net/"
+    }
+  ]
 }

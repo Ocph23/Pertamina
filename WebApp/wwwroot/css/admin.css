@@ -1,9 +1,36 @@
-.pelanggaran .user-bg,
-.pelanggaran .add-pelanggaran, .jenis-pelanggaran {
-  background: linear-gradient(145deg, #275a7ea8, #001f34a8);
-  -webkit-box-shadow: 1px 1px 0px #fffb007a, -1px -1px 0px #ff4a4a60;
-          box-shadow: 1px 1px 0px #fffb007a, -1px -1px 0px #ff4a4a60;
+.close-menu, .add-menu:hover {
+  border-radius: 6px;
+  -webkit-box-shadow: inset 3px 3px 5px #13222c79, inset -2px -2px 5px #92bad379;
+          box-shadow: inset 3px 3px 5px #13222c79, inset -2px -2px 5px #92bad379;
+  color: white;
+  border: 0px;
+}
+
+.add-menu, .admin .main-left, .admin .main-left .menus .menus-header img, .admin .main-left .menus .menus-body, .profile .profile-biodata .profile-biodata-body .photo .photo-body, .profile .profile-biodata .profile-biodata-body .point, .pelanggaran-data, .pelanggaran, .pelanggaran .user-bg, .pelanggaran .user-bg .search, .pelanggaran .user-bg .users .user, .pelanggaran .user-bg .users .user .userbody img, .perusahaan .perusahaan-baru,
+.perusahaan .data-perusahaan, .perusahaan .perusahaan-baru .logo .logo-body, .jenis-pelanggaran, .jenis-pelanggaran .jenis-main .jenis-body .jenis, .jenis-pelanggaran .jenis-main .detail-body {
+  -webkit-box-shadow: 3px 3px 5px #13222c79, -2px -2px 5px #92bad379;
+          box-shadow: 3px 3px 5px #13222c79, -2px -2px 5px #92bad379;
+  color: white;
+  border: 0px;
   border-radius: 5px;
+}
+
+@media only screen and (max-width: 500px) {
+  .close-menu, .add-menu:hover {
+    -webkit-box-shadow: inset 3px 3px 5px #13222c79, inset -2px -2px 5px #92bad379;
+            box-shadow: inset 3px 3px 5px #13222c79, inset -2px -2px 5px #92bad379;
+    color: white;
+    border: 0px;
+    border-radius: 0px;
+  }
+  .add-menu, .admin .main-left, .admin .main-left .menus .menus-header img, .admin .main-left .menus .menus-body, .profile .profile-biodata .profile-biodata-body .photo .photo-body, .profile .profile-biodata .profile-biodata-body .point, .pelanggaran-data, .pelanggaran, .pelanggaran .user-bg, .pelanggaran .user-bg .search, .pelanggaran .user-bg .users .user, .pelanggaran .user-bg .users .user .userbody img, .perusahaan .perusahaan-baru,
+  .perusahaan .data-perusahaan, .perusahaan .perusahaan-baru .logo .logo-body, .jenis-pelanggaran, .jenis-pelanggaran .jenis-main .jenis-body .jenis, .jenis-pelanggaran .jenis-main .detail-body {
+    -webkit-box-shadow: 3px 3px 5px #13222c79, -2px -2px 5px #92bad379;
+            box-shadow: 3px 3px 5px #13222c79, -2px -2px 5px #92bad379;
+    color: white;
+    border: 0px;
+    border-radius: 0px;
+  }
 }
 
 main {
@@ -18,9 +45,6 @@ main {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: #143655;
-  -webkit-box-shadow: inset 5px 5px 10px #081622, inset -5px -5px 10px #205688;
-          box-shadow: inset 5px 5px 10px #081622, inset -5px -5px 10px #205688;
   color: white;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -49,9 +73,7 @@ main {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: #143655;
-  -webkit-box-shadow: inset 5px 5px 10px #081622, inset -5px -5px 10px #205688;
-          box-shadow: inset 5px 5px 10px #081622, inset -5px -5px 10px #205688;
+  background: #62a000;
   color: white;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -68,8 +90,7 @@ main {
 
 .add-menu:hover {
   background: #62a000;
-  -webkit-box-shadow: inset 5px 5px 10px #263d00, inset -5px -5px 10px #406800;
-          box-shadow: inset 5px 5px 10px #263d00, inset -5px -5px 10px #406800;
+  border-radius: 50%;
   -webkit-transition: -webkit-box-shadow 200ms ease-in-out;
   transition: -webkit-box-shadow 200ms ease-in-out;
   transition: box-shadow 200ms ease-in-out;
@@ -81,7 +102,7 @@ main {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
@@ -101,9 +122,6 @@ main {
   -ms-grid-column: 1;
   -ms-grid-column-span: 1;
   grid-column: 1/2;
-  background: rgba(0, 34, 58, 0.59);
-  -webkit-box-shadow: 5px 5px 10px #a1a1a1c5, 0px 0px 10px #ffffffa4;
-          box-shadow: 5px 5px 10px #a1a1a1c5, 0px 0px 10px #ffffffa4;
   width: 220px;
   height: 100%;
 }
@@ -141,8 +159,6 @@ main {
   width: 40%;
   height: 50%;
   border-radius: 50%;
-  -webkit-box-shadow: 1px 1px 0px white;
-          box-shadow: 1px 1px 0px white;
 }
 
 .admin .main-left .menus .menus-header .user-name {
@@ -164,8 +180,6 @@ main {
   grid-row: 2/3;
   background: rgba(0, 34, 58, 0.59);
   border-radius: 40px 40px 0px 0px;
-  -webkit-box-shadow: -2px -2px 6px #5f7788;
-          box-shadow: -2px -2px 6px #5f7788;
   padding: 10%;
   margin-top: 20px;
   display: -webkit-box;
@@ -194,7 +208,7 @@ main {
   padding-top: 10px;
   padding-bottom: 10px;
   margin: 2px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   font-size: 14px;
   color: white;
   display: -webkit-box;
@@ -211,11 +225,16 @@ main {
 
 .admin .main-left .menus .menus-body ul li img {
   margin-right: 5px;
-  max-width: 20px;
+  max-width: 25px;
 }
 
 .admin .main-left .menus .menus-body ul li .menu-icon {
   margin-right: 20px;
+  cursor: pointer;
+}
+
+.admin .main-left .menus .menus-body ul li .menu-text {
+  cursor: pointer;
 }
 
 .admin .main-left .menus .menus-body ul li:hover {
@@ -231,25 +250,10 @@ main {
   padding-left: 10px;
 }
 
-.admin .main-right table {
-  color: black;
-  border-radius: 6px;
-  background: linear-gradient(145deg, #f0f0f0, #ffffff);
-  padding: 10px;
-}
-
-.admin .main-right table tr {
-  margin-top: 10px;
-}
-
-.admin .main-right table tr th,
-.admin .main-right table tr td {
-  border-top: 0.5px solid #dee2e6;
-  border-bottom: 0.5px solid grey;
-}
-
-.admin .main-right table tr:hover {
-  color: #84c125;
+.active {
+  border-bottom: 2px solid #ff0202 !important;
+  font-weight: bold;
+  padding-bottom: 15px !important;
 }
 
 .profile {
@@ -303,15 +307,22 @@ main {
   display: -ms-flexbox;
   display: flex;
   width: 100%;
-  height: 25% !important;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
 }
 
-.profile .profile-biodata .profile-biodata-body .photo img {
+.profile .profile-biodata .profile-biodata-body .photo .photo-body {
+  margin-top: 10px;
+  border-radius: 10px;
+  width: 40%;
+  height: 35% !important;
+  padding: 1px;
+}
+
+.profile .profile-biodata .profile-biodata-body .photo .photo-body img {
   border-radius: 5px;
-  width: 50%;
+  width: 100%;
   height: 100%;
 }
 
@@ -326,7 +337,7 @@ main {
 .profile .profile-biodata .profile-biodata-body .biodata-data .biodata-info-group .label {
   font-size: 11px;
   font-style: italic;
-  color: #94b4ca;
+  color: #74a7ce;
 }
 
 .profile .profile-biodata .profile-biodata-body .biodata-data .biodata-info-group .nilai {
@@ -336,10 +347,7 @@ main {
 .profile .profile-biodata .profile-biodata-body .point {
   width: 90%;
   height: 30%;
-  border-radius: 23px;
-  background: linear-gradient(145deg, #00243ea8, #001f34a8);
-  -webkit-box-shadow: 1px 1px 0px #00243ea8, -1px -1px 0px #00243ea8;
-          box-shadow: 1px 1px 0px #00243ea8, -1px -1px 0px #00243ea8;
+  border-radius: 10px;
 }
 
 .profile .profile-biodata .profile-biodata-body .point .point-title {
@@ -351,8 +359,8 @@ main {
   margin: 20px;
 }
 
-.profile .profile-biodata .profile-biodata-body .point .chart #chartPoint {
-  width: 100%;
+.profile .profile-biodata .profile-biodata-body .point .chart canvas {
+  width: 100% !important;
 }
 
 .profile .profile-grafik {
@@ -362,6 +370,17 @@ main {
   -ms-grid-column: 1;
   -ms-grid-column-span: 1;
   grid-column: 1/2;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.profile .profile-grafik button {
+  margin-top: 10px;
 }
 
 .profile .profile-data {
@@ -374,6 +393,30 @@ main {
 }
 
 .profile .profile-data .profile-data-date {
+  margin-top: 15px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+.pelanggaran-data {
+  background-color: #001d3093;
+}
+
+.pelanggaran-data .profile-data {
+  padding: 25px;
+  color: white;
+  border-radius: 10px;
+  -webkit-box-shadow: 1px 1px 0px #dcdcdc, -1px -1px 0px #d6d6d6;
+          box-shadow: 1px 1px 0px #dcdcdc, -1px -1px 0px #d6d6d6;
+}
+
+.pelanggaran-data .profile-data .profile-data-date {
+  margin-top: 15px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -384,14 +427,15 @@ main {
 }
 
 .form-info-group {
-  margin-bottom: 15px;
+  margin-bottom: 6px;
   margin-right: 2px;
 }
 
 .form-info-group .label {
   font-size: 11px;
   font-style: italic;
-  color: #94b4ca;
+  color: #74a7ce;
+  margin-bottom: 2px;
 }
 
 .form-info-group .nilai {
@@ -414,9 +458,10 @@ hr {
   height: 100%;
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 1.5fr 3fr;
-      grid-template-columns: 1.5fr 3fr;
+  -ms-grid-columns: 1fr 3fr;
+      grid-template-columns: 1fr 3fr;
   grid-gap: 5px;
+  background-color: #001d3093;
 }
 
 .pelanggaran .user-bg,
@@ -542,6 +587,8 @@ hr {
 }
 
 .pelanggaran .user-bg {
+  -webkit-box-shadow: 10px 3px 15px #13222c79, -2px -2px 5px #92bad379;
+          box-shadow: 10px 3px 15px #13222c79, -2px -2px 5px #92bad379;
   min-width: 300px;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -567,14 +614,11 @@ hr {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  border-radius: 5px;
-  background-color: #00243e25;
-  -webkit-box-shadow: 1px 1px 0px #d6d6d6, -1px -1px 0px #d6d6d6;
-          box-shadow: 1px 1px 0px #d6d6d6, -1px -1px 0px #d6d6d6;
-  padding: 10px;
+  margin: 10px;
 }
 
 .pelanggaran .user-bg .users {
+  padding: 10px;
   max-height: 80vh;
 }
 
@@ -582,9 +626,6 @@ hr {
   margin-bottom: 10px;
   padding: 15px;
   border-radius: 5px;
-  background-color: #00243e25;
-  -webkit-box-shadow: 1px 1px 0px #d6d6d656, -1px -1px 0px #d6d6d656;
-          box-shadow: 1px 1px 0px #d6d6d656, -1px -1px 0px #d6d6d656;
 }
 
 .pelanggaran .user-bg .users .user .userbody {
@@ -599,12 +640,8 @@ hr {
 
 .pelanggaran .user-bg .users .user .userbody img {
   width: 100px;
-  height: 120px;
+  height: 130px;
   margin-right: 10px;
-}
-
-.pelanggaran .user-bg .users .user .userbody .user-body .form-info-group {
-  margin-bottom: 5px;
 }
 
 .pelanggaran .user-bg .users .user .user-input {
@@ -613,12 +650,8 @@ hr {
   margin-top: 10px;
 }
 
-.pelanggaran .user-bg .users .user .user-input .form-info-group {
-  margin-bottom: 5px;
-}
-
 .pelanggaran .user-bg .users .user-selected {
-  background-color: #00243ea1;
+  background-color: #00243e52;
 }
 
 .pelanggaran .user-bg .users .user-selected .user-input {
@@ -630,7 +663,7 @@ hr {
 }
 
 .pelanggaran .user-bg .users .user-selected .user-input-btns {
-  margin-top: 5px;
+  margin-top: 10px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -649,15 +682,14 @@ hr {
 .perusahaan .perusahaan-baru,
 .perusahaan .data-perusahaan {
   border-radius: 10px;
-  background: linear-gradient(145deg, #00243ea8, #001f34a8);
-  -webkit-box-shadow: 1px 1px 0px #dcdcdc, -1px -1px 0px #d6d6d6;
-          box-shadow: 1px 1px 0px #dcdcdc, -1px -1px 0px #d6d6d6;
+  background-color: #001d3093;
   padding: 20px;
 }
 
 .perusahaan .perusahaan-baru {
   width: 35%;
   min-width: 300px;
+  margin-right: 8px;
 }
 
 .perusahaan .perusahaan-baru .logo {
@@ -675,13 +707,21 @@ hr {
       -ms-flex-pack: center;
           justify-content: center;
   margin: 5px;
+  margin-top: 15px;
   width: 100%;
-  height: 17%;
+  height: 15%;
 }
 
-.perusahaan .perusahaan-baru .logo img {
+.perusahaan .perusahaan-baru .logo .logo-body {
   border-radius: 10px;
   width: 40%;
+  height: 100%;
+  padding: 1px;
+}
+
+.perusahaan .perusahaan-baru .logo .logo-body img {
+  border-radius: 10px;
+  width: 100%;
   height: 100%;
   -o-object-fit: cover;
      object-fit: cover;
@@ -696,6 +736,7 @@ hr {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+  height: 65vh;
 }
 
 .perusahaan .perusahaan-baru .data-body .btn-option {
@@ -722,6 +763,7 @@ hr {
 
 .jenis-pelanggaran {
   height: 100%;
+  background-color: #001d3093;
   padding: 30px;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -744,9 +786,7 @@ hr {
 }
 
 .jenis-pelanggaran .jenis-main .jenis-body .jenis {
-  border-radius: 5px;
-  margin: 5px;
-  background-color: #001f34a8;
+  margin: 15px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -865,17 +905,10 @@ hr {
           justify-content: space-between;
 }
 
-.jenis-pelanggaran .jenis-main .jenis-body .jenis-baru .jenis-input .data-input form button {
-  margin-left: 5px;
-}
-
 .jenis-pelanggaran .jenis-main .detail-body {
-  background: linear-gradient(145deg, #00243ea8, #001f34a8);
-  -webkit-box-shadow: 1px 1px 0px #001f34a8, -1px -1px 0px #001f34a8;
-          box-shadow: 1px 1px 0px #001f34a8, -1px -1px 0px #001f34a8;
-  border-radius: 10px;
   height: 100%;
   padding: 20px;
+  margin-top: 15px;
 }
 
 .jenis-pelanggaran .jenis-main .detail-body .detail-table {
@@ -888,12 +921,8 @@ hr {
     margin-right: 2px;
   }
   .form-info-group .label {
-    font-size: 8px;
     font-style: italic;
-    color: #94b4ca;
-  }
-  .form-info-group .nilai {
-    font-size: 10px;
+    color: #74a7ce;
   }
   .header strong {
     font-size: 17px;
@@ -910,12 +939,10 @@ hr {
   width: auto;
 }
 
-.optionItem i {
-  margin-left: 10px;
-}
-
 .option-show {
-  display: block;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
   -webkit-animation: optionItemAnimation 100ms;
           animation: optionItemAnimation 100ms;
   -webkit-animation-fill-mode: forwards;
@@ -931,9 +958,13 @@ button {
 }
 
 .tcenter {
-  background-color: white;
   vertical-align: middle !important;
   text-align: center !important;
+}
+
+.tright {
+  vertical-align: middle !important;
+  text-align: right !important;
 }
 
 .buktishow {
@@ -944,6 +975,7 @@ button {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  height: 70vh;
   width: 100%;
   position: relative;
   padding: 10px;

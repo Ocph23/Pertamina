@@ -1,17 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using WebApp.Data;
 using WebApp.Models;
+using Microsoft.EntityFrameworkCore;
+using WebApp.Middlewares;
 
 namespace WebApp.Api
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PerusahaanController : ControllerBase
     {
         private IConfiguration _config;
@@ -35,7 +35,15 @@ namespace WebApp.Api
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            return Ok(_context.Perusahaan.Where(x => x.idperusahaan == id).FirstOrDefault());
+            var result = _context.Perusahaan.Where(x => x.Id == id)
+            .Include(x => x.PerusahaansKaryawan)
+            .ThenInclude(x => x.Karyawan)
+              .Include(x => x.Pelanggarans)
+                    .ThenInclude(x => x.Jenispelanggaran).ThenInclude(x => x.Level)
+              .Include(x => x.Pelanggarans)
+                    .ThenInclude(x => x.Files);
+
+            return Ok(result.FirstOrDefault());
 
         }
 
@@ -47,12 +55,12 @@ namespace WebApp.Api
             {
                 if (value.DataPhoto != null && value.DataPhoto.Length > 0)
                 {
-                    value.logo = Helpers.CreateFileName("image");
-                    System.IO.File.WriteAllBytes(Helpers.LogoPath + value.logo, Helpers.CreateThumb(value.DataPhoto));
+                    value.Logo = Helpers.CreateFileName("image");
+                    System.IO.File.WriteAllBytes(Helpers.LogoPath + value.Logo, Helpers.CreateThumb(value.DataPhoto));
                 }
                 _context.Perusahaan.Add(value);
                 var saved = _context.SaveChanges();
-                if (value.idperusahaan <= 0)
+                if (value.Id <= 0)
                     throw new SystemException("Data Perusahaan  Tidak Berhasil Disimpan !");
                 return Ok(value);
             }
@@ -70,17 +78,17 @@ namespace WebApp.Api
             {
                 if (value.DataPhoto != null && value.DataPhoto.Length > 0)
                 {
-                    value.logo = Helpers.CreateFileName("image");
-                    System.IO.File.WriteAllBytes(Helpers.LogoPath + value.logo, Helpers.CreateThumb(value.DataPhoto));
+                    value.Logo = Helpers.CreateFileName("image");
+                    System.IO.File.WriteAllBytes(Helpers.LogoPath + value.Logo, Helpers.CreateThumb(value.DataPhoto));
                 }
-                var x = _context.Perusahaan.Where(x => x.idperusahaan == value.idperusahaan).FirstOrDefault();
-                x.idperusahaan = value.idperusahaan;
-                x.alamat = value.alamat;
-                x.direktur = value.direktur;
-                x.emaildirektur = value.emaildirektur;
-                x.kontakdirektur = value.kontakdirektur;
-                x.logo = value.logo;
-                x.namaperusahaan = value.namaperusahaan;
+                var x = _context.Perusahaan.Where(z => z.Id == value.Id).FirstOrDefault();
+                x.Id = value.Id;
+                x.Alamat = value.Alamat;
+                x.Direktur = value.Direktur;
+                x.Email = value.Email;
+                x.Kontak = value.Kontak;
+                x.Logo = value.Logo;
+                x.Nama = value.Nama;
 
                 var saved = _context.SaveChanges();
 
@@ -102,7 +110,7 @@ namespace WebApp.Api
         {
             try
             {
-                var item = _context.Perusahaan.Where(x => x.idperusahaan == id).FirstOrDefault();
+                var item = _context.Perusahaan.Where(x => x.Id == id).FirstOrDefault();
 
                 _context.Perusahaan.Remove(item);
                 var saved = _context.SaveChanges();

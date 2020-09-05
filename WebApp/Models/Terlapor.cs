@@ -7,22 +7,16 @@ using System.Threading.Tasks;
 
 namespace WebApp.Models
 {
-    // [TableName ("Terlapor")]
     public class Terlapor
     {
-        // [PrimaryKey ("idterlapor")]
-        // [DbColumn ("idterlapor")]
         [Key]
-        public int idterlapor { get; set; }
+        public int Id { get; set; }
 
-        // [DbColumn ("idpengaduan")]
-        public int idpengaduan { get; set; }
+        public int IdPengadian { get; set; }
 
-        // [DbColumn ("idkaryawan")]
-        public int idkaryawan { get; set; }
+        public int KaryawanId { get; set; }
 
-        // [DbColumn ("idjenispelanggaran")]
-        public int idjenispelanggaran { get; set; }
+        public int JenisPelanggaranId { get; set; }
 
     }
 }

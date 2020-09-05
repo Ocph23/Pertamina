@@ -2,7 +2,7 @@ const Toast = Swal.mixin({
 	toast: true,
 	position: 'top-end',
 	showConfirmButton: false,
-	timer: 2000,
+	timer: 4000,
 	timerProgressBar: true,
 	onOpen: (toast) => {
 		toast.addEventListener('mouseenter', Swal.stopTimer);
@@ -11,7 +11,7 @@ const Toast = Swal.mixin({
 });
 
 angular
-	.module('admin', [ 'service', 'ui.router', 'files' ])
+	.module('admin', [ 'service', 'ui.router', 'datatables', 'files' ])
 	.directive('dateInput', function() {
 		return {
 			restrict: 'A',
@@ -109,16 +109,30 @@ angular
 				templateUrl: './views/perusahaan.html'
 			})
 			.state({
+				name: 'perusahaan-detail',
+				url: '/perusahaan/:id',
+				controller: 'detailPerusahaanController',
+				templateUrl: './views/perusahaan-detail.html'
+			})
+			.state({
 				name: 'pelanggaran-baru',
 				url: '/pelanggaran-baru',
 				controller: 'pelanggaranBaru',
 				templateUrl: './views/pelanggaran-baru.html'
+			})
+			.state({
+				name: 'pelanggaran',
+				url: '/pelanggaran',
+				controller: 'pelanggaranController',
+				templateUrl: './views/pelanggaran.html'
 			});
 	})
 	.controller('homeController', homeController)
 	.controller('periodeController', periodeController)
+	.controller('pelanggaranController', pelanggaranController)
 	.controller('pelanggaranBaru', pelanggaranBaru)
 	.controller('perusahaanController', perusahaanController)
+	.controller('detailPerusahaanController', detailPerusahaanController)
 	.controller('karyawanController', karyawanController)
 	.controller('detailKaryawanController', detailKaryawanController)
 	.controller('jenisController', jenisController);
@@ -137,7 +151,12 @@ function homeController($scope, UserService) {
 	});
 }
 
-function periodeController($scope, PeriodeService) {
+function periodeController($scope, PeriodeService, DTOptionsBuilder) {
+	var vm = this;
+	vm.dtOptions = DTOptionsBuilder.newOptions()
+		.withPaginationType('full_numbers')
+		.withDisplayLength(10)
+		.withDOM('pitrfl');
 	var e = document.getElementById('close-left');
 
 	PeriodeService.get().then((data) => {
@@ -202,7 +221,12 @@ function periodeController($scope, PeriodeService) {
 	};
 }
 
-function pelanggaranBaru($scope, KaryawanService, JenisService, PelanggaranService) {
+function pelanggaranBaru($scope, KaryawanService, JenisService, PelanggaranService, DTOptionsBuilder) {
+	var vm = this;
+	vm.dtOptions = DTOptionsBuilder.newOptions()
+		.withPaginationType('full_numbers')
+		.withDisplayLength(10)
+		.withDOM('pitrfl');
 	var dropbox = document.getElementById('imgPelanggaran');
 	var btndropbox = document.getElementById('btnAddFile');
 
@@ -257,6 +281,7 @@ function pelanggaranBaru($scope, KaryawanService, JenisService, PelanggaranServi
 	};
 
 	$scope.save = (item, files) => {
+		item.idperusahaan = item.perusahaanKaryawan.idperusahaan;
 		item.idjenispelanggaran = item.jenis.idjenispelanggaran;
 		item.files = angular.copy(files);
 		item.karyawan = item.jenis.pengurangankaryawan;
@@ -354,7 +379,18 @@ function pelanggaranBaru($scope, KaryawanService, JenisService, PelanggaranServi
 	};
 }
 
-function jenisController($scope, JenisService, UserService) {
+function jenisController($scope, JenisService, UserService, DTOptionsBuilder) {
+	var vm = this;
+	vm.dtOptions = DTOptionsBuilder.newOptions()
+		.withPaginationType('full_numbers')
+		.withDisplayLength(10)
+		.withDOM('pitrfl');
+
+	// "bPaginate": false,
+	// "bLengthChange": false,
+	// "bFilter": true,
+	// "bInfo": false,
+
 	UserService.profile().then((x) => {
 		$scope.profile = x;
 		JenisService.get().then((x) => {
@@ -536,15 +572,30 @@ function jenisController($scope, JenisService, UserService) {
 	};
 }
 
-function perusahaanController($scope, PerusahaanService) {
+function perusahaanController($scope, PerusahaanService, HelperService, DTOptionsBuilder) {
+	$scope.helper = HelperService;
 	$scope.isBusy = false;
 	$scope.addItem = false;
+	$scope.datas = [];
+	var vm = this;
+	vm.dtOptions = DTOptionsBuilder.newOptions()
+		.withPaginationType('full_numbers')
+		.withDisplayLength(10)
+		.withDOM('pitrfl');
 
 	$('#photo').on('click', (x) => {
 		$('#fileInput').click();
 	});
 	PerusahaanService.get().then((x) => {
-		$scope.datas = x;
+		var time = 0;
+		x.forEach((m) => {
+			setTimeout(() => {
+				$scope.$apply(() => {
+					$scope.datas.push(m);
+				});
+			}, (time += 200));
+		});
+
 		$scope.addItem = false;
 	});
 
@@ -602,10 +653,15 @@ function perusahaanController($scope, PerusahaanService) {
 	};
 }
 
-function karyawanController($scope, PerusahaanService, KaryawanService) {
+function karyawanController($scope, PerusahaanService, KaryawanService, DTOptionsBuilder) {
+	var vm = this;
+	vm.dtOptions = DTOptionsBuilder.newOptions()
+		.withPaginationType('full_numbers')
+		.withDisplayLength(10)
+		.withDOM('pitrfl');
 	$scope.isBusy = false;
 	$scope.addItem = false;
-	$scope.model = {};
+	$scope.model = { photo: 'noimage.png', perusahaanKaryawan: {} };
 
 	$('#photo').on('click', (x) => {
 		$('#fileInput').click();
@@ -622,8 +678,7 @@ function karyawanController($scope, PerusahaanService, KaryawanService) {
 		if (!$scope.isBusy) {
 			$scope.isBusy = true;
 
-			model.idperusahaan = model.perusahaan.idperusahaan;
-			if (!model.idkaryawan) {
+			if (!model.idKaryawan) {
 				KaryawanService.post(model).then((x) => {
 					Toast.fire({
 						icon: 'success',
@@ -652,7 +707,7 @@ function karyawanController($scope, PerusahaanService, KaryawanService) {
 
 	$scope.newItem = () => {
 		$scope.addItem = true;
-		$scope.model = { photo: 'noimage.png' };
+		$scope.model = { photo: 'noimage.png', perusahaanKaryawan: {} };
 	};
 
 	$scope.getPhoto = (files, model) => {
@@ -670,83 +725,29 @@ function karyawanController($scope, PerusahaanService, KaryawanService) {
 	};
 }
 
-function detailKaryawanController(
+function detailPerusahaanController(
 	$scope,
 	$stateParams,
 	KaryawanService,
-	PelanggaranService,
+	PerusahaanService,
 	HelperService,
 	PointService,
 	UserService,
-	PeriodeService
+	PeriodeService,
+	DTOptionsBuilder,
+	DTColumnDefBuilder
 ) {
+	var vm = this;
+	vm.dtOptions = DTOptionsBuilder.newOptions()
+		.withPaginationType('full_numbers')
+		.withDisplayLength(10)
+		.withDOM('pitrfl');
 	$scope.helper = HelperService;
 
-	UserService.profile().then((profile) => {
-		$scope.profile = profile;
-		KaryawanService.getById($stateParams.id).then((x) => {
-			$scope.model = x;
-			$scope.roles = [];
-			$scope.helper.roles.forEach((element) => {
-				var role = element;
-				role.checked = false;
-				if (x.roles.find((x) => x == element.role.toLowerCase())) {
-					role.checked = true;
-				}
-			});
-
-			PelanggaranService.getById(x.idkaryawan).then((pelanggaran) => {
-				$scope.pelanggarans = pelanggaran;
-				$scope.model.pelanggaran = pelanggaran;
-
-				PeriodeService.active().then((active) => {
-					var total = PointService.point($scope.model, active);
-
-					// write text plugin
-					Chart.pluginService.register({
-						beforeDraw: function(chart) {
-							var width = chart.chart.width,
-								height = chart.chart.height,
-								ctx = chart.chart.ctx;
-
-							ctx.restore();
-							var fontSize = (height / 114).toFixed(2);
-							ctx.font = fontSize + 'em sans-serif';
-							ctx.fillStyle = 'white';
-							ctx.textBaseline = 'middle';
-
-							var text = total,
-								textX = Math.round((width - ctx.measureText(text).width) / 2),
-								textY = height / 2;
-
-							ctx.fillText(text, textX, textY);
-							ctx.save();
-						}
-					});
-					var ctx = document.getElementById('chartPoint');
-					var myPieChart = new Chart(ctx, {
-						type: 'doughnut',
-						data: {
-							datasets: [
-								{
-									data: [ total, $scope.model.pengurangan ],
-									backgroundColor: [ '#84c125', '#d9241b' ]
-								}
-							],
-
-							// These labels appear in the legend and in the tooltips when hovering different arcs
-							labels: [ 'Point', 'Pengurangan' ]
-						},
-						options: {
-							//cutoutPercentage: 40,
-							responsive: false,
-							legend: {
-								display: false
-							}
-						}
-					});
-				});
-			});
+	PerusahaanService.getById($stateParams.id).then((x) => {
+		$scope.model = x;
+		PeriodeService.active().then((active) => {
+			//var total = PointService.point($scope.model, active);
 		});
 	});
 
@@ -765,7 +766,7 @@ function detailKaryawanController(
 	};
 
 	$scope.onChangeRole = (model, role) => {
-		role.idkaryawan = model.idkaryawan;
+		role.idKaryawan = model.idKaryawan;
 		KaryawanService.setRole(role).then(
 			(x) => {},
 			(err) => {
@@ -803,5 +804,229 @@ function detailKaryawanController(
 			video.style.display = 'block';
 			picture.src = '';
 		}
+	};
+}
+
+function detailKaryawanController(
+	$scope,
+	$stateParams,
+	KaryawanService,
+	PelanggaranService,
+	HelperService,
+	PointService,
+	UserService,
+	PeriodeService,
+	DTOptionsBuilder
+) {
+	$scope.helper = HelperService;
+	var vm = this;
+	vm.dtOptions = DTOptionsBuilder.newOptions()
+		.withPaginationType('full_numbers')
+		.withDisplayLength(10)
+		.withDOM('pitrfl');
+
+	UserService.profile().then((profile) => {
+		$scope.profile = profile;
+		KaryawanService.getById($stateParams.id).then((x) => {
+			$scope.model = x;
+			$scope.roles = [];
+			$scope.helper.roles.forEach((element) => {
+				var role = element;
+				role.checked = false;
+				if (x.roles.find((x) => x == element.role.toLowerCase())) {
+					role.checked = true;
+				}
+
+				PeriodeService.active().then((active) => {
+					var ctx = document.getElementById('chartPoint');
+					const context = ctx.getContext('2d');
+					context.clearRect(0, 0, ctx.width, ctx.height);
+					var total = PointService.point($scope.model, active);
+
+					// write text plugin
+
+					var myPieChart = new Chart(ctx, {
+						type: 'doughnut',
+						data: {
+							datasets: [
+								{
+									data: [ total, $scope.model.pengurangan ],
+									backgroundColor: [ '#84c125', '#d9241b' ]
+								}
+							],
+
+							// These labels appear in the legend and in the tooltips when hovering different arcs
+							labels: [ 'Point', 'Pengurangan' ]
+						},
+						options: {
+							//cutoutPercentage: 40,
+							responsive: false,
+							legend: {
+								display: false
+							}
+						}
+					});
+					Chart.pluginService.register({
+						beforeDraw: function(chart) {
+							var width = chart.chart.width,
+								height = chart.chart.height,
+								ctx = chart.chart.ctx;
+
+							ctx.restore();
+							var fontSize = (height / 114).toFixed(2);
+							ctx.font = fontSize + 'em sans-serif';
+							ctx.fillStyle = 'white';
+							ctx.textBaseline = 'middle';
+
+							var text = total,
+								textX = Math.round((width - ctx.measureText(text).width) / 2),
+								textY = height / 2;
+
+							ctx.fillText(text, textX, textY);
+							ctx.save();
+						}
+					});
+				});
+			});
+		});
+	});
+
+	$scope.myFilter = function(month, year) {
+		if (month && year) {
+			return function(event) {
+				var bulan = new Date(event.tanggal).getMonth();
+				var tahun = new Date(event.tanggal).getFullYear();
+				return bulan == month.value && tahun == year ? true : false;
+			};
+		} else {
+			return function(event) {
+				return false;
+			};
+		}
+	};
+
+	$scope.onChangeRole = (model, role) => {
+		role.idKaryawan = model.idKaryawan;
+		KaryawanService.setRole(role).then(
+			(x) => {},
+			(err) => {
+				role.checked = !role.checked;
+				Toast.fire({
+					icon: 'success',
+					title: 'Data Berhasil Diubah !'
+				});
+			}
+		);
+	};
+
+	$scope.selectBukti = (files) => {
+		$scope.selectedFiles = files;
+		var picture = document.getElementById('picture');
+		var video = document.getElementById('myvideo');
+		picture.src = '';
+		video.src = '';
+		picture.style.display = 'none';
+		video.style.display = 'none';
+	};
+
+	$scope.selectFile = (file) => {
+		var picture = document.getElementById('picture');
+		var video = document.getElementById('myvideo');
+
+		if (file.fileType.includes('image')) {
+			picture.src = '/bukti/images/' + file.fileName;
+			video.src = '';
+			picture.style.display = 'block';
+			video.style.display = 'none';
+		} else {
+			video.src = '/bukti/videos/' + file.fileName;
+			picture.style.display = 'none';
+			video.style.display = 'block';
+			picture.src = '';
+		}
+	};
+}
+
+function pelanggaranController($scope, PelanggaranService, HelperService, PeriodeService, DTOptionsBuilder) {
+	var vm = this;
+	vm.dtOptions = DTOptionsBuilder.newOptions()
+		.withPaginationType('full_numbers')
+		.withDisplayLength(10)
+		.withDOM('pitrfl');
+
+	$scope.helper = HelperService;
+
+	$scope.bulans = [];
+
+	PeriodeService.active().then((active) => {
+		$scope.active = active;
+		PelanggaranService.get().then((datas) => {
+			$scope.datas = datas;
+			var bulan = { value: -1, name: 'Periode Active' };
+			$scope.bulans.push(bulan);
+			HelperService.bulans.forEach((element) => {
+				$scope.bulans.push(element);
+			});
+			UserService.profile().then((x) => {
+				$scope.profile = x;
+			});
+		});
+	});
+
+	$scope.myFilter = function(month, year) {
+		if (month && month.value == -1 && $scope.active) {
+			return function(event) {
+				var tgl = new Date(event.tanggal);
+				return tgl >= new Date($scope.active.tanggalmulai) && tgl <= new Date($scope.active.tanggalselesai);
+			};
+		} else if (month && year) {
+			return function(event) {
+				var bulan = new Date(event.tanggal).getMonth();
+				var tahun = new Date(event.tanggal).getFullYear();
+				return bulan == month.value && tahun == year ? true : false;
+			};
+		} else {
+			return function(event) {
+				return false;
+			};
+		}
+	};
+
+	$scope.selectBukti = (data) => {
+		$scope.selected = data;
+		$scope.selectedFiles = data.files;
+		var picture = document.getElementById('picture');
+		var video = document.getElementById('myvideo');
+		picture.src = '';
+		video.src = '';
+		picture.style.display = 'none';
+		video.style.display = 'none';
+	};
+
+	$scope.selectFile = (file) => {
+		var picture = document.getElementById('picture');
+		var video = document.getElementById('myvideo');
+
+		if (file.fileType.includes('image')) {
+			picture.src = '/bukti/images/' + file.fileName;
+			video.src = '';
+			picture.style.display = 'block';
+			video.style.display = 'none';
+		} else {
+			video.src = '/bukti/videos/' + file.fileName;
+			picture.style.display = 'none';
+			video.style.display = 'block';
+			picture.src = '';
+		}
+	};
+
+	$scope.updateStatus = (data, status) => {
+		PelanggaranService.updateStatus(data.idpelanggaran, status).then(
+			(x) => {
+				data.status = x;
+				$('#bukti').modal('hide');
+			},
+			(err) => {}
+		);
 	};
 }

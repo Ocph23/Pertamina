@@ -1,22 +1,19 @@
-﻿using System.Collections;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using WebApp.Models;
-using Newtonsoft.Json;
 using WebApp.Data;
 using Microsoft.EntityFrameworkCore;
+using WebApp.Middlewares;
 
 namespace WebApp.Api
 {
 
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PelanggaranController : ControllerBase
     {
         private IConfiguration _config;
@@ -32,7 +29,12 @@ namespace WebApp.Api
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(_context.Pelanggaran.ToList());
+            var result = _context.Pelanggaran
+            .Include(x => x.DataKaryawan)
+            .Include(x => x.DataPerusahaan)
+            .Include(x => x.Jenispelanggaran).ThenInclude(x => x.Level)
+            .Include(x => x.Files);
+            return Ok(result.ToList());
         }
 
         // GET: api/Employees/5
@@ -43,28 +45,54 @@ namespace WebApp.Api
         }
 
 
-        [HttpGet("karyawan/{id}")]
+        [HttpGet("NilaiKaryawan/{id}")]
         public IActionResult GetByKaryawanId(int id)
         {
-            var datas = _context.Pelanggaran.Where(x => x.idkaryawan == id)
-                 .Include(x => x.Files)
-                 .Include(z => z.Jenispelanggaran);
+            var datas = _context.Pelanggaran.Where(x => x.KaryawanId == id)
+                 .Include(z => z.Jenispelanggaran)
+                 .Include(x => x.Files);
 
             var result = from a in datas
-                         join c in _context.Level on a.Jenispelanggaran.idlevel equals c.idlevel
+                         join c in _context.Level on a.Jenispelanggaran.LevelId equals c.Id
                          select new Pelanggaran
                          {
                              Files = a.Files,
-                             idjenispelanggaran = a.idjenispelanggaran,
-                             idkaryawan = a.idkaryawan,
-                             idpelanggaran = a.idpelanggaran,
+                             JenisPelanggaranId = a.JenisPelanggaranId,
+                             KaryawanId = a.KaryawanId,
+                             Id = a.Id,
                              Jenispelanggaran = a.Jenispelanggaran,
-                             karyawan = a.karyawan,
-                             perusahaan = a.perusahaan,
-                             tanggal = a.tanggal,
+                             NilaiKaryawan = a.NilaiKaryawan,
+                             NilaiPerusahaan = a.NilaiPerusahaan,
+                             Tanggal = a.Tanggal,
                              Level = c
                          };
             return Ok(result.ToList());
+
+        }
+
+
+
+        [HttpGet("status/{id}/{status}")]
+        public IActionResult UpdateStatus(int id, StatusPelanggaran status)
+        {
+            try
+            {
+                var data = _context.Pelanggaran.Where(x => x.Id == id).FirstOrDefault();
+                if (data != null && data.Status != status)
+                {
+                    data.Status = status;
+                    var result = _context.SaveChanges();
+                    if (result <= 0)
+                    {
+                        throw new SystemException("Data Tidak Berhasil Diubah");
+                    }
+                }
+                return Ok(status);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
         }
 
@@ -88,7 +116,7 @@ namespace WebApp.Api
                     }
                     _context.Pelanggaran.Add(value);
                     var saved = _context.SaveChanges();
-                    if (value.idpelanggaran <= 0)
+                    if (value.Id <= 0)
                         throw new SystemException("Data Perusahaan  Tidak Berhasil Disimpan !");
 
 
@@ -112,13 +140,13 @@ namespace WebApp.Api
         {
             try
             {
-                var pelanggaran = _context.Pelanggaran.Where(x => x.idjenispelanggaran == value.idpelanggaran).FirstOrDefault();
-                pelanggaran.idjenispelanggaran = value.idjenispelanggaran;
-                pelanggaran.idkaryawan = value.idpelanggaran;
+                var pelanggaran = _context.Pelanggaran.Where(x => x.JenisPelanggaranId == value.Id).FirstOrDefault();
+                pelanggaran.JenisPelanggaranId = value.JenisPelanggaranId;
+                pelanggaran.KaryawanId = value.Id;
                 pelanggaran.Jenispelanggaran = value.Jenispelanggaran;
-                pelanggaran.karyawan = value.karyawan;
-                pelanggaran.perusahaan = value.perusahaan;
-                pelanggaran.tanggal = value.tanggal;
+                pelanggaran.NilaiKaryawan = value.NilaiKaryawan;
+                pelanggaran.NilaiPerusahaan = value.NilaiPerusahaan;
+                pelanggaran.Tanggal = value.Tanggal;
                 return Ok(value);
             }
             catch (System.Exception ex)
@@ -134,7 +162,7 @@ namespace WebApp.Api
         {
             try
             {
-                var item = _context.Pelanggaran.Where(x => x.idpelanggaran == id).FirstOrDefault();
+                var item = _context.Pelanggaran.Where(x => x.Id == id).FirstOrDefault();
                 _context.Pelanggaran.Remove(item);
                 var saved = _context.SaveChanges();
                 if (saved <= 0)

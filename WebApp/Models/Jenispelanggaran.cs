@@ -5,35 +5,25 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-//using Ocph.DAL;
 
 namespace WebApp.Models
 {
-    // [TableName("Jenispelanggaran")]
-    public class Jenispelanggaran
+    public class JenisPelanggaran
     {
-        //   [PrimaryKey ("idjenispelanggaran")]
-        // [DbColumn ("idjenispelanggaran")]
 
         [Key]
-        public int idjenispelanggaran { get; set; }
+        public int Id { get; set; }
 
-        //[DbColumn("idlevel")]
-        public int idlevel { get; set; }
+        public string Nama { get; set; }
 
-        // [DbColumn("jenispelanggaran")]
-        public string jenispelanggaran { get; set; }
+        public double NilaiKaryawan { get; set; }
 
-        //[DbColumn("pengurangankaryawan")]
-        public double pengurangankaryawan { get; set; }
+        public double NilaiPerusahaan { get; set; }
 
-        //[DbColumn("penguranganperusahaan")]
-        public double penguranganperusahaan { get; set; }
+        public double Penambahan { get; set; }
 
-        //[DbColumn("penambahanpoint")]
-        public double penambahanpoint { get; set; }
-
-
+        public int LevelId { get; set; }
+        public virtual Level Level { get; set; }
 
 
     }

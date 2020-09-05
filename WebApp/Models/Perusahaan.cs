@@ -1,3 +1,4 @@
+using System.Collections;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,34 +9,31 @@ using System.Threading.Tasks;
 
 namespace WebApp.Models
 {
-    // [TableName("Perusahaan")]
     public class Perusahaan
     {
-        // [PrimaryKey("idperusahaan")]
-        // [DbColumn("idperusahaan")]
         [Key]
-        public int idperusahaan { get; set; }
+        public int Id { get; set; }
 
-        // [DbColumn("namaperusahaan")]
-        public string namaperusahaan { get; set; }
+        public string Nama { get; set; }
 
-        // [DbColumn("alamat")]
-        public string alamat { get; set; }
+        public string Alamat { get; set; }
 
-        // [DbColumn("direktur")]
-        public string direktur { get; set; }
+        public string Direktur { get; set; }
 
-        // [DbColumn("kontakdirektur")]
-        public string kontakdirektur { get; set; }
+        public string Kontak { get; set; }
 
-        // [DbColumn("emaildirektur")]
-        public string emaildirektur { get; set; }
+        public string Email { get; set; }
 
-        // [DbColumn("logo")]
-        public string logo { get; set; }
+        public string Logo { get; set; }
 
         [NotMapped]
         public byte[] DataPhoto { get; set; }
 
+        public ICollection<PerusahaanKaryawan> PerusahaansKaryawan { get; set; }
+
+        public ICollection<Pelanggaran> Pelanggarans { get; set; }
+
     }
+
+
 }

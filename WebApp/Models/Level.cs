@@ -7,12 +7,10 @@ namespace WebApp.Models
     public class Level
     {
         [Key]
-        public int idlevel { get; set; }
+        public int Id { get; set; }
 
-        public string level { get; set; }
+        public string Name { get; set; }
 
-        [ForeignKey("idlevel")]
-        public ICollection<Jenispelanggaran> Datas { get; set; }
-
+        public virtual ICollection<JenisPelanggaran> Datas { get; set; }
     }
 }

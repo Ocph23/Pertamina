@@ -7,25 +7,18 @@ using System.Threading.Tasks;
 
 namespace WebApp.Models
 {
-    // [TableName("Periode")]
     public class Periode
     {
-        // [PrimaryKey("idperiode")]
-        // [DbColumn("idperiode")]
         [Key]
-        public int idperiode { get; set; }
+        public int Id { get; set; }
 
-        // [DbColumn("tanggalmulai")]
-        public DateTime tanggalmulai { get; set; }
+        public DateTime Mulai { get; set; }
 
-        // [DbColumn("tanggalselesai")]
-        public DateTime tanggalselesai { get; set; }
+        public DateTime Selesai { get; set; }
 
-        // [DbColumn("tanggalundian")]
-        public DateTime tanggalundian { get; set; }
+        public DateTime Undian { get; set; }
 
-        // [DbColumn("status")]
-        public bool status { get; set; }
+        public bool Status { get; set; }
 
     }
 }

@@ -1,6 +1,13 @@
 /* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
+@font-face {
+    font-family: "Montserrat";
+    src: url(/lib/Montserrat/Montserrat-Regular.ttf);
+}
+
+@import "./variable";
+
 a.navbar-brand {
     white-space: normal;
     text-align: center;
@@ -31,6 +38,7 @@ a {
 /* Sticky footer styles
   -------------------------------------------------- */
 html {
+    font-family: "Montserrat", sans-serif;
     font-size: 14px;
 }
 
@@ -58,12 +66,14 @@ html {
 }
 
 body {
+    font-family: "Montserrat", sans-serif;
     /* Margin bottom by footer height */
     background-image: url("../images/src/bg.png");
     background-repeat: no-repeat;
     background-size: cover;
     min-height: 106vh;
     display: grid;
+    color: $color;
     grid-template-rows: auto 1fr auto;
 }
 .footer {
@@ -95,18 +105,18 @@ body {
 .hidden {
     display: none;
 }
-
 .modal-content {
     background-image: url("../images/src/bg.png");
     background-repeat: no-repeat;
     background-size: cover;
     color: white;
+    height: 100%;
 }
 
 .modal-body,
 .modal-footer,
 .modal-header {
-    background: linear-gradient(145deg, #00243ea8, #001f3469);
+    background: $bg-box;
 }
 
 .account {
@@ -118,9 +128,8 @@ body {
     .account-body {
         width: 40%;
         padding: 30px 35px;
-        border-radius: 12px;
-        background: linear-gradient(145deg, #00274288, #0375cc73);
-        box-shadow: 2px 2px 5px #000e199f, -2px -2px 5px #003a638a;
+        background-color: $bg-box;
+        @extend %box-border-out;
         vertical-align: middle;
         color: white;
     }
@@ -146,19 +155,6 @@ body {
 
 #logo-google {
     width: 30px;
-}
-
-.vertical-scroll {
-    overflow-y: scroll;
-}
-
-.vertical-scroll::-webkit-scrollbar {
-    display: none;
-}
-
-.vertical-scroll thead th {
-    position: sticky;
-    top: -1px;
 }
 
 @media (min-width: 768px) {
@@ -221,6 +217,87 @@ body {
     color: red;
 }
 
+//scrooll
+
+::-webkit-scrollbar {
+    width: 4px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px $bg-box-light;
+    border-radius: 3px;
+    width: 4px;
+    margin-right: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 10px;
+    box-shadow: inset 0 0 5px $bg-box-dark;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: $bg-box;
+    width: 10px;
+}
+
+.vertical-scroll {
+    overflow-y: auto;
+    margin-right: 5px;
+    padding: 5px;
+}
+
+.vertical-scroll::-webkit-scrollbar {
+    //display: none;
+}
+
+.vertical-scroll thead th {
+    position: sticky;
+    top: -1px;
+}
+
+//dataTabel
+.dataTables_wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto 1fr auto;
+    .dataTables_length {
+        grid-column: 1/2;
+        .label {
+            display: flex;
+            select {
+                @extend %box-border-in;
+                min-width: 100px !important;
+            }
+            &:before {
+                content: "" !important;
+            }
+
+            &:after {
+                content: "* * *" !important;
+            }
+        }
+    }
+    .dataTables_filter {
+        grid-column: 2/3;
+        text-align: right;
+    }
+
+    table {
+        grid-column: 1/3;
+    }
+
+    .dataTables_info {
+    }
+    .dataTables_paginate {
+        grid-column: 2/3;
+        text-align: right;
+    }
+}
+
 //mobile
 @media only screen and (max-width: 500px) {
     .account {
@@ -271,4 +348,107 @@ body {
     h2 {
         font-size: 20px !important;
     }
+}
+
+//neomorphis
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input[type="search"],
+input[type="search"]:hover,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+select:-webkit-autofill,
+select:-webkit-autofill:hover {
+    background-color: transparent;
+    @extend %box-border-in;
+    color: $color;
+    transition: background-color 5000s ease-in-out 0s;
+    min-height: 45px;
+}
+
+select:-webkit-autofill:focus,
+textarea:-webkit-autofill:focus,
+input[type="search"]:focus,
+input:-webkit-autofill:focus {
+    @extend %box-border-in;
+
+    color: $color;
+    transition: background-color 5000s ease-in-out 0s;
+    min-height: 45px;
+}
+
+.form-control {
+    background-color: transparent;
+    @extend %box-border-in;
+    min-height: 45px;
+}
+.form-control:focus {
+    @extend %box-border-in;
+    min-height: 45px;
+    background-color: #36363675;
+}
+
+.btn {
+    @extend %box-border-out;
+    // background-color: $bg-box;
+    min-width: 50px;
+    margin-left: 10px;
+}
+
+table {
+    border-collapse: separate;
+    border-spacing: 0 8px;
+}
+tr {
+    @extend %box-border-out;
+}
+.table td,
+.table th {
+    padding: 0.5rem;
+    vertical-align: middle;
+    border-top: none;
+    height: 45px;
+}
+
+.table th {
+    border-bottom: 1px solid #ff0018 !important;
+}
+
+tr:hover {
+    color: $accent-color !important;
+}
+select {
+    background: transparent;
+    @extend %box-border-in;
+    appearance: none;
+    color: white;
+    background-image: url("../images/src/down.png");
+    background-repeat: no-repeat;
+    background-position: right;
+    background-size: 25px;
+    min-height: 45px;
+    min-width: 80px;
+    option {
+        background: $bg-box;
+        color: #fff;
+    }
+}
+
+.nav-tabs {
+    border-bottom: 2px solid red;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.nav-tabs .nav-link.active {
+    background-color: transparent;
+    @extend %box-border-out;
+}
+
+.header-title {
+    text-transform: uppercase;
+    border-bottom: 2px solid red;
+    padding-bottom: 5px;
+    height: fit-content;
 }

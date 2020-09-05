@@ -85,12 +85,13 @@ namespace WebApp.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    if (User.IsInRole("admin"))
+                    if (User.IsInRole("admin") || User.IsInRole("manager") || User.IsInRole("administrator"))
                         return Redirect("/Admin");
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
                 {
+
                     return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
                 }
                 if (result.IsLockedOut)

@@ -1,11 +1,13 @@
 <div class="perusahaan">
     <div class="perusahaan-baru " ng-class="{hidden: !addItem}">
         <div class="header">
-            <strong>Tambah Perusahaan</strong><i></i>
+            <strong class="header-title">Form Perusahaan</strong><i></i>
         </div>
         <div class="logo" id="logo">
-            <input id="fileInput" type="file" ng-files="getPhoto($files, model)" hidden>
-            <img id="photo" ng-src="/images/logo/{{model.logo}}" />
+            <input id="fileInput" type="file" ng-files="getPhoto($files, model)" hidden />
+            <div class="logo-body">
+                <img id="photo" ng-src="/images/logo/{{model.logo}}" />
+            </div>
         </div>
         <div class="data-body">
             <form ng-submit="save(model)">
@@ -49,30 +51,34 @@
 
     <div class="data-perusahaan">
         <div class="header">
-            <strong>Data Perusahaan</strong><i></i>
+            <strong class="header-title">Data Perusahaan</strong><i></i>
             <div class="add-menu" id="close-menu" ng-click="newItem()"><i class="fa fa-plus"></i></div>
         </div>
-        <table class="table table-dark table-hover">
+        <table class="table table-hover" datatable="ng" dt-options="showCase.dtOptions"
+            dt-column-defs="showCase.dtColumnDefs">
             <thead>
                 <tr>
                     <th>Perusahaan</th>
                     <th>Direktur</th>
                     <th>Telepon</th>
-                    <th>Email</th>
-                    <th>Alamat</th>
+                    <th class="tright"></th>
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="data in datas" ng-click="select(data)" ng-click="addItem=true">
+                <tr ng-repeat="data in datas" ng-click="select(data)" ng-click="addItem=true" data-toggle="tooltip"
+                    data-placement="bottom" title="Click Untuk Mengedit Data">
                     <td valign="center">{{data.namaperusahaan}}</td>
                     <td>{{data.direktur}}</td>
                     <td>{{data.kontakdirektur}}</td>
-                    <td>{{data.emaildirektur}}</td>
-                    <td>{{data.alamat}}</td>
+                    <td class="tright">
+                        <button data-toggle="tooltip" data-placement="bottom" title="Click Untuk Melihat Detail"
+                            class="btn btn-info" ui-sref="perusahaan-detail({id:data.idperusahaan})">
+                            <i class="fa fa-list"></i>
+                        </button>
+                    </td>
                 </tr>
             </tbody>
         </table>
     </div>
-
 
 </div>

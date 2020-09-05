@@ -1,21 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using WebApp.Data;
 using WebApp.Models;
+using WebApp.Middlewares;
 
 namespace WebApp.Api
 {
     [Route("api/[controller]")]
     [ApiController]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [Authorize]
     public class LevelController : ControllerBase
     {
@@ -30,12 +26,12 @@ namespace WebApp.Api
 
         // GET: api/Employees
         [HttpGet]
+        [Authorize]
         public IActionResult Get()
         {
             try
             {
                 var results = _context.Level.Include(x => x.Datas);
-
                 return Ok(results.ToList());
             }
             catch (System.Exception ex)
@@ -50,7 +46,7 @@ namespace WebApp.Api
         {
             try
             {
-                var result = _context.Level.Where(x => x.idlevel == id).FirstOrDefault();
+                var result = _context.Level.Where(x => x.Id == id).Include(x => x.Datas).FirstOrDefault();
                 return Ok(result);
             }
             catch (System.Exception ex)
@@ -68,7 +64,7 @@ namespace WebApp.Api
                 _context.Level.Add(value);
                 _context.SaveChanges();
 
-                if (value.idlevel <= 0)
+                if (value.Id <= 0)
                     throw new SystemException("Data Perusahaan  Tidak Berhasil Disimpan !");
                 return Ok(value);
             }
@@ -84,11 +80,11 @@ namespace WebApp.Api
         {
             try
             {
-                var result = _context.Level.Where(x => x.idlevel == value.idlevel).FirstOrDefault();
-                result.level = value.level;
+                var result = _context.Level.Where(x => x.Id == value.Id).FirstOrDefault();
+                result.Name = value.Name;
                 var saved = _context.SaveChanges();
                 if (saved <= 0)
-                    throw new SystemException("Data Perusahaan  Tidak Berhasil Disimpan !");
+                    throw new SystemException("Data Tidak Berhasil Disimpan !");
 
                 return Ok(value);
             }
@@ -105,7 +101,9 @@ namespace WebApp.Api
         {
             try
             {
-                var result = _context.Level.Where(x => x.idlevel == id).FirstOrDefault();
+                var result = _context.Level.Where(x => x.Id == id).FirstOrDefault();
+                if (result == null)
+                    throw new SystemException("Data Tidak Ditemukan");
                 _context.Level.Remove(result);
 
                 var saved = _context.SaveChanges();

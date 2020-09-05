@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using WebApp.Data;
 using WebApp.Models;
 
+
 namespace WebApp.Api
 {
     [Route("api/[controller]")]
@@ -30,36 +31,31 @@ namespace WebApp.Api
         {
             try
             {
-
-
-                var actived = _context.Periode.Where(x => x.status == true).FirstOrDefault();
-
+                var actived = _context.Periode.Where(x => x.Status == true).FirstOrDefault();
                 if (actived == null)
                     throw new SystemException("Periode Aktif Belum Ditemukan");
-
-
-                var pelanggarans = from a in _context.Pelanggaran.Where(x => x.tanggal >= actived.tanggalmulai && x.tanggal <= actived.tanggalselesai)
-                                   join b in _context.Level on a.Jenispelanggaran.idlevel equals b.idlevel
+                var pelanggarans = from a in _context.Pelanggaran.Where(x => x.Tanggal >= actived.Mulai && x.Tanggal <= actived.Selesai)
+                                   join b in _context.Level on a.Jenispelanggaran.LevelId equals b.Id
                                    select new DashboardJenis
                                    {
-                                       Level = b.level,
-                                       IdLevel = b.idlevel,
-                                       JenisPelanggaran = a.Jenispelanggaran.jenispelanggaran,
-                                       Perusahaan = a.perusahaan,
-                                       Karyawan = a.karyawan,
-                                       Tanggal = a.tanggal.Value
+                                       Level = b.Name,
+                                       LevelId = b.Id,
+                                       JenisPelanggaran = a.Jenispelanggaran.Nama,
+                                       Perusahaan = a.NilaiPerusahaan,
+                                       Karyawan = a.NilaiKaryawan,
+                                       Tanggal = a.Tanggal.Value
                                    };
 
                 var datas = new List<dynamic>();
 
-                var group = pelanggarans.ToList().GroupBy(x => x.IdLevel).ToList();
+                var group = pelanggarans.ToList().GroupBy(x => x.LevelId).ToList();
                 foreach (var items in group)
                 {
                     var dataTemp = items.FirstOrDefault();
 
                     dynamic data = new
                     {
-                        IdLevel = dataTemp.IdLevel,
+                        LevelId = dataTemp.LevelId,
                         Jenispelanggaran = dataTemp.JenisPelanggaran,
                         Perusahaan = dataTemp.Perusahaan,
                         Karyawan = items.Count(),
@@ -70,21 +66,20 @@ namespace WebApp.Api
                     datas.Add(data);
                 }
 
-                var pelanggaranss = (from a in _context.Pelanggaran
-                                     join b in _context.Karyawan on a.idkaryawan equals b.idkaryawan
-                                     join c in _context.Perusahaan on b.idperusahaan equals c.idperusahaan
-                                     select new { IdPerusahaan = c.idperusahaan, Pelanggaran = a }).ToList().GroupBy(x => x.IdPerusahaan);
+                // // var pelanggaranss = (from a in _context.Pelanggaran
+                // //                      join b in _context.Karyawan on a.idkaryawan equals b.idkaryawan
+                // //                      select new {  Pelanggaran = a }).ToList().GroupBy(x => x.IdPerusahaan);
 
 
-                var list = new List<dynamic>();
-                foreach (var item in _context.Perusahaan.ToList())
-                {
-                    var pel = pelanggaranss.Where(x => x.Key == item.idperusahaan).FirstOrDefault();
-                    list.Add(new { Perusahaan = item, total = pel == null ? 0 : pel.Count() });
-                }
+                // var list = new List<dynamic>();
+                // foreach (var item in _context.Perusahaan.ToList())
+                // {
+                //     // var pel = pelanggaranss.Where(x => x.Key == item.idperusahaan).FirstOrDefault();
+                //     list.Add(new { Perusahaan = item, total = pel == null ? 0 : pel.Count() });
+                // }
 
 
-                return Ok(new { Datas = datas, Perusahhan = list.ToList() });
+                return Ok(new { Datas = datas, });
             }
             catch (System.Exception ex)
             {
@@ -98,7 +93,7 @@ namespace WebApp.Api
     public class DashboardJenis
     {
         public string Level { get; set; }
-        public int IdLevel { get; set; }
+        public int LevelId { get; set; }
         public string JenisPelanggaran { get; set; }
         public double Karyawan { get; set; }
         public double Perusahaan { get; set; }

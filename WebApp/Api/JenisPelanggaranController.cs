@@ -7,11 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using WebApp.Data;
 using WebApp.Models;
+using WebApp.Middlewares;
+
 
 namespace WebApp.Api
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class JenisPelanggaranController : ControllerBase
     {
         private IConfiguration _config;
@@ -48,7 +51,7 @@ namespace WebApp.Api
 
         // POST: api/Employees
         [HttpPost]
-        public IActionResult Post([FromBody] Jenispelanggaran value)
+        public IActionResult Post([FromBody] JenisPelanggaran value)
         {
             try
             {
@@ -64,17 +67,17 @@ namespace WebApp.Api
 
         // PUT: api/Employees/5
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] Jenispelanggaran value)
+        public IActionResult Put(int id, [FromBody] JenisPelanggaran value)
         {
             try
             {
-                var data = _context.JenisPelanggaran.Where(x => x.idjenispelanggaran == value.idjenispelanggaran).FirstOrDefault();
+                var data = _context.JenisPelanggaran.Where(x => x.Id == value.Id).FirstOrDefault();
                 if (data != null)
                 {
-                    data.jenispelanggaran = value.jenispelanggaran;
-                    data.penambahanpoint = value.penambahanpoint;
-                    data.pengurangankaryawan = value.pengurangankaryawan;
-                    data.penguranganperusahaan = value.penguranganperusahaan;
+                    data.Nama = value.Nama;
+                    data.Penambahan = value.Penambahan;
+                    data.NilaiKaryawan = value.NilaiKaryawan;
+                    data.NilaiPerusahaan = value.NilaiPerusahaan;
                 }
                 _context.SaveChanges();
                 return Ok(value);
@@ -91,7 +94,7 @@ namespace WebApp.Api
         {
             try
             {
-                var data = _context.JenisPelanggaran.Where(x => x.idjenispelanggaran == id).FirstOrDefault();
+                var data = _context.JenisPelanggaran.Where(x => x.Id == id).FirstOrDefault();
                 _context.JenisPelanggaran.Remove(data);
                 _context.SaveChanges();
                 return Ok(true);

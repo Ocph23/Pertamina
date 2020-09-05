@@ -156,6 +156,19 @@ function PerusahaanService($http, $q) {
 		return def.promise;
 	};
 
+	service.getById = (id) => {
+		var def = $q.defer();
+		$http({ url: controller + '/' + id, method: 'Get' }).then(
+			(response) => {
+				def.resolve(response.data);
+			},
+			(err) => {
+				def.reject(err.message);
+			}
+		);
+		return def.promise;
+	};
+
 	service.post = (model) => {
 		var def = $q.defer();
 		$http({ url: controller, method: 'POST', data: model }).then(
@@ -338,7 +351,7 @@ function KaryawanService($http, $q) {
 
 	service.getById = (id) => {
 		var def = $q.defer();
-		var data = datas.find((x) => x.idkaryawan == id);
+		var data = datas.find((x) => x.idKaryawan == id);
 		if (data) {
 			if (!data.roles) {
 				$http({ url: controller + '/roles/' + id, method: 'Get' }).then((response) => {
@@ -377,9 +390,9 @@ function KaryawanService($http, $q) {
 
 	service.put = (model) => {
 		var def = $q.defer();
-		$http({ url: controller + '/' + model.idkaryawan, method: 'PUT', data: model }).then(
+		$http({ url: controller + '/' + model.idKaryawan, method: 'PUT', data: model }).then(
 			(response) => {
-				var item = datas.find((x) => x.idkaryawan == model.idperusahaan);
+				var item = datas.find((x) => x.idKaryawan == model.idperusahaan);
 				if (item) {
 					item.level = model.level;
 				}
@@ -395,7 +408,7 @@ function KaryawanService($http, $q) {
 
 	service.delete = (model) => {
 		var def = $q.defer();
-		$http({ url: controller + '/' + model.idkaryawan, method: 'Delete' }).then(
+		$http({ url: controller + '/' + model.idKaryawan, method: 'Delete' }).then(
 			(response) => {
 				var index = datas.indexOf(model);
 				datas.splice(index, 1);
@@ -431,6 +444,27 @@ function PelanggaranService($http, $q) {
 	var service = {};
 	var datas = [];
 
+	service.get = () => {
+		var def = $q.defer();
+
+		if (!service.instance) {
+			$http({ url: controller, method: 'Get' }).then(
+				(response) => {
+					datas = response.data;
+					service.instance = true;
+					def.resolve(datas);
+				},
+				(err) => {
+					def.reject(err.message);
+				}
+			);
+		} else {
+			def.resolve(datas);
+		}
+
+		return def.promise;
+	};
+
 	service.getById = (id) => {
 		var def = $q.defer();
 		$http({ url: controller + '/karyawan/' + id, method: 'Get' }).then(
@@ -455,8 +489,9 @@ function PelanggaranService($http, $q) {
 
 		var modelData = {
 			idpelanggaran: 0,
+			idperusahaan: model.idperusahaan,
 			idjenispelanggaran: model.idjenispelanggaran,
-			idkaryawan: model.idkaryawan,
+			idKaryawan: model.idKaryawan,
 			karyawan: model.karyawan,
 			perusahaan: model.perusahaan,
 			tanggal: new Date(),
@@ -478,9 +513,9 @@ function PelanggaranService($http, $q) {
 
 	service.put = (model) => {
 		var def = $q.defer();
-		$http({ url: controller + '/' + model.idkaryawan, method: 'PUT', data: model }).then(
+		$http({ url: controller + '/' + model.idKaryawan, method: 'PUT', data: model }).then(
 			(response) => {
-				var item = datas.find((x) => x.idkaryawan == model.idperusahaan);
+				var item = datas.find((x) => x.idKaryawan == model.idperusahaan);
 				if (item) {
 					item.level = model.level;
 				}
@@ -496,10 +531,24 @@ function PelanggaranService($http, $q) {
 
 	service.delete = (model) => {
 		var def = $q.defer();
-		$http({ url: controller + '/' + model.idkaryawan, method: 'Delete' }).then(
+		$http({ url: controller + '/' + model.idKaryawan, method: 'Delete' }).then(
 			(response) => {
 				var index = datas.indexOf(model);
 				datas.splice(index, 1);
+				def.resolve(response.data);
+			},
+			(err) => {
+				def.reject(err.message);
+			}
+		);
+
+		return def.promise;
+	};
+
+	service.updateStatus = (id, status) => {
+		var def = $q.defer();
+		$http({ url: controller + '/status/' + id + '/' + status, method: 'Get' }).then(
+			(response) => {
 				def.resolve(response.data);
 			},
 			(err) => {
@@ -515,6 +564,10 @@ function PelanggaranService($http, $q) {
 
 function HelperService() {
 	var service = {};
+
+	service.toDate = (stringDate) => {
+		return new Date(stringDate);
+	};
 
 	service.bulans = [
 		{ name: 'Januari', value: 0 },
@@ -567,7 +620,7 @@ function PointService() {
 			tglcompare.setDate(tglcompare.getDate() + (index == 0 ? 0 : 1));
 			if (tglawal.getDate() + index <= currentdate.getDate() && currentdate.getDate() <= tglselesai.getDate()) {
 				var pelanggaran = false;
-				karyawan.pelanggaran.forEach((element) => {
+				karyawan.pelanggarans.forEach((element) => {
 					if (element && new Date(element.tanggal).toLocaleDateString() == tglcompare.toLocaleDateString()) {
 						pelanggaran = true;
 						karyawan.pengurangan += element.karyawan;

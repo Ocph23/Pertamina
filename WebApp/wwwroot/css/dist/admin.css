@@ -1,0 +1,865 @@
+.add-menu:hover, .close-menu {
+  border-radius: 6px;
+  box-shadow: inset 3px 3px 5px #13222c79, inset -2px -2px 5px #92bad379;
+  color: white;
+  border: 0px;
+}
+
+.jenis-pelanggaran .jenis-main .detail-body, .jenis-pelanggaran .jenis-main .jenis-body .jenis, .jenis-pelanggaran, .perusahaan .perusahaan-baru .logo .logo-body, .perusahaan .perusahaan-baru,
+.perusahaan .data-perusahaan, .pelanggaran .user-bg .users .user .userbody img, .pelanggaran .user-bg .users .user, .pelanggaran .user-bg .search, .pelanggaran .user-bg, .pelanggaran, .pelanggaran-data, .profile .profile-biodata .profile-biodata-body .point, .profile .profile-biodata .profile-biodata-body .photo .photo-body, .admin .main-left .menus .menus-body, .admin .main-left .menus .menus-header img, .admin .main-left, .add-menu {
+  box-shadow: 3px 3px 5px #13222c79, -2px -2px 5px #92bad379;
+  color: white;
+  border: 0px;
+  border-radius: 5px;
+}
+
+@media only screen and (max-width: 500px) {
+  .add-menu:hover, .close-menu {
+    box-shadow: inset 3px 3px 5px #13222c79, inset -2px -2px 5px #92bad379;
+    color: white;
+    border: 0px;
+    border-radius: 0px;
+  }
+
+  .jenis-pelanggaran .jenis-main .detail-body, .jenis-pelanggaran .jenis-main .jenis-body .jenis, .jenis-pelanggaran, .perusahaan .perusahaan-baru .logo .logo-body, .perusahaan .perusahaan-baru,
+.perusahaan .data-perusahaan, .pelanggaran .user-bg .users .user .userbody img, .pelanggaran .user-bg .users .user, .pelanggaran .user-bg .search, .pelanggaran .user-bg, .pelanggaran, .pelanggaran-data, .profile .profile-biodata .profile-biodata-body .point, .profile .profile-biodata .profile-biodata-body .photo .photo-body, .admin .main-left .menus .menus-body, .admin .main-left .menus .menus-header img, .admin .main-left, .add-menu {
+    box-shadow: 3px 3px 5px #13222c79, -2px -2px 5px #92bad379;
+    color: white;
+    border: 0px;
+    border-radius: 0px;
+  }
+}
+main {
+  height: 100%;
+  width: 100%;
+  grid-row: 2/3;
+}
+
+.close-menu {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: flex-end;
+}
+
+.close-menu:hover {
+  background: #970101;
+  box-shadow: inset 5px 5px 10px #3c0000, inset -5px -5px 10px #f20202;
+  transition: box-shadow 200ms ease-in-out;
+}
+
+.add-menu {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #62a000;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: flex-end;
+}
+
+.add-menu:hover {
+  background: #62a000;
+  border-radius: 50%;
+  transition: box-shadow 200ms ease-in-out;
+}
+
+.header {
+  color: white;
+  display: flex;
+  margin-bottom: 0px;
+  justify-content: space-between;
+}
+
+.admin {
+  height: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  color: black;
+}
+.admin .main-left {
+  position: relative;
+  grid-column: 1/2;
+  width: 220px;
+  height: 100%;
+}
+.admin .main-left .menus {
+  height: 100%;
+  display: grid;
+  grid-template-rows: 1fr 3fr;
+}
+.admin .main-left .menus .menus-header {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  grid-row: 1/2;
+}
+.admin .main-left .menus .menus-header img {
+  margin: 10px;
+  width: 40%;
+  height: 50%;
+  border-radius: 50%;
+}
+.admin .main-left .menus .menus-header .user-name {
+  margin-top: 15px;
+  font-size: 15px;
+  color: white;
+  text-decoration: underline;
+  font-weight: bold;
+}
+.admin .main-left .menus .menus-header .user-job {
+  color: white;
+  font-size: 10px;
+}
+.admin .main-left .menus .menus-body {
+  grid-row: 2/3;
+  background: rgba(0, 34, 58, 0.59);
+  border-radius: 40px 40px 0px 0px;
+  padding: 10%;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.admin .main-left .menus .menus-body ul {
+  list-style-type: none;
+  margin: 0px;
+  margin-top: 20px;
+  padding: 0px;
+}
+.admin .main-left .menus .menus-body ul li {
+  max-height: 32px;
+  border-radius: 0px;
+  border-bottom: 1px solid grey;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin: 2px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.admin .main-left .menus .menus-body ul li img {
+  margin-right: 5px;
+  max-width: 25px;
+}
+.admin .main-left .menus .menus-body ul li .menu-icon {
+  margin-right: 20px;
+  cursor: pointer;
+}
+.admin .main-left .menus .menus-body ul li .menu-text {
+  cursor: pointer;
+}
+.admin .main-left .menus .menus-body ul li:hover {
+  border-bottom: 2px solid #ff0202;
+}
+.admin .main-right {
+  height: 100%;
+  grid-column: 2/3;
+  padding: 2px;
+  padding-left: 10px;
+}
+
+.active {
+  border-bottom: 2px solid #ff0202 !important;
+  font-weight: bold;
+  padding-bottom: 15px !important;
+}
+
+.profile {
+  height: 100%;
+  display: grid;
+  grid-template-columns: minmax(300px, 1fr) 3fr;
+  grid-template-rows: auto 1fr;
+  grid-gap: 5px;
+}
+.profile .profile-biodata,
+.profile .profile-grafik,
+.profile .profile-data {
+  padding: 25px;
+  color: white;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #00243ea8, #001f34a8);
+  box-shadow: 1px 1px 0px #dcdcdc, -1px -1px 0px #d6d6d6;
+}
+.profile .profile-biodata {
+  grid-row: 1/2;
+  grid-column: 1/2;
+  height: 100%;
+}
+.profile .profile-biodata .profile-biodata-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.profile .profile-biodata .profile-biodata-body .photo {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+.profile .profile-biodata .profile-biodata-body .photo .photo-body {
+  margin-top: 10px;
+  border-radius: 10px;
+  width: 40%;
+  height: 35% !important;
+  padding: 1px;
+}
+.profile .profile-biodata .profile-biodata-body .photo .photo-body img {
+  border-radius: 5px;
+  width: 100%;
+  height: 100%;
+}
+.profile .profile-biodata .profile-biodata-body .biodata-data {
+  width: 100%;
+}
+.profile .profile-biodata .profile-biodata-body .biodata-data .biodata-info-group {
+  margin-bottom: 15px;
+}
+.profile .profile-biodata .profile-biodata-body .biodata-data .biodata-info-group .label {
+  font-size: 11px;
+  font-style: italic;
+  color: #74a7ce;
+}
+.profile .profile-biodata .profile-biodata-body .biodata-data .biodata-info-group .nilai {
+  font-size: 14px;
+}
+.profile .profile-biodata .profile-biodata-body .point {
+  width: 90%;
+  height: 30%;
+  border-radius: 10px;
+}
+.profile .profile-biodata .profile-biodata-body .point .point-title {
+  position: absolute;
+  margin: 10px;
+}
+.profile .profile-biodata .profile-biodata-body .point .chart {
+  margin: 20px;
+}
+.profile .profile-biodata .profile-biodata-body .point .chart canvas {
+  width: 100% !important;
+}
+.profile .profile-grafik {
+  grid-row: 2/3;
+  grid-column: 1/2;
+  display: flex;
+  flex-direction: column;
+}
+.profile .profile-grafik button {
+  margin-top: 10px;
+}
+.profile .profile-data {
+  grid-row: 1/3;
+  grid-column: 2/3;
+}
+.profile .profile-data .profile-data-date {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: row;
+}
+
+.pelanggaran-data {
+  background-color: #001d3093;
+}
+.pelanggaran-data .profile-data {
+  padding: 25px;
+  color: white;
+  border-radius: 10px;
+  box-shadow: 1px 1px 0px #dcdcdc, -1px -1px 0px #d6d6d6;
+}
+.pelanggaran-data .profile-data .profile-data-date {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: row;
+}
+
+.form-info-group {
+  margin-bottom: 6px;
+  margin-right: 2px;
+}
+.form-info-group .label {
+  font-size: 11px;
+  font-style: italic;
+  color: #74a7ce;
+  margin-bottom: 2px;
+}
+.form-info-group .nilai {
+  font-size: 14px;
+}
+.form-info-group .nilai .check-box {
+  display: flex;
+  color: white;
+}
+
+hr {
+  border-top: 2px solid red;
+  width: 100%;
+}
+
+.pelanggaran {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  grid-gap: 5px;
+  background-color: #001d3093;
+}
+.pelanggaran .user-bg,
+.pelanggaran .add-pelanggaran {
+  width: 100%;
+  height: 100%;
+  color: white;
+}
+.pelanggaran .add-pelanggaran {
+  flex-direction: column;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  padding: 10px;
+  z-index: 1;
+}
+.pelanggaran .add-pelanggaran .dropBox {
+  height: 100%;
+  width: 100%;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  display: flex;
+}
+.pelanggaran .add-pelanggaran .dropBox video {
+  width: 100%;
+  height: 80%;
+  display: none;
+}
+.pelanggaran .add-pelanggaran input {
+  display: none;
+}
+.pelanggaran .add-pelanggaran .message {
+  text-align: center;
+  bottom: 30px;
+  height: 100%;
+}
+.pelanggaran .add-pelanggaran .message button {
+  color: white;
+  padding: 20px;
+}
+.pelanggaran .add-pelanggaran .files {
+  bottom: 10px;
+  width: 98%;
+  height: 200px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-self: center;
+  position: absolute;
+}
+.pelanggaran .add-pelanggaran .files .thumb,
+.pelanggaran .add-pelanggaran .files video {
+  padding: 5px;
+  width: 100px;
+  height: 100px;
+  margin: 5px;
+  margin-top: auto;
+  margin-bottom: auto;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.562);
+  box-shadow: 1px 1px 0px #dcdcdc4d, -1px -1px 0px #d6d6d67c;
+}
+.pelanggaran .add-pelanggaran .files .thumb {
+  position: relative;
+}
+.pelanggaran .add-pelanggaran .files .thumb i {
+  display: none;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  color: #949494;
+}
+.pelanggaran .add-pelanggaran .files .thumb i:hover {
+  color: red;
+  font-size: 18px;
+}
+.pelanggaran .add-pelanggaran .files .thumb img {
+  width: 100%;
+  height: 100%;
+}
+.pelanggaran .add-pelanggaran .files .thumb:hover {
+  width: 150px;
+  height: 150px;
+}
+.pelanggaran .add-pelanggaran .files .thumb:hover i {
+  display: block;
+}
+.pelanggaran .add-pelanggaran .files video:hover {
+  width: 150px;
+  height: 150px;
+}
+.pelanggaran .user-bg {
+  box-shadow: 10px 3px 15px #13222c79, -2px -2px 5px #92bad379;
+  min-width: 300px;
+  display: flex;
+  padding: 15px;
+  align-items: stretch;
+  flex-direction: column;
+}
+.pelanggaran .user-bg img {
+  grid-row: 1/3;
+}
+.pelanggaran .user-bg .search {
+  margin-bottom: 20px;
+  display: flex;
+  margin: 10px;
+}
+.pelanggaran .user-bg .users {
+  padding: 10px;
+  max-height: 80vh;
+}
+.pelanggaran .user-bg .users .user {
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 5px;
+}
+.pelanggaran .user-bg .users .user .userbody {
+  display: flex;
+  flex-direction: row;
+}
+.pelanggaran .user-bg .users .user .userbody img {
+  width: 100px;
+  height: 130px;
+  margin-right: 10px;
+}
+.pelanggaran .user-bg .users .user .user-input {
+  display: none;
+  width: 100%;
+  margin-top: 10px;
+}
+.pelanggaran .user-bg .users .user-selected {
+  background-color: #00243e52;
+}
+.pelanggaran .user-bg .users .user-selected .user-input {
+  display: block;
+}
+.pelanggaran .user-bg .users .user-selected .user-input select {
+  margin-bottom: 2px;
+}
+.pelanggaran .user-bg .users .user-selected .user-input-btns {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.perusahaan {
+  display: flex;
+  height: 100%;
+}
+.perusahaan .perusahaan-baru,
+.perusahaan .data-perusahaan {
+  border-radius: 10px;
+  background-color: #001d3093;
+  padding: 20px;
+}
+.perusahaan .perusahaan-baru {
+  width: 35%;
+  min-width: 300px;
+  margin-right: 8px;
+}
+.perusahaan .perusahaan-baru .logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 5px;
+  margin-top: 15px;
+  width: 100%;
+  height: 15%;
+}
+.perusahaan .perusahaan-baru .logo .logo-body {
+  border-radius: 10px;
+  width: 40%;
+  height: 100%;
+  padding: 1px;
+}
+.perusahaan .perusahaan-baru .logo .logo-body img {
+  border-radius: 10px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.perusahaan .perusahaan-baru .data-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  height: 65vh;
+}
+.perusahaan .perusahaan-baru .data-body .btn-option {
+  display: flex;
+  justify-content: flex-end;
+}
+.perusahaan .data-perusahaan {
+  width: 100%;
+}
+
+#logoPerusahaan {
+  width: 100px;
+  height: 100px;
+}
+
+#alamatPerusahaan {
+  min-height: 100px;
+}
+
+.jenis-pelanggaran {
+  height: 100%;
+  background-color: #001d3093;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.jenis-pelanggaran .jenis-main {
+  height: 100%;
+  display: grid;
+  grid-template-columns: minmax(200px, 1fr) 3fr;
+}
+.jenis-pelanggaran .jenis-main .jenis-body .jenis {
+  margin: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.jenis-pelanggaran .jenis-main .jenis-body .jenis .jenis-text {
+  color: white;
+  padding: 20px;
+  width: 100%;
+  cursor: pointer;
+}
+.jenis-pelanggaran .jenis-main .jenis-body .jenis .jenis-input {
+  display: none;
+}
+.jenis-pelanggaran .jenis-main .jenis-body .jenis .arrow-body {
+  display: flex;
+  align-items: center;
+}
+.jenis-pelanggaran .jenis-main .jenis-body .jenis .arrow-body .arrow {
+  background-color: #d8d8d8;
+  height: 20px;
+  width: 20px;
+  clip-path: polygon(0 0, 0% 100%, 100% 45%);
+  margin-right: 20px;
+}
+.jenis-pelanggaran .jenis-main .jenis-body .jenis .arrow-body .remove-item {
+  display: none;
+  height: 100%;
+  background-color: #d8d8d8;
+  width: 0px;
+}
+.jenis-pelanggaran .jenis-main .jenis-body .jenis .arrow-body .remove-item-show {
+  display: block;
+  background-color: #d8d8d8;
+  height: 62px;
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+}
+.jenis-pelanggaran .jenis-main .jenis-body .jenis .arrow-body .remove-item-show i {
+  margin-left: 5px;
+}
+.jenis-pelanggaran .jenis-main .jenis-body .jenis .arrow-body .arrow-show {
+  background-color: #d8d8d8;
+  transform: rotate(180deg);
+  margin-right: 0px;
+}
+.jenis-pelanggaran .jenis-main .jenis-body .jenis .arrow-body .arrow-select {
+  background-color: red !important;
+}
+.jenis-pelanggaran .jenis-main .jenis-body .jenis:hover > .arrow-body > .arrow {
+  background-color: red;
+  cursor: pointer;
+}
+.jenis-pelanggaran .jenis-main .jenis-body .jenis-baru {
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.jenis-pelanggaran .jenis-main .jenis-body .jenis-baru .jenis-text,
+.jenis-pelanggaran .jenis-main .jenis-body .jenis-baru .arrow {
+  display: none;
+}
+.jenis-pelanggaran .jenis-main .jenis-body .jenis-baru .jenis-input {
+  padding: 20px;
+  display: block;
+  width: 100%;
+}
+.jenis-pelanggaran .jenis-main .jenis-body .jenis-baru .jenis-input .data-input form {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.jenis-pelanggaran .jenis-main .detail-body {
+  height: 100%;
+  padding: 20px;
+  margin-top: 15px;
+}
+.jenis-pelanggaran .jenis-main .detail-body .detail-table {
+  height: 50vh;
+}
+
+@media only screen and (max-width: 1360px) {
+  .form-info-group {
+    margin-bottom: 10px;
+    margin-right: 2px;
+  }
+  .form-info-group .label {
+    font-style: italic;
+    color: #74a7ce;
+  }
+  .header strong {
+    font-size: 17px;
+  }
+
+  th,
+td {
+    font-size: 14px;
+    padding-top: 10px;
+  }
+}
+.optionItem {
+  display: none;
+  width: auto;
+}
+
+.option-show {
+  display: flex;
+  animation: optionItemAnimation 100ms;
+  animation-fill-mode: forwards;
+}
+
+.jenis:active {
+  background-color: red;
+}
+
+button {
+  margin-left: 3px;
+}
+
+.tcenter {
+  vertical-align: middle !important;
+  text-align: center !important;
+}
+
+.tright {
+  vertical-align: middle !important;
+  text-align: right !important;
+}
+
+.buktishow {
+  flex-direction: column;
+  display: flex;
+  height: 70vh;
+  width: 100%;
+  position: relative;
+  padding: 10px;
+  z-index: 1;
+}
+.buktishow .dropBox {
+  height: 100%;
+  width: 100%;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  display: flex;
+}
+.buktishow .dropBox video {
+  width: 100%;
+  height: 80%;
+  display: none;
+}
+.buktishow .files {
+  bottom: 10px;
+  width: 98%;
+  height: 100px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-self: center;
+  position: absolute;
+}
+.buktishow .files .thumb {
+  padding: 5px;
+  width: 75px;
+  height: 75px;
+  margin: 5px;
+  margin-top: auto;
+  margin-bottom: auto;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.562);
+  box-shadow: 1px 1px 0px #dcdcdc4d, -1px -1px 0px #d6d6d67c;
+  position: relative;
+}
+.buktishow .files .thumb i {
+  display: none;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  color: #949494;
+}
+.buktishow .files .thumb i:hover {
+  color: red;
+  font-size: 18px;
+}
+.buktishow .files .thumb img {
+  width: 100%;
+  height: 100%;
+}
+.buktishow .files .thumb video {
+  width: 100%;
+  height: 100%;
+}
+.buktishow .files .thumb:hover {
+  width: 100px;
+  height: 100px;
+}
+.buktishow .files .thumb:hover i {
+  display: block;
+}
+
+input[type=checkbox],
+input[type=radio] {
+  box-sizing: border-box;
+  padding: 0;
+  height: 19px;
+  width: 19px;
+  margin-right: 10px;
+  /* width: auto; */
+}
+
+@keyframes optionItemAnimation {
+  to {
+    width: auto;
+  }
+}
+.navbar-nav {
+  display: none;
+}
+
+#close-left {
+  display: none;
+}
+
+@media only screen and (max-width: 500px) {
+  .navbar-nav {
+    display: flex;
+  }
+
+  .main-left {
+    display: none;
+  }
+
+  .main-right {
+    padding-left: 0px !important;
+  }
+
+  .pelanggaran {
+    grid-template-columns: 1fr;
+  }
+  .pelanggaran .add-pelanggaran {
+    position: relative;
+    min-height: 300px;
+  }
+  .pelanggaran .add-pelanggaran .dropBox {
+    height: 100%;
+    width: 100%;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    display: flex;
+  }
+  .pelanggaran .add-pelanggaran .dropBox video {
+    width: 100%;
+    height: 80%;
+    display: none;
+  }
+  .pelanggaran .add-pelanggaran input {
+    display: none;
+  }
+  .pelanggaran .add-pelanggaran .message {
+    text-align: center;
+    bottom: 30px;
+    height: 100%;
+  }
+  .pelanggaran .add-pelanggaran .message button {
+    color: white;
+    padding: 20px;
+  }
+  .pelanggaran .add-pelanggaran .files {
+    position: absolute;
+    height: 100px;
+  }
+  .pelanggaran .add-pelanggaran .files .thumb,
+.pelanggaran .add-pelanggaran .files video {
+    width: 50px;
+    height: 50px;
+  }
+  .pelanggaran .add-pelanggaran .files .thumb {
+    position: relative;
+  }
+  .pelanggaran .add-pelanggaran .files .thumb i {
+    display: none;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    color: #949494;
+  }
+  .pelanggaran .add-pelanggaran .files .thumb i:hover {
+    color: red;
+    font-size: 18px;
+  }
+  .pelanggaran .add-pelanggaran .files .thumb:hover {
+    width: 75px;
+    height: 75px;
+  }
+  .pelanggaran .add-pelanggaran .files .thumb:hover i {
+    display: block;
+  }
+  .pelanggaran .add-pelanggaran .files video:hover {
+    width: 75px;
+    height: 75px;
+  }
+  .pelanggaran .user-bg {
+    height: 65vh;
+  }
+
+  #close-left {
+    display: flex;
+  }
+
+  .perusahaan {
+    flex-flow: column !important;
+  }
+  .perusahaan .perusahaan-baru {
+    width: 100%;
+    height: 100vh;
+  }
+
+  .jenis-pelanggaran {
+    padding: 5px;
+  }
+  .jenis-pelanggaran .jenis-main {
+    grid-template-columns: 1fr !important;
+  }
+
+  .profile {
+    display: flex !important;
+    flex-flow: column;
+    width: 100%;
+  }
+}

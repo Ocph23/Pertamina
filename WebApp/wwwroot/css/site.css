@@ -1,5 +1,63 @@
 /* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
+@font-face {
+  font-family: "Montserrat";
+  src: url(/lib/Montserrat/Montserrat-Regular.ttf);
+}
+
+.dataTables_wrapper .dataTables_length .label select, input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input[type="search"],
+input[type="search"]:hover,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+select:-webkit-autofill,
+select:-webkit-autofill:hover, select:-webkit-autofill:focus,
+textarea:-webkit-autofill:focus,
+input[type="search"]:focus,
+input:-webkit-autofill:focus, .form-control, .form-control:focus, select {
+  border-radius: 6px;
+  -webkit-box-shadow: inset 3px 3px 5px #13222c79, inset -2px -2px 5px #92bad379;
+          box-shadow: inset 3px 3px 5px #13222c79, inset -2px -2px 5px #92bad379;
+  color: white;
+  border: 0px;
+}
+
+.account .account-body, .btn, tr, .nav-tabs .nav-link.active {
+  -webkit-box-shadow: 3px 3px 5px #13222c79, -2px -2px 5px #92bad379;
+          box-shadow: 3px 3px 5px #13222c79, -2px -2px 5px #92bad379;
+  color: white;
+  border: 0px;
+  border-radius: 5px;
+}
+
+@media only screen and (max-width: 500px) {
+  .dataTables_wrapper .dataTables_length .label select, input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input[type="search"],
+  input[type="search"]:hover,
+  textarea:-webkit-autofill,
+  textarea:-webkit-autofill:hover,
+  select:-webkit-autofill,
+  select:-webkit-autofill:hover, select:-webkit-autofill:focus,
+  textarea:-webkit-autofill:focus,
+  input[type="search"]:focus,
+  input:-webkit-autofill:focus, .form-control, .form-control:focus, select {
+    -webkit-box-shadow: inset 3px 3px 5px #13222c79, inset -2px -2px 5px #92bad379;
+            box-shadow: inset 3px 3px 5px #13222c79, inset -2px -2px 5px #92bad379;
+    color: white;
+    border: 0px;
+    border-radius: 0px;
+  }
+  .account .account-body, .btn, tr, .nav-tabs .nav-link.active {
+    -webkit-box-shadow: 3px 3px 5px #13222c79, -2px -2px 5px #92bad379;
+            box-shadow: 3px 3px 5px #13222c79, -2px -2px 5px #92bad379;
+    color: white;
+    border: 0px;
+    border-radius: 0px;
+  }
+}
+
 a.navbar-brand {
   white-space: normal;
   text-align: center;
@@ -34,6 +92,7 @@ a {
 /* Sticky footer styles
   -------------------------------------------------- */
 html {
+  font-family: "Montserrat", sans-serif;
   font-size: 14px;
 }
 
@@ -63,6 +122,7 @@ html {
 }
 
 body {
+  font-family: "Montserrat", sans-serif;
   /* Margin bottom by footer height */
   background-image: url("../images/src/bg.png");
   background-repeat: no-repeat;
@@ -70,6 +130,7 @@ body {
   min-height: 106vh;
   display: -ms-grid;
   display: grid;
+  color: white;
   -ms-grid-rows: auto 1fr auto;
       grid-template-rows: auto 1fr auto;
 }
@@ -116,12 +177,13 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   color: white;
+  height: 100%;
 }
 
 .modal-body,
 .modal-footer,
 .modal-header {
-  background: linear-gradient(145deg, #00243ea8, #001f3469);
+  background: #001d3093;
 }
 
 .account {
@@ -141,10 +203,7 @@ body {
 .account .account-body {
   width: 40%;
   padding: 30px 35px;
-  border-radius: 12px;
-  background: linear-gradient(145deg, #00274288, #0375cc73);
-  -webkit-box-shadow: 2px 2px 5px #000e199f, -2px -2px 5px #003a638a;
-          box-shadow: 2px 2px 5px #000e199f, -2px -2px 5px #003a638a;
+  background-color: #001d3093;
   vertical-align: middle;
   color: white;
 }
@@ -174,20 +233,6 @@ body {
 
 #logo-google {
   width: 30px;
-}
-
-.vertical-scroll {
-  overflow-y: scroll;
-}
-
-.vertical-scroll::-webkit-scrollbar {
-  display: none;
-}
-
-.vertical-scroll thead th {
-  position: -webkit-sticky;
-  position: sticky;
-  top: -1px;
 }
 
 @media (min-width: 768px) {
@@ -270,6 +315,98 @@ body {
   color: red;
 }
 
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 5px #92bad379;
+          box-shadow: inset 0 0 5px #92bad379;
+  border-radius: 3px;
+  width: 4px;
+  margin-right: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 5px #13222c79;
+          box-shadow: inset 0 0 5px #13222c79;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #001d3093;
+  width: 10px;
+}
+
+.vertical-scroll {
+  overflow-y: auto;
+  margin-right: 5px;
+  padding: 5px;
+}
+
+.vertical-scroll thead th {
+  position: -webkit-sticky;
+  position: sticky;
+  top: -1px;
+}
+
+.dataTables_wrapper {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
+  -ms-grid-rows: auto 1fr auto;
+      grid-template-rows: auto 1fr auto;
+}
+
+.dataTables_wrapper .dataTables_length {
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 1;
+  grid-column: 1/2;
+}
+
+.dataTables_wrapper .dataTables_length .label {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.dataTables_wrapper .dataTables_length .label select {
+  min-width: 100px !important;
+}
+
+.dataTables_wrapper .dataTables_length .label:before {
+  content: "" !important;
+}
+
+.dataTables_wrapper .dataTables_length .label:after {
+  content: "* * *" !important;
+}
+
+.dataTables_wrapper .dataTables_filter {
+  -ms-grid-column: 2;
+  -ms-grid-column-span: 1;
+  grid-column: 2/3;
+  text-align: right;
+}
+
+.dataTables_wrapper table {
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 2;
+  grid-column: 1/3;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+  -ms-grid-column: 2;
+  -ms-grid-column-span: 1;
+  grid-column: 2/3;
+  text-align: right;
+}
+
 @media only screen and (max-width: 500px) {
   .account .account-body {
     width: 80%;
@@ -319,5 +456,104 @@ body {
   h2 {
     font-size: 20px !important;
   }
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input[type="search"],
+input[type="search"]:hover,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+select:-webkit-autofill,
+select:-webkit-autofill:hover {
+  background-color: transparent;
+  color: white;
+  -webkit-transition: background-color 5000s ease-in-out 0s;
+  transition: background-color 5000s ease-in-out 0s;
+  min-height: 45px;
+}
+
+select:-webkit-autofill:focus,
+textarea:-webkit-autofill:focus,
+input[type="search"]:focus,
+input:-webkit-autofill:focus {
+  color: white;
+  -webkit-transition: background-color 5000s ease-in-out 0s;
+  transition: background-color 5000s ease-in-out 0s;
+  min-height: 45px;
+}
+
+.form-control {
+  background-color: transparent;
+  min-height: 45px;
+}
+
+.form-control:focus {
+  min-height: 45px;
+  background-color: #36363675;
+}
+
+.btn {
+  min-width: 50px;
+  margin-left: 10px;
+}
+
+table {
+  border-collapse: separate;
+  border-spacing: 0 8px;
+}
+
+.table td,
+.table th {
+  padding: 0.5rem;
+  vertical-align: middle;
+  border-top: none;
+  height: 45px;
+}
+
+.table th {
+  border-bottom: 1px solid #ff0018 !important;
+}
+
+tr:hover {
+  color: #beeb2d !important;
+}
+
+select {
+  background: transparent;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  color: white;
+  background-image: url("../images/src/down.png");
+  background-repeat: no-repeat;
+  background-position: right;
+  background-size: 25px;
+  min-height: 45px;
+  min-width: 80px;
+}
+
+select option {
+  background: #001d3093;
+  color: #fff;
+}
+
+.nav-tabs {
+  border-bottom: 2px solid red;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+}
+
+.nav-tabs .nav-link.active {
+  background-color: transparent;
+}
+
+.header-title {
+  text-transform: uppercase;
+  border-bottom: 2px solid red;
+  padding-bottom: 5px;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
 }
 /*# sourceMappingURL=site.css.map */

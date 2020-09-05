@@ -4,28 +4,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace WebApp.Models
 {
 
-    // [TableName("buktipelanggaran")]
     public class BuktiPelanggaran
     {
-        // [PrimaryKey("Id")]
-        // [DbColumn("Id")]
         [Key]
         public int Id { get; set; }
 
-        // [DbColumn("idpelanggaran")]
+        public int PelanggaranId { get; set; }
 
-
-        public int IdPelanggaran { get; set; }
-
-        // [DbColumn("filetype")]
         public string FileType { get; set; }
 
-        // [DbColumn("filename")]
         public string FileName { get; set; }
 
-
-        // [DbColumn("thumb")]
         public string Thumb { get; set; }
+
 
         [NotMapped]
 

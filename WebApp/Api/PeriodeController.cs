@@ -6,12 +6,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using WebApp.Data;
+using WebApp.Middlewares;
 using WebApp.Models;
 
 namespace WebApp.Api
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PeriodeController : ControllerBase
     {
         private IConfiguration _config;
@@ -48,7 +50,7 @@ namespace WebApp.Api
 
             try
             {
-                return Ok(_context.Periode.Where(x => x.idperiode == id).FirstOrDefault());
+                return Ok(_context.Periode.Where(x => x.Id == id).FirstOrDefault());
             }
             catch (System.Exception ex)
             {
@@ -63,7 +65,7 @@ namespace WebApp.Api
         {
             try
             {
-                return Ok(_context.Periode.Where(x => x.status == true).FirstOrDefault());
+                return Ok(_context.Periode.Where(x => x.Status == true).FirstOrDefault());
             }
             catch (System.Exception ex)
             {
@@ -80,16 +82,16 @@ namespace WebApp.Api
 
             try
             {
-                value.tanggalmulai = TimeZoneInfo.ConvertTimeFromUtc(value.tanggalmulai, nzTimeZone);
-                value.tanggalselesai = TimeZoneInfo.ConvertTimeFromUtc(value.tanggalselesai, nzTimeZone);
-                value.tanggalundian = TimeZoneInfo.ConvertTimeFromUtc(value.tanggalundian, nzTimeZone);
-                value.status = true;
-                var active = _context.Periode.Where(x => x.status == true).FirstOrDefault();
+                value.Mulai = TimeZoneInfo.ConvertTimeFromUtc(value.Mulai, nzTimeZone);
+                value.Selesai = TimeZoneInfo.ConvertTimeFromUtc(value.Selesai, nzTimeZone);
+                value.Undian = TimeZoneInfo.ConvertTimeFromUtc(value.Undian, nzTimeZone);
+                value.Status = true;
+                var active = _context.Periode.Where(x => x.Status == true).FirstOrDefault();
                 if (active != null)
                 {
-                    if (value.tanggalmulai < active.tanggalselesai)
+                    if (value.Mulai < active.Selesai)
                         throw new SystemException("Tanggal Mulai Harus Lebih Besar dari Tanggal Akhir Periode Lalu");
-                    active.status = false;
+                    active.Status = false;
                 }
                 _context.Periode.Add(value);
 
@@ -110,14 +112,14 @@ namespace WebApp.Api
         {
             try
             {
-                value.tanggalmulai = TimeZoneInfo.ConvertTimeFromUtc(value.tanggalmulai, nzTimeZone);
-                value.tanggalselesai = TimeZoneInfo.ConvertTimeFromUtc(value.tanggalselesai, nzTimeZone);
-                value.tanggalundian = TimeZoneInfo.ConvertTimeFromUtc(value.tanggalundian, nzTimeZone);
-                var periode = _context.Periode.Where(x => x.idperiode == value.idperiode).FirstOrDefault();
-                periode.idperiode = value.idperiode;
-                periode.tanggalmulai = value.tanggalmulai;
-                periode.tanggalselesai = value.tanggalselesai;
-                periode.tanggalundian = value.tanggalundian;
+                value.Mulai = TimeZoneInfo.ConvertTimeFromUtc(value.Mulai, nzTimeZone);
+                value.Selesai = TimeZoneInfo.ConvertTimeFromUtc(value.Selesai, nzTimeZone);
+                value.Undian = TimeZoneInfo.ConvertTimeFromUtc(value.Undian, nzTimeZone);
+                var periode = _context.Periode.Where(x => x.Id == value.Id).FirstOrDefault();
+                periode.Id = value.Id;
+                periode.Mulai = value.Mulai;
+                periode.Selesai = value.Selesai;
+                periode.Undian = value.Undian;
 
                 var updated = _context.SaveChanges();
                 if (updated <= 0)
@@ -138,7 +140,7 @@ namespace WebApp.Api
         {
             try
             {
-                var deleted = _context.Periode.Where(x => x.idperiode == id).FirstOrDefault();
+                var deleted = _context.Periode.Where(x => x.Id == id).FirstOrDefault();
                 _context.Periode.Remove(deleted);
                 var result = _context.SaveChanges();
                 if (result <= 0)
