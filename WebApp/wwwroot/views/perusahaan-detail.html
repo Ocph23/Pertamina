@@ -10,7 +10,7 @@
             <div class="biodata-data">
                 <div class="form-info-group">
                     <div class="label">Nama</div>
-                    <div class="nilai">{{model.namaperusahaan}}</div>
+                    <div class="nilai">{{model.nama}}</div>
                 </div>
                 <div class="form-info-group">
                     <div class="label">Pimpinan</div>
@@ -18,11 +18,15 @@
                 </div>
                 <div class="form-info-group">
                     <div class="label">Email</div>
-                    <div class="nilai">{{model.emaildirektur}}</div>
+                    <div class="nilai">{{model.email}}</div>
                 </div>
                 <div class="form-info-group">
                     <div class="label">Telepon</div>
-                    <div class="nilai">{{model.kontakdirektur}}</div>
+                    <div class="nilai">{{model.kontak}}</div>
+                </div>
+                <div class="form-info-group">
+                    <div class="label">Alamat</div>
+                    <div class="nilai">{{model.alamat}}</div>
                 </div>
             </div>
         </div>
@@ -59,7 +63,7 @@
                         </thead>
                         <tbody class="vertical-scroll">
                             <tr ng-repeat="item in model.perusahaansKaryawan">
-                                <td>{{item.karyawan.namakaryawan}}</td>
+                                <td>{{item.karyawan.nama}}</td>
                                 <td>{{item.jabatan}}</td>
                                 <td>{{item.mulaiKerja | date:'dd-MM-yyyy'}}</td>
                                 <td> <span

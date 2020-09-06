@@ -12,7 +12,7 @@
                     <div class="user-body">
                         <div class="form-info-group">
                             <div class="label">Nama</div>
-                            <div class="nilai">{{item.namakaryawan}}</div>
+                            <div class="nilai">{{item.nama}}</div>
                         </div>
                         <div class="form-info-group">
                             <div class="label">Jabatan</div>
@@ -20,16 +20,16 @@
                         </div>
                         <div class="form-info-group">
                             <div class="label">Nama Perusahaan</div>
-                            <div class="nilai">{{item.perusahaanKaryawan.perusahaan.namaperusahaan}}</div>
+                            <div class="nilai">{{item.perusahaanKaryawan.perusahaan.nama}}</div>
                         </div>
                     </div>
                 </div>
                 <form class="user-input" ng-submit="save(item, files)">
                     <select class="form-control" ng-model="item.selectedJenis"
-                        ng-options="level as level.level for level in datajenis">
+                        ng-options="level as level.name for level in datajenis">
                     </select>
                     <select class="form-control" ng-model="item.jenis"
-                        ng-options="itemName as itemName.jenispelanggaran for itemName in item.selectedJenis.datas">
+                        ng-options="itemName as itemName.nama for itemName in item.selectedJenis.datas">
                     </select>
                     <div class="user-input-btns">
                         <button type="submit" class="btn btn-success"

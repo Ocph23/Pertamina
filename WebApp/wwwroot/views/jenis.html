@@ -5,11 +5,11 @@
     <div class="jenis-main">
         <div class="jenis-body vertical-scroll">
             <div class="jenis" id="jenis{{$index}}" ng-class="{'jenis-baru':item.isNew}" ng-repeat="item in items">
-                <div class="jenis-text" ng-click="selectItem(item)">{{item.level}}</div>
+                <div class="jenis-text" ng-click="selectItem(item)">{{item.name}}</div>
                 <div class="jenis-input">
                     <div class="data-input">
                         <form ng-submit="saveJenis(item)">
-                            <input type="text" placeholder="Tambah Baru" ng-model="item.level" class="form-control"
+                            <input type="text" placeholder="Tambah Baru" ng-model="item.name" class="form-control"
                                 required>
                             <button class="btn btn-outline-success" type="submit" ng-class="{disabled:!item.level}">
                                 <i class="fa fa-save" ng-show="!item.proccess"></i>
@@ -50,10 +50,10 @@
                     </thead>
                     <tbody ng-repeat="detail in selected.datas">
                         <tr ng-if="!detail.isNew">
-                            <td>{{detail.jenispelanggaran }}</td>
-                            <td class="tcenter">{{detail.pengurangankaryawan }}</td>
-                            <td class="tcenter">{{detail.penguranganperusahaan}}</td>
-                            <td class="tcenter">{{detail.penambahanpoint}}</td>
+                            <td>{{detail.nama }}</td>
+                            <td class="tcenter">{{detail.nilaiKaryawan }}</td>
+                            <td class="tcenter">{{detail.nilaiPerusahaan}}</td>
+                            <td class="tcenter">{{detail.penambahan}}</td>
                             <td>
                                 <button class="btn btn-info" ng-show="!optionShow" ng-click="optionShow= !optionShow">
                                     <i class="fa fa-cog"></i>
@@ -72,13 +72,13 @@
                         </tr>
                         <tr ng-if="detail.isNew">
                             <form>
-                                <td><input type="text" ng-model="detail.jenispelanggaran" class="form-control" required>
+                                <td><input type="text" ng-model="detail.nama" class="form-control" required>
                                 </td>
-                                <td><input type="number" min="0" step=".1" ng-model="detail.pengurangankaryawan"
+                                <td><input type="number" min="0" step=".1" ng-model="detail.nilaiKaryawan"
                                         class="form-control" required></td>
-                                <td><input type="number" min="0" step=".1" ng-model="detail.penguranganperusahaan"
+                                <td><input type="number" min="0" step=".1" ng-model="detail.nilaiPerusahaan"
                                         class="form-control" required>
-                                <td><input type="number" min="0" step=".1" ng-model="detail.penambahanpoint"
+                                <td><input type="number" min="0" step=".1" ng-model="detail.penambahan"
                                         ng-disabled="!profile.InRole('manager')" class="form-control" required>
                                 </td>
                                 <td>

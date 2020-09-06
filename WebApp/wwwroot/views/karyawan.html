@@ -14,19 +14,19 @@
             <form ng-submit="save(model)">
                 <div class="form-info-group">
                     <div class="label">ID Karyawan</div>
-                    <div class="nilai"><input ng-model="model.kodekaryawan" type="text" class="form-control" required>
+                    <div class="nilai"><input ng-model="model.kodeKaryawan" type="text" class="form-control" required>
                     </div>
                 </div>
                 <div class="form-info-group">
                     <div class="label">Nama Karyawan</div>
-                    <div class="nilai"><input ng-model="model.namakaryawan" type="text" class="form-control" required>
+                    <div class="nilai"><input ng-model="model.namaKaryawan" type="text" class="form-control" required>
                     </div>
                 </div>
                 <div class="form-info-group">
                     <div class="label">Perusahaan</div>
                     <div class="nilai">
-                        <select ng-model="model.perusahaanKaryawan" type="text" class="form-control" required
-                            ng-options="item as item.namaperusahaan for item in perusahaan track by item.idperusahaan">
+                        <select ng-model="model.perusahaanKaryawan.perusahaan" type="text" class="form-control" required
+                            ng-options="item as item.nama for item in perusahaan track by item.id">
                         </select>
                     </div>
                 </div>
@@ -52,7 +52,7 @@
                 <div class="form-info-group">
                     <div class="label">Email</div>
                     <div class="nilai">
-                        <input ng-model="model.email" type="email" class="form-control">
+                        <input ng-model="model.email" ng-disabled="model.id" type="email" class="form-control">
                     </div>
                 </div>
                 <div class="form-info-group">
@@ -90,14 +90,17 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="data in datas" ng-click="selectItem(data)">
-                    <td valign="center">{{data.kodekaryawan}}</td>
-                    <td>{{data.namakaryawan}}</td>
-                    <td>{{data.perusahaanKaryawan.perusahaan.namaperusahaan}}</td>
+                <tr ng-repeat="data in datas">
+                    <td valign="center">{{data.kodeKaryawan}}</td>
+                    <td>{{data.namaKaryawan}}</td>
+                    <td>{{data.perusahaanKaryawan.perusahaan.nama}}</td>
                     <td>{{data.perusahaanKaryawan.jabatan}}</td>
                     <td style="width: auto; text-align: right;">
-                        <button class="btn btn-info" ui-sref="karyawan-detail({id:data.idKaryawan})">
+                        <button class="btn btn-info" ui-sref="karyawan-detail({id:data.id})">
                             <i class="fa fa-list"></i>
+                        </button>
+                        <button class="btn btn-warning" ng-click="selectItem(data)">
+                            <i class="fa fa-edit"></i>
                         </button>
                     </td>
                 </tr>

@@ -26,8 +26,8 @@
                 dt-column-defs="showCase.dtColumnDefs">
                 <thead>
                     <tr>
-                        <th>Tanggal</th>
-                        <th>Nama Karyawan</th>
+                        <th>Tanggal/Waktu</th>
+                        <th>Karyawan</th>
                         <th>Perusahaan</th>
                         <th>Level</th>
                         <th>Pelanggaran</th>
@@ -38,10 +38,10 @@
                 <tbody class="vertical-scroll">
                     <tr ng-repeat="item in datas |filter : myFilter(bulan, tahun)">
                         <td>{{item.tanggal| date:'dd-MM-yyyy HH:mm:ss'}}</td>
-                        <td>{{item.dataKaryawan.namakaryawan}}</td>
-                        <td>{{item.dataPerusahaan.namaperusahaan}}</td>
-                        <td>{{item.jenispelanggaran.level.level}}</td>
-                        <td>{{item.jenispelanggaran.jenispelanggaran}}</td>
+                        <td>{{item.dataKaryawan.namaKaryawan}}</td>
+                        <td>{{item.dataPerusahaan.nama}}</td>
+                        <td>{{item.jenispelanggaran.level.name}}</td>
+                        <td>{{item.jenispelanggaran.nama}}</td>
                         <td>{{item.status==0 ? 'Baru': item.status==1 ? 'Diterima':'Ditolak'}}</td>
                         <td class="text-center"><i class="fa fa-list text-info" data-toggle="modal" data-target="#bukti"
                                 ng-click="selectBukti(item)"></i></td>

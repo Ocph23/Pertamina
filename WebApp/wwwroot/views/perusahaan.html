@@ -13,7 +13,7 @@
             <form ng-submit="save(model)">
                 <div class="form-info-group">
                     <div class="label">Nama Perusahaan</div>
-                    <div class="nilai"><input ng-model="model.namaperusahaan" type="text" class="form-control" required>
+                    <div class="nilai"><input ng-model="model.nama" type="text" class="form-control" required>
                     </div>
                 </div>
                 <div class="form-info-group">
@@ -22,12 +22,12 @@
                 </div>
                 <div class="form-info-group">
                     <div class="label">Kontak</div>
-                    <div class="nilai"><input ng-model="model.kontakdirektur" type="text" class="form-control" required>
+                    <div class="nilai"><input ng-model="model.kontak" type="text" class="form-control" required>
                     </div>
                 </div>
                 <div class="form-info-group">
                     <div class="label">Email</div>
-                    <div class="nilai"><input ng-model="model.emaildirektur" type="email" class="form-control" required>
+                    <div class="nilai"><input ng-model="model.email" type="email" class="form-control" required>
                     </div>
                 </div>
                 <div class="form-info-group">
@@ -67,12 +67,12 @@
             <tbody>
                 <tr ng-repeat="data in datas" ng-click="select(data)" ng-click="addItem=true" data-toggle="tooltip"
                     data-placement="bottom" title="Click Untuk Mengedit Data">
-                    <td valign="center">{{data.namaperusahaan}}</td>
+                    <td valign="center">{{data.nama}}</td>
                     <td>{{data.direktur}}</td>
-                    <td>{{data.kontakdirektur}}</td>
+                    <td>{{data.kontak}}</td>
                     <td class="tright">
                         <button data-toggle="tooltip" data-placement="bottom" title="Click Untuk Melihat Detail"
-                            class="btn btn-info" ui-sref="perusahaan-detail({id:data.idperusahaan})">
+                            class="btn btn-info" ui-sref="perusahaan-detail({id:data.id})">
                             <i class="fa fa-list"></i>
                         </button>
                     </td>

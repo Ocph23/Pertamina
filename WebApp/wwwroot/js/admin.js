@@ -281,11 +281,12 @@ function pelanggaranBaru($scope, KaryawanService, JenisService, PelanggaranServi
 	};
 
 	$scope.save = (item, files) => {
-		item.idperusahaan = item.perusahaanKaryawan.idperusahaan;
-		item.idjenispelanggaran = item.jenis.idjenispelanggaran;
+		item.perusahaanId = item.perusahaanKaryawan.perusahaan.id;
+		item.jenispelanggaranId = item.jenis.id;
 		item.files = angular.copy(files);
-		item.karyawan = item.jenis.pengurangankaryawan;
-		item.perusahaan = item.jenis.penguranganperusahaan;
+		item.nilaiKaryawan = item.jenis.nilaiKaryawan;
+		item.nilaiPerusahaan = item.jenis.nilaiPerusahaan;
+
 		PelanggaranService.post(item).then((x) => {
 			Toast.fire({
 				icon: 'success',
@@ -416,9 +417,9 @@ function jenisController($scope, JenisService, UserService, DTOptionsBuilder) {
 		if (!emptyExists)
 			$scope.items.push({
 				nama: '',
-				pengurangankaryawan: 0,
-				penguranganperusahaan: 0,
-				penambahanpoint: 0,
+				nilaiKaryawan: 0,
+				nilaiPerusahaan: 0,
+				penambahan: 0,
 				isNew: true
 			});
 	};
@@ -437,7 +438,7 @@ function jenisController($scope, JenisService, UserService, DTOptionsBuilder) {
 	$scope.saveJenis = (model) => {
 		if (!model.proccess) {
 			model.proccess = true;
-			if (!model.idlevel) {
+			if (!model.id) {
 				JenisService.post(model).then(
 					(x) => {
 						model.proccess = false;
@@ -446,7 +447,7 @@ function jenisController($scope, JenisService, UserService, DTOptionsBuilder) {
 							title: 'Data Berhasil Ditambah !'
 						});
 						model.isNew = false;
-						model.idlevel = x.idlevel;
+						model.id = x.id;
 						$scope.selected = model;
 						$scope.selected.selected = true;
 						$scope.createNew();
@@ -508,8 +509,8 @@ function jenisController($scope, JenisService, UserService, DTOptionsBuilder) {
 	$scope.saveDetail = (model) => {
 		if (!model.proccess) {
 			model.proccess = true;
-			if (!model.idjenispelanggaran) {
-				model.idlevel = $scope.selected.idlevel;
+			if (!model.id) {
+				model.levelId = $scope.selected.id;
 				JenisService.postDetail(model).then(
 					(x) => {
 						model.proccess = false;
@@ -518,7 +519,7 @@ function jenisController($scope, JenisService, UserService, DTOptionsBuilder) {
 							title: 'Data Berhasil Ditambah !'
 						});
 
-						model.idjenispelanggaran = x.idjenispelanggaran;
+						model.id = x.id;
 						model.isNew = false;
 					},
 					(e) => {}
@@ -526,11 +527,12 @@ function jenisController($scope, JenisService, UserService, DTOptionsBuilder) {
 			} else {
 				JenisService.putDetail(model).then(
 					(x) => {
-						var detail = $scope.selected.datas.find(
-							(x) => x.idjenispelanggaran == model.idjenispelanggaran
-						);
+						var detail = $scope.selected.datas.find((x) => x.id == model.id);
 						if (detail) {
-							detail.jenispelanggaran = model.jenispelanggaran;
+							detail.nama = model.nama;
+							detail.nilaiKaryawan = model.nilaiKaryawan;
+							detail.nilaiPerusahaan = model.nilaiPerusahaan;
+							detail.penambahan = model.penambahan;
 						}
 						Toast.fire({
 							icon: 'success',
@@ -602,7 +604,7 @@ function perusahaanController($scope, PerusahaanService, HelperService, DTOption
 	$scope.save = (model) => {
 		if (!$scope.isBusy) {
 			$scope.isBusy = true;
-			if (!model.idperusahaan) {
+			if (!model.id) {
 				PerusahaanService.post(model).then((x) => {
 					Toast.fire({
 						icon: 'success',
@@ -617,6 +619,7 @@ function perusahaanController($scope, PerusahaanService, HelperService, DTOption
 						icon: 'success',
 						title: 'Data Berhasil Diubah !'
 					});
+
 					$scope.newItem();
 					$scope.isBusy = false;
 				});
@@ -678,7 +681,7 @@ function karyawanController($scope, PerusahaanService, KaryawanService, DTOption
 		if (!$scope.isBusy) {
 			$scope.isBusy = true;
 
-			if (!model.idKaryawan) {
+			if (!model.id) {
 				KaryawanService.post(model).then((x) => {
 					Toast.fire({
 						icon: 'success',
@@ -702,6 +705,11 @@ function karyawanController($scope, PerusahaanService, KaryawanService, DTOption
 
 	$scope.selectItem = (model) => {
 		$scope.model = model;
+
+		if (!model.photo) {
+			model.photo = 'noimage.png';
+		}
+
 		$scope.addItem = true;
 	};
 
@@ -947,7 +955,14 @@ function detailKaryawanController(
 	};
 }
 
-function pelanggaranController($scope, PelanggaranService, HelperService, PeriodeService, DTOptionsBuilder) {
+function pelanggaranController(
+	$scope,
+	PelanggaranService,
+	HelperService,
+	UserService,
+	PeriodeService,
+	DTOptionsBuilder
+) {
 	var vm = this;
 	vm.dtOptions = DTOptionsBuilder.newOptions()
 		.withPaginationType('full_numbers')
@@ -977,7 +992,7 @@ function pelanggaranController($scope, PelanggaranService, HelperService, Period
 		if (month && month.value == -1 && $scope.active) {
 			return function(event) {
 				var tgl = new Date(event.tanggal);
-				return tgl >= new Date($scope.active.tanggalmulai) && tgl <= new Date($scope.active.tanggalselesai);
+				return tgl >= new Date($scope.active.mulai) && tgl <= new Date($scope.active.selesai);
 			};
 		} else if (month && year) {
 			return function(event) {

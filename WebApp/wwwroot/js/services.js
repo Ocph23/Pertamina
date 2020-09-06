@@ -52,9 +52,9 @@ function JenisService($http, $q) {
 
 	service.put = (model) => {
 		var def = $q.defer();
-		$http({ url: controller + '/' + model.idlevel, method: 'PUT', data: model }).then(
+		$http({ url: controller + '/' + model.id, method: 'PUT', data: model }).then(
 			(response) => {
-				var item = datas.find((x) => x.idlevel == model.idlevel);
+				var item = datas.find((x) => x.id == model.id);
 				if (item) {
 					item.level = model.level;
 				}
@@ -70,7 +70,7 @@ function JenisService($http, $q) {
 
 	service.delete = (model) => {
 		var def = $q.defer();
-		$http({ url: controller + '/' + model.idlevel, method: 'Delete' }).then(
+		$http({ url: controller + '/' + model.id, method: 'Delete' }).then(
 			(response) => {
 				var index = datas.indexOf(model);
 				datas.splice(index, 1);
@@ -101,7 +101,7 @@ function JenisService($http, $q) {
 
 	service.putDetail = (model) => {
 		var def = $q.defer();
-		$http({ url: controllerDetail + '/' + model.idjenispelanggaran, method: 'PUT', data: model }).then(
+		$http({ url: controllerDetail + '/' + model.id, method: 'PUT', data: model }).then(
 			(response) => {
 				def.resolve(response.data);
 			},
@@ -115,7 +115,7 @@ function JenisService($http, $q) {
 
 	service.deleteDetail = (model) => {
 		var def = $q.defer();
-		$http({ url: controllerDetail + '/' + model.idjenispelanggaran, method: 'Delete' }).then(
+		$http({ url: controllerDetail + '/' + model.id, method: 'Delete' }).then(
 			(response) => {
 				def.resolve(response.data);
 			},
@@ -186,11 +186,15 @@ function PerusahaanService($http, $q) {
 
 	service.put = (model) => {
 		var def = $q.defer();
-		$http({ url: controller + '/' + model.idperusahaan, method: 'PUT', data: model }).then(
+		$http({ url: controller + '/' + model.id, method: 'PUT', data: model }).then(
 			(response) => {
-				var item = datas.find((x) => x.idperusahaan == model.idperusahaan);
+				var item = datas.find((x) => x.id == model.id);
 				if (item) {
-					item.level = model.level;
+					item.nama = response.data.nama;
+					item.direktur = response.data.direktur;
+					item.kontak = response.data.kontak;
+					item.alamat = response.data.alamat;
+					item.email = response.data.email;
 				}
 				def.resolve(response.data);
 			},
@@ -204,7 +208,7 @@ function PerusahaanService($http, $q) {
 
 	service.delete = (model) => {
 		var def = $q.defer();
-		$http({ url: controller + '/' + model.idperusahaan, method: 'Delete' }).then(
+		$http({ url: controller + '/' + model.id, method: 'Delete' }).then(
 			(response) => {
 				var index = datas.indexOf(model);
 				datas.splice(index, 1);
@@ -390,7 +394,7 @@ function KaryawanService($http, $q) {
 
 	service.put = (model) => {
 		var def = $q.defer();
-		$http({ url: controller + '/' + model.idKaryawan, method: 'PUT', data: model }).then(
+		$http({ url: controller + '/' + model.id, method: 'PUT', data: model }).then(
 			(response) => {
 				var item = datas.find((x) => x.idKaryawan == model.idperusahaan);
 				if (item) {
@@ -488,12 +492,12 @@ function PelanggaranService($http, $q) {
 		}
 
 		var modelData = {
-			idpelanggaran: 0,
-			idperusahaan: model.idperusahaan,
-			idjenispelanggaran: model.idjenispelanggaran,
-			idKaryawan: model.idKaryawan,
-			karyawan: model.karyawan,
-			perusahaan: model.perusahaan,
+			id: 0,
+			perusahaanId: model.perusahaanId,
+			jenispelanggaranId: model.jenispelanggaranId,
+			karyawanId: model.id,
+			nilaiKaryawan: model.nilaiKaryawan,
+			nilaiPerusahaan: model.nilaiPerusahaan,
 			tanggal: new Date(),
 			files: model.files
 		};

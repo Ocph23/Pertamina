@@ -16,6 +16,8 @@ namespace WebApp.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+
+            base.OnModelCreating(builder);
             builder.Entity<Karyawan>().HasIndex(u => u.KodeKaryawan).IsUnique();
         }
 
