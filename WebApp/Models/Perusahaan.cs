@@ -29,9 +29,9 @@ namespace WebApp.Models
         [NotMapped]
         public byte[] DataPhoto { get; set; }
 
-        public ICollection<PerusahaanKaryawan> PerusahaansKaryawan { get; set; }
+        public virtual ICollection<PerusahaanKaryawan> PerusahaansKaryawan { get; set; }
 
-        public ICollection<Pelanggaran> Pelanggarans { get; set; }
+        public virtual ICollection<Pelanggaran> Pelanggarans { get; set; }
 
     }
 

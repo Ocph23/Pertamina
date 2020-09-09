@@ -48,24 +48,8 @@ namespace WebApp.Api
         {
             try
             {
-
-                var active = _context.Periode.Where(x => x.Status == true).FirstOrDefault();
-
-                if (active != null)
-                {
-                    var result = _context.Karyawan
-                       .Include(x => x.Perusahaans)
-                    .ThenInclude(x => x.Perusahaan)
-                .Include(x => x.Pelanggarans)
-                    .ThenInclude(z => z.DataPerusahaan)
-                .Include(x => x.Pelanggarans)
-                    .ThenInclude(x => x.Files)
-                .Include(x => x.Pelanggarans)
-                    .ThenInclude(x => x.Jenispelanggaran).ThenInclude(x => x.Level);
-
-                    return Ok(result.ToList());
-                }
-                throw new SystemException("Periode Aktif Belum Ada !");
+                var result = _context.Karyawan.Include(x => x.Perusahaans).ThenInclude(x => x.Perusahaan);
+                return Ok(result.ToList());
             }
             catch (System.Exception ex)
             {
@@ -81,20 +65,12 @@ namespace WebApp.Api
             try
             {
                 var karyawans = _context.Karyawan.Where(x => x.Id == id)
-                .Include(x => x.Perusahaans)
-                    .ThenInclude(x => x.Perusahaan)
-                .Include(x => x.Pelanggarans)
-                    .ThenInclude(z => z.DataPerusahaan)
-                .Include(x => x.Pelanggarans)
-                    .ThenInclude(x => x.Files)
-                .Include(x => x.Pelanggarans)
-                    .ThenInclude(x => x.Jenispelanggaran).ThenInclude(x => x.Level);
+                .Include(x => x.Perusahaans).ThenInclude(x => x.Perusahaan);
 
                 var karyawan = karyawans.FirstOrDefault();
                 var user = await _userManager.FindByNameAsync(karyawan.KodeKaryawan);
-                karyawan.Roles = await _userManager.GetRolesAsync(user) as List<string>;
-
-
+                var roles = await _userManager.GetRolesAsync(user) as List<string>;
+                karyawan.Roles = roles;
                 return Ok(karyawan);
             }
             catch (System.Exception ex)
@@ -111,8 +87,8 @@ namespace WebApp.Api
             {
                 var karyawan = _context.Karyawan.Where(x => x.Id == id).FirstOrDefault();
                 var user = await _userManager.FindByNameAsync(karyawan.KodeKaryawan);
-                karyawan.Roles = await _userManager.GetRolesAsync(user) as List<string>;
-                return Ok(karyawan.Roles.ToList());
+                var roles = await _userManager.GetRolesAsync(user) as List<string>;
+                return Ok(roles);
             }
             catch (System.Exception ex)
             {
@@ -159,8 +135,8 @@ namespace WebApp.Api
                             System.IO.File.WriteAllBytes(Helpers.ProfilePath + value.Photo, Helpers.CreateThumb(value.DataPhoto));
                         }
 
-                        value.Perusahaans.Add(value.PerusahaanKaryawan);
                         _context.Karyawan.Add(value);
+                        value.Perusahaans.Add(value.Perusahaan);
                         _context.SaveChanges();
                         if (value.Id <= 0)
                             throw new SystemException("Data Karyawan  Tidak Berhasil Disimpan !");
@@ -173,6 +149,11 @@ namespace WebApp.Api
                 catch (System.Exception ex)
                 {
                     await _userManager.DeleteAsync(user);
+                    if (System.IO.File.Exists(Helpers.ProfilePath + value.Photo))
+                    {
+                        System.IO.File.Delete(Helpers.ProfilePath + value.Photo);
+                    }
+
                     transaction.Rollback();
                     return BadRequest(ex.Message);
                 }
@@ -185,20 +166,23 @@ namespace WebApp.Api
         {
             try
             {
+
                 if (value.DataPhoto != null && value.DataPhoto.Length > 0)
                 {
                     value.Photo = Helpers.CreateFileName("image");
                     System.IO.File.WriteAllBytes(Helpers.ProfilePath + value.Photo, Helpers.CreateThumb(value.DataPhoto));
                 }
-                var data = _context.Karyawan.Where(x => x.Id == value.Id).Include(x => x.Perusahaans).FirstOrDefault();
+                var data = _context.Karyawan.Where(x => x.Id == value.Id).Include((x) => x.Perusahaans).FirstOrDefault();
 
-                if (data.PerusahaanKaryawan != null && data.PerusahaanKaryawan.PerusahaanId != value.PerusahaanKaryawan.PerusahaanId)
+                if (data.Perusahaan != null && data.Perusahaan.PerusahaanId != value.Perusahaan.PerusahaanId)
                 {
-                    value.PerusahaanKaryawan.Id = 0;
+                    value.Perusahaan.Id = 0;
                     data.Status = false;
-                    data.Perusahaans.Add(value.PerusahaanKaryawan);
+                    data.Perusahaans.Add(value.Perusahaan);
                 }
-                data.PerusahaanKaryawan.SelesaiKerja = DateTime.Now;
+
+                value.Perusahaan.KaryawanId = value.Id;
+                data.Perusahaan.SelesaiKerja = DateTime.Now;
                 data.Alamat = value.Alamat;
                 data.Kontak = value.Kontak;
                 data.NamaKaryawan = value.NamaKaryawan;

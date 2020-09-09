@@ -25,7 +25,7 @@
                 <div class="form-info-group">
                     <div class="label">Perusahaan</div>
                     <div class="nilai">
-                        <select ng-model="model.perusahaanKaryawan.perusahaan" type="text" class="form-control" required
+                        <select ng-model="model.perusahaan.perusahaan" type="text" class="form-control" required
                             ng-options="item as item.nama for item in perusahaan track by item.id">
                         </select>
                     </div>
@@ -33,14 +33,14 @@
                 <div class="form-info-group">
                     <div class="label">Tanggal Mulai Bekerja</div>
                     <div class="nilai">
-                        <input ng-model="model.perusahaanKaryawan.mulaiKerja" date-input type="date"
-                            class="form-control" required />
+                        <input ng-model="model.perusahaan.mulaiKerja" date-input type="date" class="form-control"
+                            required />
                     </div>
                 </div>
                 <div class="form-info-group">
                     <div class="label">Jabatan</div>
                     <div class="nilai">
-                        <input ng-model="model.perusahaanKaryawan.jabatan" type="text" class="form-control" required>
+                        <input ng-model="model.perusahaan.jabatan" type="text" class="form-control" required>
                     </div>
                 </div>
                 <div class="form-info-group">
@@ -93,8 +93,8 @@
                 <tr ng-repeat="data in datas">
                     <td valign="center">{{data.kodeKaryawan}}</td>
                     <td>{{data.namaKaryawan}}</td>
-                    <td>{{data.perusahaanKaryawan.perusahaan.nama}}</td>
-                    <td>{{data.perusahaanKaryawan.jabatan}}</td>
+                    <td>{{data.perusahaan.perusahaan.nama}}</td>
+                    <td>{{data.perusahaan.jabatan}}</td>
                     <td style="width: auto; text-align: right;">
                         <button class="btn btn-info" ui-sref="karyawan-detail({id:data.id})">
                             <i class="fa fa-list"></i>

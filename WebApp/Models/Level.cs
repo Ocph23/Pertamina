@@ -9,8 +9,8 @@ namespace WebApp.Models
         [Key]
         public int Id { get; set; }
 
-        public string Name { get; set; }
+        public string Nama { get; set; }
 
-        public virtual ICollection<JenisPelanggaran> Datas { get; set; }
+        public virtual ICollection<DetailLevel> Datas { get; set; }
     }
 }

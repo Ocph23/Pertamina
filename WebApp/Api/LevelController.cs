@@ -81,7 +81,7 @@ namespace WebApp.Api
             try
             {
                 var result = _context.Level.Where(x => x.Id == value.Id).FirstOrDefault();
-                result.Name = value.Name;
+                result.Nama = value.Nama;
                 var saved = _context.SaveChanges();
                 if (saved <= 0)
                     throw new SystemException("Data Tidak Berhasil Disimpan !");

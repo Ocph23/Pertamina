@@ -1,4 +1,4 @@
-@host = https://localhost:5001/api/user
+@host = http://localhost/api/user
 
 
 ####
@@ -13,8 +13,8 @@ POST {{host}}/login HTTP/1.1
 Content-Type: application/json
 
  {
-    "Username": "Administrator",
-    "password": "Administrator123#"
+    "Username": "123457",
+    "password": "Pwd123457#"
   }
 
 #####

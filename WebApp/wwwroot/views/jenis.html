@@ -5,11 +5,11 @@
     <div class="jenis-main">
         <div class="jenis-body vertical-scroll">
             <div class="jenis" id="jenis{{$index}}" ng-class="{'jenis-baru':item.isNew}" ng-repeat="item in items">
-                <div class="jenis-text" ng-click="selectItem(item)">{{item.name}}</div>
+                <div class="jenis-text" ng-click="selectItem(item)">{{item.nama}}</div>
                 <div class="jenis-input">
                     <div class="data-input">
                         <form ng-submit="saveJenis(item)">
-                            <input type="text" placeholder="Tambah Baru" ng-model="item.name" class="form-control"
+                            <input type="text" placeholder="Tambah Baru" ng-model="item.nama" class="form-control"
                                 required>
                             <button class="btn btn-outline-success" type="submit" ng-class="{disabled:!item.level}">
                                 <i class="fa fa-save" ng-show="!item.proccess"></i>

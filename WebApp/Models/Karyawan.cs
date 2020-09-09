@@ -32,7 +32,7 @@ namespace WebApp.Models
         public byte[] DataPhoto { get; set; }
 
         [NotMapped]
-        public PerusahaanKaryawan PerusahaanKaryawan
+        public PerusahaanKaryawan Perusahaan
         {
             get
             {
@@ -50,15 +50,14 @@ namespace WebApp.Models
             }
             set { _perusahaan = value; }
         }
+        [NotMapped]
+        public ICollection<Pelanggaran> Pelanggarans { get; set; }
+        [NotMapped]
+        public ICollection<Absen> Absens { get; set; }
+        public virtual ICollection<PerusahaanKaryawan> Perusahaans { get; set; } = new List<PerusahaanKaryawan>();
 
         [NotMapped]
-        public virtual ICollection<string> Roles { get; set; }
-
-        public virtual ICollection<Pelanggaran> Pelanggarans { get; set; }
-
-        public virtual ICollection<Absen> Absens { get; set; }
-
-        public ICollection<PerusahaanKaryawan> Perusahaans { get; set; } = new List<PerusahaanKaryawan>();
+        public List<string> Roles { get; set; }
 
         private PerusahaanKaryawan _perusahaan;
     }

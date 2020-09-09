@@ -142,8 +142,8 @@ function homeController($scope, UserService) {
 		$scope.profile = x;
 		setTimeout(() => {
 			$('#avatar').attr('src', '/images/src/noimage.png');
-			if (x.karyawan) {
-				$('#avatar').attr('src', x.karyawan.photo);
+			if (x.karyawan && x.karyawan.photo) {
+				$('#avatar').attr('src', '/images/profiles/' + x.karyawan.photo);
 			}
 			$('#userName').text(x.userName);
 			$('#role').text(x.roles[0]);
@@ -260,15 +260,54 @@ function pelanggaranBaru($scope, KaryawanService, JenisService, PelanggaranServi
 
 	KaryawanService.get().then((x) => {
 		$scope.datas = x;
+		var datas = [];
 		JenisService.get().then((jenis) => {
-			$scope.datajenis = jenis;
+			jenis.forEach((element) => {
+				var parent = { id: element.id, text: element.nama, children: [] };
+				datas.push(parent);
+				element.datas.forEach((item) => {
+					parent.children.push({
+						id: item.id,
+						detailLevelId: item.id,
+						text: item.nama,
+						selected: false,
+						parentId: parent.id,
+						data: item
+					});
+				});
+			});
+			$scope.datajenis = datas;
 		});
 	});
 
 	$scope.selectUser = (data) => {
-		$scope.datas.forEach((x) => {
-			x.userSelect = false;
-		});
+		if (!data.userSelect) {
+			$('#pelanggaran-item' + data.id).select2({
+				data: $scope.datajenis,
+				templateSelection: function(data, container) {
+					// Add custom attributes to the <option> tag for the selected option
+					$(data.element).attr(
+						'data-custom-attribute',
+						JSON.stringify({
+							detailLevelId: data.id,
+							nama: data.data.nama,
+							levelId: data.parentId,
+							nilaiKaryawan: data.data.nilaiKaryawan,
+							nilaiPerusahaan: data.data.nilaiPerusahaan,
+							penambahan: data.data.penambahan
+						})
+					);
+					return data.text;
+				}
+			});
+		} else {
+			$scope.datas.forEach((x) => {
+				if (x.userSelect && x.id != data.id) {
+					x.userSelect = false;
+				}
+			});
+		}
+
 		data.userSelect = true;
 	};
 
@@ -281,13 +320,26 @@ function pelanggaranBaru($scope, KaryawanService, JenisService, PelanggaranServi
 	};
 
 	$scope.save = (item, files) => {
-		item.perusahaanId = item.perusahaanKaryawan.perusahaan.id;
-		item.jenispelanggaranId = item.jenis.id;
-		item.files = angular.copy(files);
-		item.nilaiKaryawan = item.jenis.nilaiKaryawan;
-		item.nilaiPerusahaan = item.jenis.nilaiPerusahaan;
+		var pelanggaran = {
+			id: 0,
+			tanggalKejadian: new Date(),
+			terlaporId: item.id,
+			tanggal: new Date(),
+			deskripsi: null,
+			status: false,
+			itemPelanggarans: [],
+			files: angular.copy(files),
+			perusahaanId: item.perusahaan.id
+		};
 
-		PelanggaranService.post(item).then((x) => {
+		var items = $('#pelanggaran-item' + item.id).find(':selected');
+
+		$.each(items, (x, y) => {
+			var data = $(y).data('custom-attribute');
+			pelanggaran.itemPelanggarans.push(data);
+		});
+
+		PelanggaranService.post(pelanggaran).then((x) => {
 			Toast.fire({
 				icon: 'success',
 				title: 'Data Berhasil Ditambah !'
@@ -405,7 +457,7 @@ function jenisController($scope, JenisService, UserService, DTOptionsBuilder) {
 		if (!emptyExists)
 			$scope.items.push({
 				idlevel: 0,
-				level: '',
+				nama: '',
 				isNew: true
 			});
 	};
@@ -664,7 +716,7 @@ function karyawanController($scope, PerusahaanService, KaryawanService, DTOption
 		.withDOM('pitrfl');
 	$scope.isBusy = false;
 	$scope.addItem = false;
-	$scope.model = { photo: 'noimage.png', perusahaanKaryawan: {} };
+	$scope.model = { photo: 'noimage.png', Perusahaan: {} };
 
 	$('#photo').on('click', (x) => {
 		$('#fileInput').click();
@@ -914,7 +966,7 @@ function detailKaryawanController(
 	};
 
 	$scope.onChangeRole = (model, role) => {
-		role.idKaryawan = model.idKaryawan;
+		role.idKaryawan = model.id;
 		KaryawanService.setRole(role).then(
 			(x) => {},
 			(err) => {

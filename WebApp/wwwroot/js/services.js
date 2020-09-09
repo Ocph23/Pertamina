@@ -11,7 +11,7 @@ angular
 
 function JenisService($http, $q) {
 	var controller = 'api/level';
-	var controllerDetail = 'api/jenispelanggaran';
+	var controllerDetail = 'api/detaillevel';
 	var service = {};
 	var datas = [];
 
@@ -379,6 +379,10 @@ function KaryawanService($http, $q) {
 
 	service.post = (model) => {
 		var def = $q.defer();
+		if (model.dataPhoto) {
+			model.photo = null;
+		}
+
 		$http({ url: controller, method: 'POST', data: model }).then(
 			(response) => {
 				datas.push(response.data);
@@ -394,6 +398,11 @@ function KaryawanService($http, $q) {
 
 	service.put = (model) => {
 		var def = $q.defer();
+
+		if (model.dataPhoto) {
+			model.photo = null;
+		}
+
 		$http({ url: controller + '/' + model.id, method: 'PUT', data: model }).then(
 			(response) => {
 				var item = datas.find((x) => x.idKaryawan == model.idperusahaan);
@@ -484,26 +493,13 @@ function PelanggaranService($http, $q) {
 
 	service.post = (model) => {
 		var def = $q.defer();
-
 		if (model.files) {
 			model.files.forEach((file) => {
 				file.thumb = null;
 			});
 		}
 
-		var modelData = {
-			id: 0,
-			perusahaanId: model.perusahaanId,
-			jenispelanggaranId: model.jenispelanggaranId,
-			karyawanId: model.id,
-			nilaiKaryawan: model.nilaiKaryawan,
-			nilaiPerusahaan: model.nilaiPerusahaan,
-			tanggal: new Date(),
-			files: model.files
-		};
-
-		model.tanggal = null;
-		$http({ url: controller, method: 'POST', data: modelData }).then(
+		$http({ url: controller, method: 'POST', data: model }).then(
 			(response) => {
 				def.resolve(response.data);
 			},

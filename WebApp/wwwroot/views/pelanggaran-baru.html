@@ -6,30 +6,29 @@
         </div>
         <div class="users vertical-scroll">
             <div class="user" ng-class="{'user-selected':item.userSelect}" ng-repeat="item in datas | filter : search"
-                id="user{{item.idkaryawan}}" ng-click="selectUser(item)">
+                id="user{{item.id}}" ng-click="selectUser(item)">
                 <div class="userbody">
                     <img src="/images/profiles/{{item.photo}}" alt="">
                     <div class="user-body">
                         <div class="form-info-group">
                             <div class="label">Nama</div>
-                            <div class="nilai">{{item.nama}}</div>
+                            <div class="nilai">{{item.namaKaryawan}}</div>
                         </div>
                         <div class="form-info-group">
                             <div class="label">Jabatan</div>
-                            <div class="nilai">{{item.perusahaanKaryawan.jabatan}}</div>
+                            <div class="nilai">{{item.perusahaan.jabatan}}</div>
                         </div>
                         <div class="form-info-group">
                             <div class="label">Nama Perusahaan</div>
-                            <div class="nilai">{{item.perusahaanKaryawan.perusahaan.nama}}</div>
+                            <div class="nilai">{{item.perusahaan.perusahaan.nama}}</div>
                         </div>
                     </div>
                 </div>
                 <form class="user-input" ng-submit="save(item, files)">
-                    <select class="form-control" ng-model="item.selectedJenis"
-                        ng-options="level as level.name for level in datajenis">
-                    </select>
-                    <select class="form-control" ng-model="item.jenis"
-                        ng-options="itemName as itemName.nama for itemName in item.selectedJenis.datas">
+                    <div class="label">Pelanggaran</div>
+                    <select style="width: 100%;" ng-model="item.jenis" id="pelanggaran-item{{item.id}}"
+                        class="pelanggaran-item form-control" multiple="multiple"
+                        ng-options="itemName as itemName.nama for itemName in datajenis">
                     </select>
                     <div class="user-input-btns">
                         <button type="submit" class="btn btn-success"
@@ -53,7 +52,6 @@
         <div class="message" ng-show="!files">
             <button id="btnAddFile" class="btn btn-outline-warning">Click / Drop Files Here ..!</button>
         </div>
-
 
         <div class="files">
             <div class="thumb" ng-repeat="item in files">

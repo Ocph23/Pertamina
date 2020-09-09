@@ -39,7 +39,9 @@ namespace WebApp.Api
             .Include(x => x.PerusahaansKaryawan)
             .ThenInclude(x => x.Karyawan)
               .Include(x => x.Pelanggarans)
-                    .ThenInclude(x => x.Jenispelanggaran).ThenInclude(x => x.Level)
+                    .ThenInclude(x => x).ThenInclude(x => x.Terlapor)
+                     .Include(x => x.Pelanggarans)
+              .ThenInclude(x => x).ThenInclude(x => x.Pelapor)
               .Include(x => x.Pelanggarans)
                     .ThenInclude(x => x.Files);
 

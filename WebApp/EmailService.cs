@@ -33,7 +33,7 @@ namespace WebApp
                 smtpClient.Send(mailMessage);
                 return Task.CompletedTask;
             }
-            catch (System.Exception ex)
+            catch (System.Exception)
             {
                 return Task.CompletedTask;
             }

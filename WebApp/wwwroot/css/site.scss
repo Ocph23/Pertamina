@@ -367,6 +367,7 @@ select:-webkit-autofill:hover {
     min-height: 45px;
 }
 
+.select2-selection--multiple,
 select:-webkit-autofill:focus,
 textarea:-webkit-autofill:focus,
 input[type="search"]:focus,
@@ -419,7 +420,7 @@ tr:hover {
     color: $accent-color !important;
 }
 select {
-    background: transparent;
+    background: transparent !important;
     @extend %box-border-in;
     appearance: none;
     color: white;
@@ -451,4 +452,53 @@ select {
     border-bottom: 2px solid red;
     padding-bottom: 5px;
     height: fit-content;
+}
+
+.select2-selection__rendered {
+    background-color: transparent;
+    height: 100%;
+    width: 100%;
+}
+
+.select2-selection--multiple {
+    border: 0px;
+}
+
+.select2-dropdown {
+    background-color: $bg-box;
+}
+
+.select2-choice {
+    background-color: rgb(18, 18, 43) !important;
+}
+
+.select2-container--default .select2-selection--single {
+    background-color: #000;
+}
+
+.select2-container--default .select2-results__option[aria-selected="true"] {
+    background-color: red;
+}
+
+.select2-container--default {
+    background-color: transparent;
+    .select2-selection--multiple {
+        background-color: transparent;
+        border: 0;
+        border-radius: 0px;
+        .select2-selection__choice {
+            background-color: yellowgreen !important;
+            border: 1px solid yellow;
+            border-radius: 4px;
+            cursor: default;
+            float: left;
+            margin: 5px;
+            padding: 0 5px;
+        }
+    }
+}
+
+.select2-container--default.select2-container--focus .select2-selection--multiple {
+    border: solid rgba(0, 0, 0, 0.199) 1px;
+    outline: 0;
 }

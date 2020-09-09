@@ -7,6 +7,8 @@ using WebApp.Models;
 using WebApp.Data;
 using Microsoft.EntityFrameworkCore;
 using WebApp.Middlewares;
+using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
 
 namespace WebApp.Api
 {
@@ -18,11 +20,13 @@ namespace WebApp.Api
     {
         private IConfiguration _config;
         private ApplicationDbContext _context;
+        private UserManager<IdentityUser> _userManager;
 
-        public PelanggaranController(IConfiguration config, ApplicationDbContext dbcontext)
+        public PelanggaranController(IConfiguration config, ApplicationDbContext dbcontext, UserManager<IdentityUser> userManager)
         {
             _config = config;
             _context = dbcontext;
+            _userManager = userManager;
         }
 
         // GET: api/Employees
@@ -30,9 +34,9 @@ namespace WebApp.Api
         public IActionResult Get()
         {
             var result = _context.Pelanggaran
-            .Include(x => x.DataKaryawan)
-            .Include(x => x.DataPerusahaan)
-            .Include(x => x.Jenispelanggaran).ThenInclude(x => x.Level)
+            .Include(x => x.Terlapor)
+            .Include(x => x.Pelapor)
+            .Include(x => x.ItemPelanggarans).ThenInclude(x => x.DetailLevel).ThenInclude(x => x.Level)
             .Include(x => x.Files);
             return Ok(result.ToList());
         }
@@ -48,25 +52,25 @@ namespace WebApp.Api
         [HttpGet("NilaiKaryawan/{id}")]
         public IActionResult GetByKaryawanId(int id)
         {
-            var datas = _context.Pelanggaran.Where(x => x.KaryawanId == id)
-                 .Include(z => z.Jenispelanggaran)
+            var datas = _context.Pelanggaran.Where(x => x.Terlapor.Id == id)
+                 .Include(z => z.ItemPelanggarans)
                  .Include(x => x.Files);
 
-            var result = from a in datas
-                         join c in _context.Level on a.Jenispelanggaran.LevelId equals c.Id
-                         select new Pelanggaran
-                         {
-                             Files = a.Files,
-                             JenisPelanggaranId = a.JenisPelanggaranId,
-                             KaryawanId = a.KaryawanId,
-                             Id = a.Id,
-                             Jenispelanggaran = a.Jenispelanggaran,
-                             NilaiKaryawan = a.NilaiKaryawan,
-                             NilaiPerusahaan = a.NilaiPerusahaan,
-                             Tanggal = a.Tanggal,
-                             Level = c
-                         };
-            return Ok(result.ToList());
+            // var result = from a in datas
+            //              join c in _context.Level on a.Jenispelanggaran.LevelId equals c.Id
+            //              select new Pelanggaran
+            //              {
+            //                  Files = a.Files,
+            //                  JenisPelanggaranId = a.JenisPelanggaranId,
+            //                  KaryawanId = a.KaryawanId,
+            //                  Id = a.Id,
+            //                  Jenispelanggaran = a.Jenispelanggaran,
+            //                  NilaiKaryawan = a.NilaiKaryawan,
+            //                  NilaiPerusahaan = a.NilaiPerusahaan,
+            //                  Tanggal = a.Tanggal,
+            //                  Level = c
+            //              };
+            return Ok(datas.ToList());
 
         }
 
@@ -98,9 +102,11 @@ namespace WebApp.Api
 
         // POST: api/Employees
         [HttpPost]
-        public IActionResult Post([FromBody] Pelanggaran value)
-        {
 
+        public async Task<IActionResult> Post([FromBody] Pelanggaran value)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var pelapor = _context.Karyawan.Where(x => x.UserId == user.Id).FirstOrDefault();
             using (var transaction = _context.Database.BeginTransaction())
             {
                 try
@@ -114,6 +120,11 @@ namespace WebApp.Api
                         System.IO.File.WriteAllBytes(Helpers.ThumbPath + item.Thumb, Helpers.CreateThumb(item.Data));
                         item.Data = null;
                     }
+
+                    value.PelaporId = pelapor.Id;
+                    value.TerlaporId = value.Terlapor.Id;
+                    value.PerusahaanId = value.Terlapor.Perusahaan.Id;
+                    value.Terlapor = null;
                     _context.Pelanggaran.Add(value);
                     var saved = _context.SaveChanges();
                     if (value.Id <= 0)
@@ -140,12 +151,7 @@ namespace WebApp.Api
         {
             try
             {
-                var pelanggaran = _context.Pelanggaran.Where(x => x.JenisPelanggaranId == value.Id).FirstOrDefault();
-                pelanggaran.JenisPelanggaranId = value.JenisPelanggaranId;
-                pelanggaran.KaryawanId = value.Id;
-                pelanggaran.Jenispelanggaran = value.Jenispelanggaran;
-                pelanggaran.NilaiKaryawan = value.NilaiKaryawan;
-                pelanggaran.NilaiPerusahaan = value.NilaiPerusahaan;
+                var pelanggaran = _context.Pelanggaran.Where(x => x.Id == value.Id).FirstOrDefault();
                 pelanggaran.Tanggal = value.Tanggal;
                 return Ok(value);
             }

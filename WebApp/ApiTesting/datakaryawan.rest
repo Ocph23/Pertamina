@@ -1,0 +1,13 @@
+@host = http://localhost/api/dataKaryawan
+
+
+####
+
+Get {{host}}/pelanggaran HTTP/1.1
+Content-Type: application/json
+Authorization: bearer 
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZjZjliOTQ1LWZiMWUtNDBlNS1hNzE1LWY1NzZlNGJlNDU0ZCIsIm5iZiI6MTU5OTY3ODYxNiwiZXhwIjoxNjAwMjgzNDE2LCJpYXQiOjE1OTk2Nzg2MTZ9.rp6y657oXT-F6M8sBXo9E2R46lPZwAGQAimWXZ0mvW8
+
+
+####
+

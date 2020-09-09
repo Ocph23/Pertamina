@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using WebApp.Data;
+using WebApp.Middlewares;
 using WebApp.Models;
 
 
@@ -11,6 +13,7 @@ namespace WebApp.Api
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class DashboardController : ControllerBase
     {
         private IConfiguration _config;
@@ -22,64 +25,49 @@ namespace WebApp.Api
             _context = context;
         }
 
-        // GET: api/Employees
-
-
-        // GET: api/Employees/5
         [HttpGet]
         public IActionResult Get()
         {
             try
             {
-                var actived = _context.Periode.Where(x => x.Status == true).FirstOrDefault();
-                if (actived == null)
-                    throw new SystemException("Periode Aktif Belum Ditemukan");
-                var pelanggarans = from a in _context.Pelanggaran.Where(x => x.Tanggal >= actived.Mulai && x.Tanggal <= actived.Selesai)
-                                   join b in _context.Level on a.Jenispelanggaran.LevelId equals b.Id
-                                   select new DashboardJenis
-                                   {
-                                       Level = b.Name,
-                                       LevelId = b.Id,
-                                       JenisPelanggaran = a.Jenispelanggaran.Nama,
-                                       Perusahaan = a.NilaiPerusahaan,
-                                       Karyawan = a.NilaiKaryawan,
-                                       Tanggal = a.Tanggal.Value
-                                   };
-
-                var datas = new List<dynamic>();
-
-                var group = pelanggarans.ToList().GroupBy(x => x.LevelId).ToList();
-                foreach (var items in group)
-                {
-                    var dataTemp = items.FirstOrDefault();
-
-                    dynamic data = new
-                    {
-                        LevelId = dataTemp.LevelId,
-                        Jenispelanggaran = dataTemp.JenisPelanggaran,
-                        Perusahaan = dataTemp.Perusahaan,
-                        Karyawan = items.Count(),
-                        Tanggal = dataTemp.Tanggal,
-                        Level = dataTemp.Level,
-                        Today = items.Where(x => x.Tanggal.Year == DateTime.Now.Year && x.Tanggal.Month == DateTime.Now.Month && x.Tanggal.Day == DateTime.Now.Day).Count()
-                    };
-                    datas.Add(data);
-                }
-
-                // // var pelanggaranss = (from a in _context.Pelanggaran
-                // //                      join b in _context.Karyawan on a.idkaryawan equals b.idkaryawan
-                // //                      select new {  Pelanggaran = a }).ToList().GroupBy(x => x.IdPerusahaan);
+                // var actived = _context.Periode.Where(x => x.Status == true).FirstOrDefault();
+                // if (actived == null)
+                //     throw new SystemException("Periode Aktif Belum Ditemukan");
+                // var pelanggarans =
 
 
-                // var list = new List<dynamic>();
-                // foreach (var item in _context.Perusahaan.ToList())
+                //  _context.Pelanggaran.Include(x => x.ItemPelanggaran)
+                //                   .Where(x => x.Tanggal >= actived.Mulai && x.Tanggal <= actived.Selesai)
+                //                    select new DashboardJenis
+                //                    {
+                //                        Level = b.Name,
+                //                        LevelId = b.Id,
+                //                        JenisPelanggaran = a.Jenispelanggaran.Nama,
+                //                        Perusahaan = a.NilaiPerusahaan,
+                //                        Karyawan = a.NilaiKaryawan,
+                //                        Tanggal = a.Tanggal.Value
+                //                    };
+
+                // var datas = new List<dynamic>();
+
+                // var group = pelanggarans.ToList().GroupBy(x => x.LevelId).ToList();
+                // foreach (var items in group)
                 // {
-                //     // var pel = pelanggaranss.Where(x => x.Key == item.idperusahaan).FirstOrDefault();
-                //     list.Add(new { Perusahaan = item, total = pel == null ? 0 : pel.Count() });
+                //     var dataTemp = items.FirstOrDefault();
+
+                //     dynamic data = new
+                //     {
+                //         LevelId = dataTemp.LevelId,
+                //         Jenispelanggaran = dataTemp.JenisPelanggaran,
+                //         Perusahaan = dataTemp.Perusahaan,
+                //         Karyawan = items.Count(),
+                //         Tanggal = dataTemp.Tanggal,
+                //         Level = dataTemp.Level,
+                //         Today = items.Where(x => x.Tanggal.Year == DateTime.Now.Year && x.Tanggal.Month == DateTime.Now.Month && x.Tanggal.Day == DateTime.Now.Day).Count()
+                //     };
+                //     datas.Add(data);
                 // }
-
-
-                return Ok(new { Datas = datas, });
+                return Ok();
             }
             catch (System.Exception ex)
             {
