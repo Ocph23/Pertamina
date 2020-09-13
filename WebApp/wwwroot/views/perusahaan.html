@@ -58,9 +58,10 @@
             dt-column-defs="showCase.dtColumnDefs">
             <thead>
                 <tr>
-                    <th>Perusahaan</th>
-                    <th>Direktur</th>
-                    <th>Telepon</th>
+                    <th style="width:20%">Perusahaan</th>
+                    <th style="width:20%">Direktur</th>
+                    <th style="width:20%">Telepon</th>
+                    <th style="width:20%">Email</th>
                     <th class="tright"></th>
                 </tr>
             </thead>
@@ -70,6 +71,7 @@
                     <td valign="center">{{data.nama}}</td>
                     <td>{{data.direktur}}</td>
                     <td>{{data.kontak}}</td>
+                    <td>{{data.email}}</td>
                     <td class="tright">
                         <button data-toggle="tooltip" data-placement="bottom" title="Click Untuk Melihat Detail"
                             class="btn btn-info" ui-sref="perusahaan-detail({id:data.id})">

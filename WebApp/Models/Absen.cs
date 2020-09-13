@@ -16,6 +16,7 @@ namespace WebApp.Models
 
         public DateTime? Pulang { get; set; }
 
+        public int KaryawanId { get; set; }
         public virtual Karyawan Karyawan { get; set; }
 
     }

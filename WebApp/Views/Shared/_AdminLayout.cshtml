@@ -61,6 +61,22 @@
     <script src="~/js/ng-files.js" asp-append-version="true"></script>
     <script src="~/js/admin.js" asp-append-version="true"></script>
     <script src="~/js/swipe.js" asp-append-version="true"></script>
+    <script src="~/lib/easyqrcodejs/dist/easy.qrcode.min.js"></script>
+    <script src="~/lib/angular-locale.js"></script>
+    <script src="~/bower_components/print-area/demo/jquery.PrintArea.js"></script>
+    <script src="~/bower_components/gasparesganga-jquery-loading-overlay/dist/loadingoverlay.min.js"></script>
+    <script>
+        $.LoadingOverlay("show");
+        $(document).ready(function(){
+            $('[data-toggle=tooltip]').hover(function(){
+                // on mouseenter
+                $(this).tooltip('show');
+            }, function(){
+                // on mouseleave
+                $(this).tooltip('hide');
+            });
+        });
+    </script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

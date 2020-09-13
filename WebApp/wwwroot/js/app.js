@@ -75,13 +75,13 @@ function dashboardController($scope, DataService, PointService, PeriodeService) 
 		var myChart = new Chart(ctx, {
 			type: 'bar',
 			data: {
-				labels: x.perusahhan.map((x) => {
-					return x.perusahaan.namaperusahaan;
+				labels: x.perusahaan.map((x) => {
+					return x.namaperusahaan;
 				}),
 				datasets: [
 					{
 						label: '',
-						data: x.perusahhan.map((x) => {
+						data: x.perusahaan.map((x) => {
 							return x.total;
 						}),
 						backgroundColor: [

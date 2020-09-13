@@ -1,0 +1,74 @@
+{
+  "_from": "easyqrcodejs",
+  "_id": "easyqrcodejs@3.8.1",
+  "_inBundle": false,
+  "_integrity": "sha512-Vz47ODAc7mgSyzTL+3mRXST0XzGxkStOoa9VPgxJJwVRBKl1kZLDYSAPHADALXQ/ysN/yP4GTiI4j/K/rS5KKg==",
+  "_location": "/easyqrcodejs",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "easyqrcodejs",
+    "name": "easyqrcodejs",
+    "escapedName": "easyqrcodejs",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/easyqrcodejs/-/easyqrcodejs-3.8.1.tgz",
+  "_shasum": "a6b390bb69f49a5901369d928597a73e3aee93cf",
+  "_spec": "easyqrcodejs",
+  "_where": "c:\\xampp\\htdocs\\code",
+  "author": {
+    "name": "Ray",
+    "email": "inthinkcolor@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/ushelp/EasyQRCodeJS/issues "
+  },
+  "bundleDependencies": false,
+  "dependencies": {},
+  "deprecated": false,
+  "description": "Cross-browser QRCode generator for pure javascript. Support Dot style, Logo, Background image, Colorful, Title etc. settings. Support Angular, Vue.js, React, Next.js framework. Support binary(hex) data mode.(Running with DOM on client side)",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-uglify": "^2.0.0"
+  },
+  "directories": {
+    "dist": "dist",
+    "src": "src",
+    "demo": "demo"
+  },
+  "homepage": "https://github.com/ushelp/EasyQRCodeJS#readme",
+  "keywords": [
+    "qrcode",
+    "js qrcode",
+    "qrcodejs",
+    "easyqrcode",
+    "javascript qrcode",
+    "canvas",
+    "html5",
+    "next.js",
+    "javascript",
+    "qrcode logo",
+    "html5 qrcode",
+    "qrcode generator",
+    "qrcode client",
+    "qrcode client side"
+  ],
+  "license": "MIT",
+  "main": "dist/easy.qrcode.min.js",
+  "name": "easyqrcodejs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ushelp/EasyQRCodeJS.git"
+  },
+  "scripts": {},
+  "version": "3.8.1"
+}

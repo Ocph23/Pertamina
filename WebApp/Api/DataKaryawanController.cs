@@ -62,16 +62,25 @@ namespace WebApp.Api
             }
         }
 
-        [HttpGet("pelanggaran")]
         [Authorize]
+        [HttpGet("pelanggaran")]
         public async Task<IActionResult> pelanggaran()
         {
             try
             {
                 var user = await _userManager.GetUserAsync(User);
-                var karyawan = _context.Karyawan.Where(x => x.UserId == user.Id).FirstOrDefault();
-                var pelanggarans = _context.Pelanggaran.Where(x => x.Terlapor.Id == karyawan.Id).FirstOrDefault();
-                return Ok(pelanggarans);
+                if (user != null)
+                {
+                    var karyawan = _context.Karyawan.Where(x => x.UserId == user.Id).FirstOrDefault();
+                    var pelanggarans = _context.Pelanggaran.Where(x => x.Terlapor.Id == karyawan.Id)
+                        .Include(x => x.Terlapor)
+                        .Include(x => x.Files)
+                        .Include(x => x.ItemPelanggarans).ThenInclude(x => x.DetailLevel).ThenInclude(x => x.Level);
+                    return Ok(pelanggarans.ToList());
+                }
+
+                throw new SystemException("Anda Tidak Memiliki Akses");
+
             }
             catch (System.Exception ex)
             {

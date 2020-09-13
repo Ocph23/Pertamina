@@ -55,37 +55,45 @@
                 <div class="label">Bulan</div>
                 <div class="nilai">
                     <select class="form-control" style="min-width: 250px;"
-                        ng-options="bln as bln.name for bln in helper.bulans" ng-model="bulan">
+                        ng-options="bln as bln.name for bln in helper.bulans" ng-model="bulan"
+                        ng-change="setpelanggaran(bulan, tahun)">
                     </select>
                 </div>
             </div>
             <div class="form-info-group">
                 <div class="label">Tahun</div>
                 <div class="nilai"> <select class="form-control" style="min-width: 150px;"
-                        ng-options="thn as thn for thn in helper.tahuns()" ng-model="tahun">
+                        ng-options="thn as thn for thn in helper.tahuns()" ng-model="tahun"
+                        ng-change="setpelanggaran(bulan, tahun)">
                     </select>
                 </div>
             </div>
         </div>
         <div class="vertical-scroll" style="height: 70vh;">
-            <table class="table table-hover">
+            <table class="table table-hover" datatable="ng">
                 <thead>
                     <tr>
-                        <th>Tanggal</th>
-                        <th>Level</th>
-                        <th>Pelanggaran</th>
-                        <th style="max-width: 100px;">Pengurangan</th>
-                        <th style="max-width: 50px;">Bukti</th>
+                        <th>No</th>
+                        <th>Tanggal/Waktu</th>
+                        <th>Pelapor</th>
+                        <th>Status</th>
+                        <th style="max-width: 50px;"><i class="fa fa-cogs"></i></th>
                     </tr>
                 </thead>
                 <tbody class="vertical-scroll">
-                    <tr ng-repeat="item in model.pelanggarans |filter : myFilter(bulan, tahun)">
-                        <td>{{item.tanggal| date:'dd-MM-yyyy HH:mm:ss'}}</td>
-                        <td>{{item.jenispelanggaran.level.level}}</td>
-                        <td>{{item.jenispelanggaran.jenispelanggaran}}</td>
-                        <td class="text-center">{{item.karyawan}}</td>
-                        <td class="text-center"><i class="fa fa-list text-info" data-toggle="modal" data-target="#bukti"
-                                ng-click="selectBukti(item.files)"></i></td>
+                    <tr ng-repeat="item in pelanggarans">
+                        <td>{{$index+1}}</td>
+                        <td>{{item.tanggal| date:'EEEE, dd MMMM yyyy HH:mm:ss'}}</td>
+                        <td>{{item.jenis==0 ? 'Admin': item.pelapor.namaKaryawan}}</td>
+                        <td>{{item.status==0 ? 'Baru': item.status==1 ? 'Diterima':'Ditolak'}}</td>
+                        <td class="text-center">
+                            <a href="" data-toggle="tooltip" data-placement="left" title="Bukti Pelanggaran" tooltip><i
+                                    class="fa fa-file text-info" data-toggle="modal" data-target="#bukti"
+                                    ng-click="selectBukti(item,'Bukti')"></i></a>
+                            <a href="" data-toggle="tooltip" data-placement="top" title="List Pelanggaran" tooltip><i
+                                    class="fa fa-list text-primary" data-toggle="modal" data-target="#bukti"
+                                    ng-click="selectBukti(item, 'Detail')"></i></a>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -106,7 +114,28 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="buktishow" id="filePanel">
+                <div ng-show="showdetail == 'Detail'">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Level</th>
+                                <th>Pelanggaran</th>
+                                <th>Pengurangan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="item in selected.itemPelanggarans">
+                                <td>{{$index+1}}</td>
+                                <td>{{item.detailLevel.level.nama}}</td>
+                                <td>{{item.detailLevel.nama}}</td>
+                                <td>{{item.detailLevel.nilaiKaryawan}} Point</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="buktishow" id="filePanel" ng-show="showdetail == 'Bukti'">
                     <div></div>
                     <div class="dropBox" id="imgPelanggaran">
                         <img id="picture" height="100%" width="100%" alt="">

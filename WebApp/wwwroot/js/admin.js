@@ -11,7 +11,7 @@ const Toast = Swal.mixin({
 });
 
 angular
-	.module('admin', [ 'service', 'ui.router', 'datatables', 'files' ])
+	.module('admin', [ 'service', 'ui.router', 'datatables', 'files', 'ngLocale' ])
 	.directive('dateInput', function() {
 		return {
 			restrict: 'A',
@@ -69,6 +69,23 @@ angular
 			}
 		}
 	})
+	.directive('tooltip', function() {
+		return {
+			restrict: 'A',
+			link: function(scope, element, attrs) {
+				element.hover(
+					function() {
+						// on mouseenter
+						element.tooltip('show');
+					},
+					function() {
+						// on mouseleave
+						element.tooltip('hide');
+					}
+				);
+			}
+		};
+	})
 	.config(function($urlRouterProvider, $stateProvider) {
 		$urlRouterProvider.otherwise('/home');
 		$stateProvider
@@ -125,6 +142,18 @@ angular
 				url: '/pelanggaran',
 				controller: 'pelanggaranController',
 				templateUrl: './views/pelanggaran.html'
+			})
+			.state({
+				name: 'qrcodegen',
+				url: '/qrcodegen',
+				controller: 'qrcodegenController',
+				templateUrl: './views/qrcodegen.html'
+			})
+			.state({
+				name: 'absen',
+				url: '/absen',
+				controller: 'absenController',
+				templateUrl: './views/absen.html'
 			});
 	})
 	.controller('homeController', homeController)
@@ -135,7 +164,9 @@ angular
 	.controller('detailPerusahaanController', detailPerusahaanController)
 	.controller('karyawanController', karyawanController)
 	.controller('detailKaryawanController', detailKaryawanController)
-	.controller('jenisController', jenisController);
+	.controller('qrcodegenController', qrcodegenController)
+	.controller('jenisController', jenisController)
+	.controller('absenController', absenController);
 
 function homeController($scope, UserService) {
 	UserService.profile().then((x) => {
@@ -147,6 +178,7 @@ function homeController($scope, UserService) {
 			}
 			$('#userName').text(x.userName);
 			$('#role').text(x.roles[0]);
+			$.LoadingOverlay('hide');
 		}, 200);
 	});
 }
@@ -161,6 +193,7 @@ function periodeController($scope, PeriodeService, DTOptionsBuilder) {
 
 	PeriodeService.get().then((data) => {
 		$scope.datas = data;
+		$.LoadingOverlay('hide');
 	});
 
 	$scope.save = (model) => {
@@ -232,6 +265,7 @@ function pelanggaranBaru($scope, KaryawanService, JenisService, PelanggaranServi
 
 	setFilesContainer(dropbox);
 	setFilesContainer(btndropbox);
+	$.LoadingOverlay('hide');
 	function setFilesContainer(e) {
 		e.addEventListener('click', (x) => {
 			$('#fileInput').click();
@@ -651,6 +685,7 @@ function perusahaanController($scope, PerusahaanService, HelperService, DTOption
 		});
 
 		$scope.addItem = false;
+		$.LoadingOverlay('hide');
 	});
 
 	$scope.save = (model) => {
@@ -726,6 +761,7 @@ function karyawanController($scope, PerusahaanService, KaryawanService, DTOption
 		$scope.perusahaan = dataperusahaan;
 		KaryawanService.get().then((karyawans) => {
 			$scope.datas = karyawans;
+			$.LoadingOverlay('hide');
 		});
 	});
 
@@ -808,6 +844,8 @@ function detailPerusahaanController(
 		$scope.model = x;
 		PeriodeService.active().then((active) => {
 			//var total = PointService.point($scope.model, active);
+
+			$.LoadingOverlay('hide');
 		});
 	});
 
@@ -901,7 +939,7 @@ function detailKaryawanController(
 					var ctx = document.getElementById('chartPoint');
 					const context = ctx.getContext('2d');
 					context.clearRect(0, 0, ctx.width, ctx.height);
-					var total = PointService.point($scope.model, active);
+					var total = Math.round(PointService.point($scope.model, active)).toFixed(2);
 
 					// write text plugin
 
@@ -926,11 +964,13 @@ function detailKaryawanController(
 							}
 						}
 					});
+					Chart.pluginService.clear();
 					Chart.pluginService.register({
 						beforeDraw: function(chart) {
 							var width = chart.chart.width,
 								height = chart.chart.height,
 								ctx = chart.chart.ctx;
+							// ctx.fillText(());
 
 							ctx.restore();
 							var fontSize = (height / 114).toFixed(2);
@@ -948,8 +988,23 @@ function detailKaryawanController(
 					});
 				});
 			});
+			$.LoadingOverlay('hide');
 		});
 	});
+	$scope.pelanggarans = [];
+	$scope.setpelanggaran = (month, year) => {
+		if (month && month.value == -1 && $scope.active) {
+			$scope.pelanggarans = $scope.model.pelanggarans.filter(
+				(x) =>
+					new Date(x.tanggal) >= new Date($scope.active.mulai) &&
+					new Date(x.tanggal) <= new Date($scope.active.selesai)
+			);
+		} else if (month && year) {
+			$scope.pelanggarans = $scope.model.pelanggarans.filter(
+				(x) => new Date(x.tanggal).getMonth() == month.value && new Date(x.tanggal).getFullYear() == year
+			);
+		}
+	};
 
 	$scope.myFilter = function(month, year) {
 		if (month && year) {
@@ -979,14 +1034,17 @@ function detailKaryawanController(
 		);
 	};
 
-	$scope.selectBukti = (files) => {
-		$scope.selectedFiles = files;
+	$scope.showdetail = 'Bukti';
+	$scope.selectBukti = (data, item) => {
+		$scope.selected = data;
+		$scope.selectedFiles = data.files;
 		var picture = document.getElementById('picture');
 		var video = document.getElementById('myvideo');
 		picture.src = '';
 		video.src = '';
 		picture.style.display = 'none';
 		video.style.display = 'none';
+		$scope.showdetail = item;
 	};
 
 	$scope.selectFile = (file) => {
@@ -1015,6 +1073,7 @@ function pelanggaranController(
 	PeriodeService,
 	DTOptionsBuilder
 ) {
+	$scope.pelanggarans = [];
 	var vm = this;
 	vm.dtOptions = DTOptionsBuilder.newOptions()
 		.withPaginationType('full_numbers')
@@ -1036,14 +1095,30 @@ function pelanggaranController(
 			});
 			UserService.profile().then((x) => {
 				$scope.profile = x;
+				$.LoadingOverlay('hide');
 			});
 		});
 	});
+
+	$scope.setpelanggaran = (month, year) => {
+		if (month && month.value == -1 && $scope.active) {
+			$scope.pelanggarans = $scope.datas.filter(
+				(x) =>
+					new Date(x.tanggal) >= new Date($scope.active.mulai) &&
+					new Date(x.tanggal) <= new Date($scope.active.selesai)
+			);
+		} else if (month && year) {
+			$scope.pelanggarans = $scope.datas.filter(
+				(x) => new Date(x.tanggal).getMonth() == month.value && new Date(x.tanggal).getFullYear() == year
+			);
+		}
+	};
 
 	$scope.myFilter = function(month, year) {
 		if (month && month.value == -1 && $scope.active) {
 			return function(event) {
 				var tgl = new Date(event.tanggal);
+				var result = tgl >= new Date($scope.active.mulai) && tgl <= new Date($scope.active.selesai);
 				return tgl >= new Date($scope.active.mulai) && tgl <= new Date($scope.active.selesai);
 			};
 		} else if (month && year) {
@@ -1054,12 +1129,12 @@ function pelanggaranController(
 			};
 		} else {
 			return function(event) {
-				return false;
+				return '';
 			};
 		}
 	};
-
-	$scope.selectBukti = (data) => {
+	$scope.showdetail = 'Bukti';
+	$scope.selectBukti = (data, item) => {
 		$scope.selected = data;
 		$scope.selectedFiles = data.files;
 		var picture = document.getElementById('picture');
@@ -1068,6 +1143,7 @@ function pelanggaranController(
 		video.src = '';
 		picture.style.display = 'none';
 		video.style.display = 'none';
+		$scope.showdetail = item;
 	};
 
 	$scope.selectFile = (file) => {
@@ -1095,5 +1171,82 @@ function pelanggaranController(
 			},
 			(err) => {}
 		);
+	};
+}
+
+function qrcodegenController($scope) {
+	$.LoadingOverlay('hide');
+	$scope.model = {};
+	var qrcode;
+	$scope.generate = () => {
+		if ($scope.model.mulai && $scope.model.selesai) {
+			if (qrcode) {
+				qrcode.clear();
+			}
+			qrcode = new QRCode(document.getElementById('qrcode'), {
+				width: 600,
+				height: 600,
+
+				title: 'QRCode Absen',
+				titleFont: 'bold 16px Arial',
+				titleColor: '#000000',
+				titleBackgroundColor: '#62a000',
+				titleHeight: 70,
+				titleTop: 25,
+				text: JSON.stringify($scope.model),
+				logo: '/images/src/logo2.png',
+				logoWidth: undefined,
+				logoHeight: undefined,
+				logoBackgroundColor: 'lightgray',
+				logoBackgroundTransparent: false
+			});
+		}
+	};
+	$scope.print = () => {
+		var mode = 'iframe'; //popup
+		var close = mode == 'popup';
+		var options = { mode: mode, popClose: close };
+		$('div.printableArea').printArea(options);
+	};
+}
+function absenController($scope, PeriodeService, HelperService, AbsenService) {
+	$scope.datas = [];
+	$scope.datasAbsen = [];
+	$scope.model = {};
+	$scope.helper = HelperService;
+	$scope.bulans = [];
+	PeriodeService.active().then((active) => {
+		$scope.active = active;
+		AbsenService.get().then((x) => {
+			$scope.datas = x;
+			var bulan = { value: -1, name: 'Periode Active' };
+			$scope.bulans.push(bulan);
+			HelperService.bulans.forEach((element) => {
+				$scope.bulans.push(element);
+			});
+			$scope.datasAbsen = $scope.datas.filter((x) => new Date().getDate() == new Date(x.masuk));
+			$.LoadingOverlay('hide');
+		});
+	});
+
+	$scope.setAbsen = (month, year) => {
+		if (month && month.value == -1 && $scope.active) {
+			$scope.datasAbsen = $scope.datas.filter(
+				(x) =>
+					new Date(x.masuk) <= new Date($scope.active.mulai) &&
+					new Date(x.masuk) >= new Date($scope.active.selesai)
+			);
+		} else if (month && year) {
+			$scope.datasAbsen = $scope.datas.filter(
+				(x) => new Date(x.masuk).getMonth() == month.value && new Date(x.masuk).getFullYear() == year
+			);
+		}
+	};
+
+	$scope.print = () => {
+		var mode = 'iframe'; //popup
+		var close = mode == 'popup';
+		var options = { mode: mode, popClose: close };
+		$('div.printableArea').printArea(options);
 	};
 }

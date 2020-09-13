@@ -64,10 +64,13 @@ namespace WebApp.Api
         {
             try
             {
-                var karyawans = _context.Karyawan.Where(x => x.Id == id)
-                .Include(x => x.Perusahaans).ThenInclude(x => x.Perusahaan);
-
-                var karyawan = karyawans.FirstOrDefault();
+                var karyawan = _context.Karyawan.Where(x => x.Id == id)
+                .Include(x => x.Perusahaans).ThenInclude(x => x.Perusahaan).FirstOrDefault();
+                var pelanggarans = _context.Pelanggaran.Where(x => x.Terlapor.Id == karyawan.Id || x.Pelapor.Id == karyawan.Id)
+                        .Include(x => x.Terlapor)
+                        .Include(x => x.Files)
+                        .Include(x => x.ItemPelanggarans).ThenInclude(x => x.DetailLevel).ThenInclude(x => x.Level);
+                karyawan.Pelanggarans = pelanggarans.ToList();
                 var user = await _userManager.FindByNameAsync(karyawan.KodeKaryawan);
                 var roles = await _userManager.GetRolesAsync(user) as List<string>;
                 karyawan.Roles = roles;

@@ -60,6 +60,7 @@ namespace WebApp.Api
         }
 
 
+        [Microsoft.AspNetCore.Authorization.AllowAnonymous]
         [HttpGet("active")]
         public IActionResult Active()
         {

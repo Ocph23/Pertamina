@@ -37,6 +37,7 @@ namespace WebApp.Api
             .Include(x => x.Terlapor)
             .Include(x => x.Pelapor)
             .Include(x => x.ItemPelanggarans).ThenInclude(x => x.DetailLevel).ThenInclude(x => x.Level)
+            .Include(x=>x.Perusahaan)
             .Include(x => x.Files);
             return Ok(result.ToList());
         }
@@ -122,8 +123,8 @@ namespace WebApp.Api
                     }
 
                     value.PelaporId = pelapor.Id;
-                    value.TerlaporId = value.Terlapor.Id;
-                    value.PerusahaanId = value.Terlapor.Perusahaan.Id;
+                    value.TerlaporId = value.TerlaporId;
+                    value.PerusahaanId = value.PerusahaanId;
                     value.Terlapor = null;
                     _context.Pelanggaran.Add(value);
                     var saved = _context.SaveChanges();

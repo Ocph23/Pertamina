@@ -19,11 +19,13 @@ namespace WebApp.Api
     {
         private IConfiguration _config;
         private ApplicationDbContext _context;
+        private IAbsenModel _absen;
 
-        public AbsenController(IConfiguration config, ApplicationDbContext dbcontext)
+        public AbsenController(IConfiguration config, ApplicationDbContext dbcontext, IAbsenModel absenService)
         {
             _config = config;
             _context = dbcontext;
+            _absen = absenService;
         }
 
         // GET: api/Employees
@@ -62,16 +64,14 @@ namespace WebApp.Api
 
         // POST: api/Employees
         [HttpPost]
-        public IActionResult Post([FromBody] Absen value)
+        public async Task<IActionResult> Post([FromBody] Absen value)
         {
             try
             {
-                _context.Absen.Add(value);
-                _context.SaveChanges();
-
-                if (value.Id <= 0)
+                var result = await _absen.absen(value.KaryawanId, value.AbsenType);
+                if (result == null)
                     throw new SystemException("Data Perusahaan  Tidak Berhasil Disimpan !");
-                return Ok(value);
+                return Ok(result);
             }
             catch (System.Exception ex)
             {
@@ -89,7 +89,6 @@ namespace WebApp.Api
                 var saved = _context.SaveChanges();
                 if (saved <= 0)
                     throw new SystemException("Data Perusahaan  Tidak Berhasil Disimpan !");
-
                 return Ok(value);
             }
             catch (System.Exception ex)

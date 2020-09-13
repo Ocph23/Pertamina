@@ -30,10 +30,24 @@ namespace WebApp.Api
         {
             try
             {
-                // var actived = _context.Periode.Where(x => x.Status == true).FirstOrDefault();
-                // if (actived == null)
-                //     throw new SystemException("Periode Aktif Belum Ditemukan");
-                // var pelanggarans =
+                var actived = _context.Periode.Where(x => x.Status == true).FirstOrDefault();
+                if (actived == null)
+                    throw new SystemException("Periode Aktif Belum Ditemukan");
+                var pelanggarans = _context.Pelanggaran.Where(x => x.Tanggal >= actived.Mulai && x.Tanggal <= actived.Selesai)
+                        .Include(x => x.ItemPelanggarans).ThenInclude(x => x.DetailLevel).ThenInclude(x => x.Level)
+                        .Include(x => x.Perusahaan);
+                var a = pelanggarans.SelectMany(x => x.ItemPelanggarans);
+                var perusahaan = pelanggarans.ToList().GroupBy(x => x.PerusahaanId);
+                var dataperusahaan = new List<dynamic>();
+                foreach (var item in perusahaan)
+                {
+                    var dataitem = item.FirstOrDefault();
+                    dataperusahaan.Add(new
+                    {
+                        namaperusahaan = dataitem.Perusahaan.Nama,
+                        total = item.Count()
+                    });
+                }
 
 
                 //  _context.Pelanggaran.Include(x => x.ItemPelanggaran)
@@ -48,26 +62,25 @@ namespace WebApp.Api
                 //                        Tanggal = a.Tanggal.Value
                 //                    };
 
-                // var datas = new List<dynamic>();
+                var datas = new List<dynamic>();
+                var group = a.ToList().GroupBy(x => x.DetailLevel.LevelId).ToList();
+                foreach (var items in group)
+                {
+                    var dataTemp = items.FirstOrDefault();
 
-                // var group = pelanggarans.ToList().GroupBy(x => x.LevelId).ToList();
-                // foreach (var items in group)
-                // {
-                //     var dataTemp = items.FirstOrDefault();
-
-                //     dynamic data = new
-                //     {
-                //         LevelId = dataTemp.LevelId,
-                //         Jenispelanggaran = dataTemp.JenisPelanggaran,
-                //         Perusahaan = dataTemp.Perusahaan,
-                //         Karyawan = items.Count(),
-                //         Tanggal = dataTemp.Tanggal,
-                //         Level = dataTemp.Level,
-                //         Today = items.Where(x => x.Tanggal.Year == DateTime.Now.Year && x.Tanggal.Month == DateTime.Now.Month && x.Tanggal.Day == DateTime.Now.Day).Count()
-                //     };
-                //     datas.Add(data);
-                // }
-                return Ok();
+                    dynamic data = new
+                    {
+                        LevelId = dataTemp.DetailLevel.LevelId,
+                        Jenispelanggaran = dataTemp.DetailLevel.Nama,
+                        Perusahaan = dataTemp.NilaiPerusahaan,
+                        Karyawan = items.Count(),
+                        // Tanggal = dataTemp.,
+                        Level = dataTemp.DetailLevel.Level.Nama,
+                        // Today = items.Where(x => x.Tanggal.Year == DateTime.Now.Year && x.Tanggal.Month == DateTime.Now.Month && x.Tanggal.Day == DateTime.Now.Day).Count()
+                    };
+                    datas.Add(data);
+                }
+                return Ok(new { datas = datas.ToList(), perusahaan = dataperusahaan });
             }
             catch (System.Exception ex)
             {

@@ -52,7 +52,7 @@ namespace WebApp.Middlewares
                     var result = await _signInManager.PasswordSignInAsync(user, model.Password, false, false);
                     if (result.Succeeded)
                     {
-                        var token = generateJwtToken(user);
+                        var token = await generateJwtToken(user);
 
                         return new AuthenticateResponse(user, token);
                     }
@@ -75,14 +75,21 @@ namespace WebApp.Middlewares
 
         // helper methods
 
-        private string generateJwtToken(IdentityUser user)
+        private async Task<string> generateJwtToken(IdentityUser user)
         {
             // generate token that is valid for 7 days
+
+            var roles = await _userManager.GetRolesAsync(user);
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
+                Subject = new ClaimsIdentity(new[]
+                {
+                    new Claim("id", user.Id.ToString()),
+                    new Claim("name", user.UserName),
+                    new Claim("role", roles.FirstOrDefault())
+                }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };

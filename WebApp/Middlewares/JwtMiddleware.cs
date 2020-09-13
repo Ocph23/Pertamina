@@ -1,10 +1,12 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Data;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -38,6 +40,7 @@ namespace WebApp.Middlewares
             try
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
+                SecurityToken validatedToken = null; 
                 var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
                 tokenHandler.ValidateToken(token, new TokenValidationParameters
                 {
@@ -47,18 +50,27 @@ namespace WebApp.Middlewares
                     ValidateAudience = false,
                     // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
                     ClockSkew = TimeSpan.Zero
-                }, out SecurityToken validatedToken);
+                }, out validatedToken);
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
-                var userId = jwtToken.Claims.First(x => x.Type == "id").Value;
+                var userId = jwtToken.Claims.First(x => x.Type ==  "id").Value;
+                var id= jwtToken.Claims.First(x => x.Type == "id").Value;
+                var name = jwtToken.Claims.First(x => x.Type == "name").Value;
+                var role = jwtToken.Claims.First(x => x.Type == "role").Value;
+                var claims = new[]
+                {
+                               new Claim(ClaimTypes.NameIdentifier, id),
+                               new Claim(ClaimTypes.Name, name),
+                               new Claim(ClaimTypes.Role, role),
 
-                // attach user to context on successful jwt validation
-                context.Items["User"] = await userService.GetById(userId);
+                };
+                var identity = new ClaimsIdentity(claims, "basic");
+                context.User = new ClaimsPrincipal(identity);
+                context.Items["User"] = context.User;
             }
             catch
             {
-                // do nothing if jwt validation fails
-                // user is not attached to context so request won't have access to secure routes
+              //  context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };
             }
         }
     }

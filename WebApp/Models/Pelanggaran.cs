@@ -13,6 +13,7 @@ namespace WebApp.Models
         public PelanggaranType Jenis { get; set; }
         public DateTime TanggalKejadian { get; set; }
         public int PerusahaanId { get; set; }
+        public virtual Perusahaan Perusahaan { get; set; }
         public int TerlaporId { get; set; }
         public virtual Karyawan Terlapor { get; set; }
         public int PelaporId { get; set; }

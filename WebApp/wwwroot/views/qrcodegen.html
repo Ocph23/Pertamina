@@ -1,0 +1,28 @@
+<div class="pelanggaran-data">
+    <div class="profile-data">
+        <div class="header">
+            <strong class="header-title">GENERATE QRCODE</strong>
+            <div class="add-menu" id="close-menu" ng-click="print()"><i class="fa fa-print"></i></div>
+        </div>
+        <div class="profile-data-date">
+            <div class="form-info-group">
+                <div class="label">Tanggal Mulai</div>
+                <div class="nilai">
+                    <input type="date" class="form-control" ng-model="model.mulai" ng-change="generate()">
+                </div>
+            </div>
+            <div class="form-info-group">
+                <div class="label">Tanggal Selesai</div>
+                <div class="nilai">
+                    <input type="date" class="form-control" ng-model="model.selesai" ng-change="generate()">
+                </div>
+            </div>
+        </div>
+        <div class="vertical-scroll printableArea" style="height: 73vh;">
+            <div class="d-flex justify-content-center align-items-center">
+                <div id="qrcode" style="margin:auto !important "></div>
+            </div>
+
+        </div>
+    </div>
+</div>

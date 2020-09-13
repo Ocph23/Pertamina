@@ -7,7 +7,8 @@ angular
 	.factory('PerusahaanService', PerusahaanService)
 	.factory('UserService', UserService)
 	.factory('PeriodeService', PeriodeService)
-	.factory('PointService', PointService);
+	.factory('PointService', PointService)
+	.factory('AbsenService', AbsenService);
 
 function JenisService($http, $q) {
 	var controller = 'api/level';
@@ -355,25 +356,20 @@ function KaryawanService($http, $q) {
 
 	service.getById = (id) => {
 		var def = $q.defer();
-		var data = datas.find((x) => x.idKaryawan == id);
-		if (data) {
-			if (!data.roles) {
-				$http({ url: controller + '/roles/' + id, method: 'Get' }).then((response) => {
-					data.roles = response.data;
-					def.resolve(data);
-				});
-			} else def.resolve(data);
-		} else {
-			$http({ url: controller + '/' + id, method: 'Get' }).then(
-				(response) => {
+		var data = datas.find((x) => x.id == id);
+		$http({ url: controller + '/' + id, method: 'Get' }).then(
+			(response) => {
+				if (data) {
+					data = response.data;
+				} else {
 					datas.push(response.data);
-					def.resolve(response.data);
-				},
-				(err) => {
-					def.reject(err.message);
 				}
-			);
-		}
+				def.resolve(response.data);
+			},
+			(err) => {
+				def.reject(err.message);
+			}
+		);
 		return def.promise;
 	};
 
@@ -610,24 +606,34 @@ function PointService() {
 	service.point = (karyawan, periode) => {
 		karyawan.point = 100;
 		karyawan.pengurangan = 0;
+
 		var currentdate = new Date();
-		var tglawal = new Date(periode.tanggalmulai);
+		var tglawal = new Date(periode.mulai);
 		var tglcompare = angular.copy(tglawal);
-		var tglselesai = new Date(periode.tanggalselesai);
-		var miliday = 24 * 60 * 60 * 1000;
-		var rr = Math.abs(new Date(2020, 7, 30) - currentdate.getDate()) / miliday;
+		var tglselesai = new Date(periode.selesai);
 		for (var index = 0; index < currentdate.getDate() - tglawal.getDate(); index++) {
 			tglcompare.setDate(tglcompare.getDate() + (index == 0 ? 0 : 1));
 			if (tglawal.getDate() + index <= currentdate.getDate() && currentdate.getDate() <= tglselesai.getDate()) {
 				var pelanggaran = false;
 				karyawan.pelanggarans.forEach((element) => {
-					if (element && new Date(element.tanggal).toLocaleDateString() == tglcompare.toLocaleDateString()) {
+					if (
+						element &&
+						element.status > 0 &&
+						new Date(element.tanggal).toLocaleDateString() == tglcompare.toLocaleDateString()
+					) {
+						element.itemPelanggarans.forEach((item) => {
+							if (element.jenis == 0) {
+								karyawan.pengurangan += item.nilaiKaryawan;
+								karyawan.point -= item.nilaiKaryawan;
+							} else {
+								if (karyawan.point < 110) karyawan.point += item.penambahan;
+							}
+						});
 						pelanggaran = true;
-						karyawan.pengurangan += element.karyawan;
 					}
 				});
 
-				if (!pelanggaran && karyawan.point < 110) {
+				if (!pelanggaran && karyawan.point < 105) {
 					karyawan.point += 0.5;
 				}
 			}
@@ -636,7 +642,7 @@ function PointService() {
 			karyawan.point = 110;
 		}
 
-		return karyawan.point - karyawan.pengurangan;
+		return karyawan.point;
 	};
 	return service;
 }
@@ -669,5 +675,28 @@ function UserService($http, $q) {
 		return def.promise;
 	};
 
+	return service;
+}
+
+function AbsenService($http, $q) {
+	var controller = 'api/absen';
+	var service = {};
+	service.get = () => {
+		var def = $q.defer();
+		if (service.data) {
+			def.resolve(service.data);
+		} else {
+			$http({ url: controller, method: 'Get' }).then(
+				(response) => {
+					service.data = response.data;
+					def.resolve(service.data);
+				},
+				(err) => {
+					def.reject(err.message);
+				}
+			);
+		}
+		return def.promise;
+	};
 	return service;
 }

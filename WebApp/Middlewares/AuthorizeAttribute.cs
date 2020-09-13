@@ -12,8 +12,8 @@ namespace WebApp.Middlewares
     {
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var user = (IdentityUser)context.HttpContext.Items["User"];
-            if (user == null && !context.HttpContext.User.Identity.IsAuthenticated)
+            //var user = (IdentityUser)context.HttpContext.Items["User"];
+            if (!context.HttpContext.User.Identity.IsAuthenticated)
             {
                 context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };
             }

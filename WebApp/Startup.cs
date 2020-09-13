@@ -49,6 +49,7 @@ namespace WebApp
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAbsenModel, AbsenModel>();
 
             services.AddDefaultIdentity<IdentityUser>(options =>
                  options.SignIn.RequireConfirmedAccount = true
