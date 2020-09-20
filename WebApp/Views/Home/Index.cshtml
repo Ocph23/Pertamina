@@ -3,7 +3,7 @@ ViewData["Title"] = "Home Page";
 }
 <div class="dashboard" ng-app="dashboard" ng-controller="dashboard.controller">
     <div class="chart-company">
-        <h5 class="title">Pelanggaran Perusahaan</h5>
+        <h5 class="title" style="color:black">Pelanggaran Perusahaan</h5>
         <div id="chart-canvas">
             <canvas id="myChart"></canvas>
         </div>
@@ -15,25 +15,25 @@ ViewData["Title"] = "Home Page";
         </div>
     </div>
     <div class="best-perform">
-        <h5 class="title">Best Perform</h5>
+        <h5 class="title" style="color:black">Best Perform</h5>
         <div class="employes vertical-scroll">
-            <div class="employe" id="employee" ng-repeat="item in source">
+            <div class="employe" id="employee" ng-repeat="item in source" ng-if="source.length">
                 <div class="employe-photo">
-                    <img ng-src="/images/profiles/{{item.photo}}">
+                    <img ng-src="/images/profiles/{{item.karyawan.photo}}">
                 </div>
                 <div class="employe-content">
                     <div class="employe-data">
                         <div class="form-data">
                             <div class="content-label">Name</div>
-                            <div class="content-value">{{item.namakaryawan}} </div>
+                            <div class="content-value">{{item.karyawan.namaKaryawan}} </div>
                         </div>
                         <div class="form-data">
                             <div class="content-label">Job</div>
-                            <div class="content-value">{{item.jabatan}} </div>
+                            <div class="content-value">{{item.karyawan.perusahaan.jabatan}} </div>
                         </div>
                         <div class="form-data">
                             <div class="content-label">Sub Company</div>
-                            <div class="content-value">{{item.perusahaan.namaperusahaan | limitTo:20}} </div>
+                            <div class="content-value">{{item.karyawan.perusahaan.perusahaan.nama}} </div>
                         </div>
                     </div>
 

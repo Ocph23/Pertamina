@@ -25,6 +25,7 @@ namespace WebApp.Models
         public string UserId { get; set; }
 
         public string Photo { get; set; }
+        public string DeviceId { get; set; }
 
         public bool Status { get; set; } = true;
 

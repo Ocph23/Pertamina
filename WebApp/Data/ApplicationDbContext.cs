@@ -33,5 +33,6 @@ namespace WebApp.Data
         public DbSet<BuktiPelanggaran> BuktiPelanggaran { get; set; }
         public DbSet<Pemenang> Pemenang { get; set; }
         public DbSet<PerusahaanKaryawan> PerusahaanKaryawan { get; set; }
+        public DbSet<NotificationModel> Notifications { get; set; }
     }
 }

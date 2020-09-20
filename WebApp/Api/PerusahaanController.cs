@@ -11,7 +11,7 @@ namespace WebApp.Api
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [ApiAuthorize]
     public class PerusahaanController : ControllerBase
     {
         private IConfiguration _config;

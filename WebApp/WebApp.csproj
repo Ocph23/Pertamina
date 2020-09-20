@@ -1,9 +1,24 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿ <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>aspnet-WebApp-E9103BF9-E4AF-449A-BEB4-A4AF737B9E1B</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="wwwroot\bower_components\**" />
+    <Content Remove="wwwroot\bower_components\**" />
+    <EmbeddedResource Remove="wwwroot\bower_components\**" />
+    <None Remove="wwwroot\bower_components\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="key.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="key.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FirebaseAdmin" Version="1.16.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="3.1.6" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.0.0" />

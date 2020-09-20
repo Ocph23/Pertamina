@@ -46,10 +46,12 @@ namespace WebApp
 
 
             services.AddTransient<IEmailSender, EmailService>();
+            services.AddTransient<IPeriodeService, PeriodeService>();
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAbsenModel, AbsenModel>();
+            services.AddScoped<IFcmService, FcmService>();
 
             services.AddDefaultIdentity<IdentityUser>(options =>
                  options.SignIn.RequireConfirmedAccount = true

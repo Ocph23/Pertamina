@@ -39,7 +39,6 @@ function dashboardController($scope, DataService, PointService, PeriodeService) 
 	$scope.datas = [];
 	DataService.jenis().then((x) => {
 		$scope.datas = x.datas;
-
 		var dataDounat = {
 			datasets: [
 				{
@@ -122,26 +121,21 @@ function dashboardController($scope, DataService, PointService, PeriodeService) 
 			}
 		});
 
-		PeriodeService.active().then((active) => {
-			DataService.get('api/karyawan').then((data) => {
-				data.forEach((element) => {
-					element.total = PointService.point(element, active);
-				});
-
-				$scope.source = data.filter((x) => x.total >= 105);
-			});
+		DataService.get('api/dashboard/karyawan').then((data) => {
+			$scope.source = data.filter((x) => x.score >= 105);
 		});
 	});
 }
 
-angular.module('undian', []).controller('undianController', undianController);
+angular.module('undian', [])
+    .controller('undianController', undianController);
 function undianController($scope, $http) {
 	var timer = null;
 	$scope.isPlay = false;
 	$scope.model = {};
-	$http({ method: 'get', url: 'api/karyawan' }).then(
+    $http({ method: 'get', url: 'api/dashboard/karyawan' }).then(
 		(response) => {
-			$scope.datas = response.data;
+            $scope.datas = response.data.filter((x) => x.score >= 105);
 			$http({ method: 'get', url: 'api/periode/active' }).then(
 				(response) => {
 					$scope.active = response.data;
@@ -194,8 +188,12 @@ function undianController($scope, $http) {
 		setTimeout(() => {
 			clearInterval(timer);
 			var win = document.getElementById('winner');
+			var lottie = document.getElementById('lottie');
+			lottie.style.display = 'flex';
 			win.innerHTML = 'PEMENANG';
-			$scope.sound.pause();
+            $scope.sound.pause();
+            var kode = document.getElementById('kode').innerHTML;
+            saveWinnder(kode);
 		}, 15000);
 	};
 
@@ -205,8 +203,22 @@ function undianController($scope, $http) {
 		var img = document.getElementById('undian');
 		var nama = document.getElementById('nama');
 		var kode = document.getElementById('kode');
-		nama.innerHTML = randomItem.namakaryawan;
-		kode.innerHTML = randomItem.kodekaryawan;
-		img.src = 'images/profiles/' + randomItem.photo;
-	}
+		nama.innerHTML = randomItem.karyawan.namaKaryawan;
+        kode.innerHTML = randomItem.karyawan.kodeKaryawan;
+        img.src = 'images/profiles/' + randomItem.karyawan.photo;
+    }
+
+
+    function saveWinnder(kode) {
+        var karyawan = $scope.datas.filter(x => x.karyawan.kodeKaryawan === kode)[0].karyawan;
+        var model = { periodeId: $scope.active.id, karyawanId: karyawan.id };
+        $http({ method: 'post', url: 'api/periode/pemenang' , data:model}).then(
+            (response) => {
+        //        $scope.active = response.data;
+            },
+            (err) => {
+                alert("Maaf Terjadi Kesalahan, Coba Ulangi Lagi !");
+            }
+        );
+    }
 }

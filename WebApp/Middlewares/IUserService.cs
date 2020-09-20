@@ -18,6 +18,7 @@ namespace WebApp.Middlewares
     {
         Task<AuthenticateResponse> Authenticate(UserLogin model);
         Task<IdentityUser> GetById(string id);
+        Task<string> AuthenticateUSerProvider(IdentityUser user);
     }
 
     public class UserService : IUserService
@@ -73,7 +74,21 @@ namespace WebApp.Middlewares
             return await _userManager.FindByIdAsync(id);
         }
 
-        // helper methods
+        public async Task<string> AuthenticateUSerProvider(IdentityUser user)
+        {
+            try
+            {
+                var token = await generateJwtToken(user);
+                if(string.IsNullOrEmpty(token ))
+                throw new SystemException("You Not Have Access");
+                return token;
+
+            }
+            catch (System.Exception ex)
+            {
+                throw new SystemException(ex.Message);
+            }
+        }
 
         private async Task<string> generateJwtToken(IdentityUser user)
         {

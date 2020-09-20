@@ -27,7 +27,7 @@ namespace WebApp.Api
         }
 
         // GET: api/Employees
-        [Authorize]
+        [ApiAuthorize]
         [HttpGet("profile")]
         public async Task<IActionResult> profile()
         {
@@ -45,7 +45,7 @@ namespace WebApp.Api
             }
         }
 
-        [Authorize]
+        [ApiAuthorize]
         [HttpGet("absen")]
         public async Task<IActionResult> absen()
         {
@@ -62,7 +62,7 @@ namespace WebApp.Api
             }
         }
 
-        [Authorize]
+        [ApiAuthorize]
         [HttpGet("pelanggaran")]
         public async Task<IActionResult> pelanggaran()
         {
@@ -72,7 +72,34 @@ namespace WebApp.Api
                 if (user != null)
                 {
                     var karyawan = _context.Karyawan.Where(x => x.UserId == user.Id).FirstOrDefault();
-                    var pelanggarans = _context.Pelanggaran.Where(x => x.Terlapor.Id == karyawan.Id)
+                    var pelanggarans = _context.Pelanggaran.Where(x => x.TerlaporId== karyawan.Id)
+                        .Include(x => x.Terlapor)
+                        .Include(x => x.Files)
+                        .Include(x => x.ItemPelanggarans).ThenInclude(x => x.DetailLevel).ThenInclude(x => x.Level);
+                    return Ok(pelanggarans.ToList());
+                }
+
+                throw new SystemException("Anda Tidak Memiliki Akses");
+
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [ApiAuthorize]
+        [HttpGet("pelaporan")]
+        public async Task<IActionResult> Pelaporan()
+        {
+            try
+            {
+                var user = await _userManager.GetUserAsync(User);
+                if (user != null)
+                {
+                    var karyawan = _context.Karyawan.Where(x => x.UserId == user.Id).FirstOrDefault();
+                    var pelanggarans = _context.Pelanggaran.Where(x => x.PelaporId== karyawan.Id && x.Jenis== PelanggaranType.Pengaduan)
                         .Include(x => x.Terlapor)
                         .Include(x => x.Files)
                         .Include(x => x.ItemPelanggarans).ThenInclude(x => x.DetailLevel).ThenInclude(x => x.Level);

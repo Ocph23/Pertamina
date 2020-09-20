@@ -20,6 +20,11 @@
     {
       "library": "datatables.net@1.10.21",
       "destination": "wwwroot/lib/datatables.net/"
+    },
+    {
+      "provider": "unpkg",
+      "library": "@lottiefiles/lottie-player@0.5.1",
+      "destination": "wwwroot/lib/lottiefiles/lottie-player/"
     }
   ]
 }

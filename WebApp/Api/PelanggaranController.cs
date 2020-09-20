@@ -15,18 +15,22 @@ namespace WebApp.Api
 
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [ApiAuthorize]
     public class PelanggaranController : ControllerBase
     {
         private IConfiguration _config;
         private ApplicationDbContext _context;
         private UserManager<IdentityUser> _userManager;
+        private IFcmService _fcm;
 
-        public PelanggaranController(IConfiguration config, ApplicationDbContext dbcontext, UserManager<IdentityUser> userManager)
+        public PelanggaranController(IConfiguration config, ApplicationDbContext dbcontext,
+            IFcmService fcm,
+            UserManager<IdentityUser> userManager)
         {
             _config = config;
             _context = dbcontext;
             _userManager = userManager;
+            _fcm = fcm;
         }
 
         // GET: api/Employees
@@ -108,6 +112,7 @@ namespace WebApp.Api
         {
             var user = await _userManager.GetUserAsync(User);
             var pelapor = _context.Karyawan.Where(x => x.UserId == user.Id).FirstOrDefault();
+            var terlapor = _context.Karyawan.Where(x => x.Id == value.TerlaporId).FirstOrDefault();
             using (var transaction = _context.Database.BeginTransaction())
             {
                 try
@@ -130,10 +135,12 @@ namespace WebApp.Api
                     var saved = _context.SaveChanges();
                     if (value.Id <= 0)
                         throw new SystemException("Data Perusahaan  Tidak Berhasil Disimpan !");
-
-
                     transaction.Commit();
 
+                    var message = new NotificationModel("System", "Pelanggaran",
+                            "Anda Telah Melakukan Pelanggaran !", NotificationType.Private);
+
+                    await _fcm.SendMessagePrivate(message, terlapor.DeviceId);
                     return Ok(value);
                 }
                 catch (Exception ex)

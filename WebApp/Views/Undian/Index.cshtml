@@ -1,23 +1,46 @@
 ﻿@{
     ViewData["Title"] = "Undian";
 }
-          
- <div class="undian" ng-app="undian" ng-controller="undianController">
-       <div class="nama-karyawan"><h2>UNDIAN KARYAWAN TERBAIK</h2></div>
-       <div class="nama-karyawan"><h4>PERIODE {{active.tanggalmulai|date:'dd/MM/yyyy'}} - {{active.tanggalselesai|date:'dd/MM/yyyy'}}</h4></div>
-    <div class="employee">
-             <div id=winner></div>
-            <img width="200" height="200" src="/images/profiles/noimage.png" id="undian" src="" alt="">
-            <div class="nama-karyawan"><h4 id="nama">{{model.kodekaryawan}}</h4></div>
-            <div class="kode-karyawan"><h6 id="kode">{{model.kodekaryawan}}</h6></div>
+
+<div id="lottie" class="lottie">
+    <div class="lottie-body">
+        <lottie-player id="lottiePlayer" src="/images/src/11272-party-popper.json" background="transparent"
+                       speed="1" loop autoplay></lottie-player>
     </div>
-         <audio  id='audio' controls autoplay   loop hidden>
+</div>
+
+@if (ViewBag.Pemenang == null)
+{
+    <div class="undian" ng-app="undian" ng-controller="undianController">
+        <div class="nama-karyawan"><h2>UNDIAN KARYAWAN TERBAIK</h2></div>
+        <div class="nama-karyawan"><h4>PERIODE {{active.mulai|date:'dd/MM/yyyy'}} - {{active.selesai|date:'dd/MM/yyyy'}}</h4></div>
+        <div class="employee">
+            <div id=winner></div>
+            <img width="200" height="200" src="/images/profiles/noimage.png" id="undian" alt="">
+            <div class="nama-karyawan"><h4 id="nama">{{model.namaKaryawan}}</h4></div>
+            <div class="kode-karyawan"><h6 id="kode">{{model.kodeKaryawan}}</h6></div>
+        </div>
+        <audio id='audio' controls autoplay loop hidden>
             <source src="" type="audio/mp3" />
             Your browser does not support the audio element.
-          </audio>
-
-          <button ng-click="start()" class="btn btn-success" ng-show="isPlay==false">Start</button>
-          <button ng-click="stop()" class="btn btn-danger" ng-show="isPlay==true">Stop</button>
+        </audio>
+        <button ng-click="start()" class="btn btn-success" ng-show="isPlay==false">Start</button>
+        <button ng-click="stop()" class="btn btn-danger" ng-show="isPlay==true">Stop</button>
     </div>
 
-   
+}
+else
+{
+    <div class="undian" >
+        <div class="nama-karyawan"><h2>UNDIAN KARYAWAN TERBAIK</h2></div>
+        <div class="nama-karyawan"><h4>PERIODE LALU</h4></div>
+        <div class="employee">
+            <div id=winner></div>   
+            <img width="200" height="200" src="~/images/profiles/@ViewBag.Pemenang.Karyawan.Photo" id="undian" alt="">
+            <div class="nama-karyawan"><h4 id="nama">@ViewBag.Pemenang.Karyawan.NamaKaryawan</h4></div>
+            <div class="kode-karyawan"><h6 id="kode">@ViewBag.Pemenang.Karyawan.KodeKaryawan</h6></div>
+        </div>
+    </div>
+
+}
+

@@ -21,6 +21,10 @@ namespace WebApp.Middlewares
         private UserManager<IdentityUser> _userManager;
         private ApplicationDbContext _db;
 
+        public AbsenModel()
+        {
+        }
+
         public AbsenModel(IOptions<AppSettings> appSettings, SignInManager<IdentityUser> signInManager,
             UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext dbcontext)
         {

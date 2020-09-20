@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -14,27 +12,32 @@ namespace WebApp.Api
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [ApiAuthorize]
     public class AbsenController : ControllerBase
     {
         private IConfiguration _config;
         private ApplicationDbContext _context;
         private IAbsenModel _absen;
+        private IFcmService _fcm;
+        private IPeriodeService _periode;
 
-        public AbsenController(IConfiguration config, ApplicationDbContext dbcontext, IAbsenModel absenService)
+        public AbsenController(IConfiguration config, ApplicationDbContext dbcontext,IFcmService fcm, IAbsenModel
+            absenService, IPeriodeService periode)
         {
+            _periode = periode;
             _config = config;
             _context = dbcontext;
-            _absen = absenService;
+            _absen = absenService;            
+            _fcm = fcm;
         }
 
         // GET: api/Employees
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
             try
             {
-                var activePeriode = _context.Periode.Where(x => x.Status).FirstOrDefault();
+                var activePeriode = await _periode.ActivePeriode();
 
                 var results = _context.Absen.Where(x => x.Masuk >= activePeriode.Mulai && x.Masuk <= activePeriode.Selesai)
                             .Include(x => x.Karyawan);
@@ -71,6 +74,10 @@ namespace WebApp.Api
                 var result = await _absen.absen(value.KaryawanId, value.AbsenType);
                 if (result == null)
                     throw new SystemException("Data Perusahaan  Tidak Berhasil Disimpan !");
+                var message = new NotificationModel("System", "Absen",
+                    $"Anda Telah Berhasil Absen {value.AbsenType} !", NotificationType.Private);
+                message.UserId = value.Karyawan.UserId;
+                await _fcm.SendMessagePrivate(message, value.Karyawan.DeviceId);
                 return Ok(result);
             }
             catch (System.Exception ex)

@@ -16,4 +16,10 @@ namespace WebApp.Data
     {
         None, Kerja, Lembur
     }
+
+
+    public enum NotificationType
+    {
+        Public, Private
+    }
 }

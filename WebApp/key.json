@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "pertamina-emloyee-score",
+  "private_key_id": "7a638dfa04298c9b111c93883ee7c3b3d377c790",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCjuzFTvjFXrQvy\nxiVEB3oHKhOA9g4yy0JJ+KJwC2FfPTuz94mpluW68Wuu2UiMFx4FA/wHYvzWmCrj\n+P6+o6JMeI8sVXCr4pTArtC4wuGf/qZdaGeILEw9O3lK1x/ZM8w+c17blx+QQNJN\n3i0llAJ4NP5/N9Y+t5CAYgziNAEFHhorFFxG9rVaxphLuUFedb/syQi1mHByp/j5\nuFRj542iHVdRG5FeQAOaCkvWkEac30so362MiDtZbjNzsENtToRmmrhodU35o8E9\nQHnh2KUqWBo456aiYMzYwzFnEX4sOcheSZb4zR+ohOdAdNfKHg+kYuSUNRridda8\n/yE8iGWLAgMBAAECggEAGNVHggAS0813RncvJ8ZKh9Ol6aVoOeQCRd3kJUJUnnFX\nINCmnIY6icQcJQTnr/fBodkc3LHyz0l9F96oJJoE/7w5WuwKjsdq8F6TYbKNLgsd\niIVRTqIJXjArEWLXfcYRcFdnR78AFoz+WLkd99kfFsRS5VC+ufx1ekNk2NoyXWgZ\nC5WeKKcZ9XyPLbYoPqB+R0u4FlB7la28jTRPh6iNRZsjxKzdiTZRLS3cHLIPfadm\nNpPbJ4M1AykMhPgGUKq9bjeZmZXL1+weTB19G7QYpF/x27xq7Yd91F9s+1VagWu5\nneznv8FHjAHPP14r3RmDqYA+5ppdTOcwYDHX6rMyAQKBgQDgNDhScIG8yPkMdDry\n/rhuD482BBAM0Ar4qyWkQzyN71aq6vq3bLY6pFvNVpZtchVP8MwhuB1tzhM76sPs\n31XsLQXTstmZDO2D+IAzJ4bZ/mPefGf5Q+AOe6K1LbpTR11FBGdp9Zje8ds7y1iV\nRemasyoVvVdSsSUHoOuypanMQQKBgQC6836OXRGygIi2iSpLx0D0H4ShS6IYRfdK\nZ3suU1nL7Xxcqu2YKhlUqkwUHpFiFeenahcBFKPCJsGvKgeNpsVxkYhUdBqw9ziA\nBK3oVR/siZUXEfH1boLsapcGMnstMSPt7q4BaznVcEQ3U2MNlXn5cuyQcKPJCSBB\nKqW2/z/uywKBgBRhCsGLkm9bgS+9nOIbfx4Z8fWB9weDHYwu2lQM/IMWPzV3+GQV\n0JaR+/o1JaU7Gm7Sv2tNNfeWJK9sjnSIdGHsUbxFZHwB7dDyFI0RybMk6WT+v+Cr\nZ8FJQafgSTBqqzKrzM6X0VZqe3f66sleunYiVO/27uoISgpgeSwa3M1BAoGAHzC8\nrpfMehGDvaCI0/e8WH5hrF9n/dC+f0VggcwaMTHAC93gogB0FXIMG1c2Pj0VVxMW\nH3IIGD5LFiRW+kUWr+nt6tksEtZMMN+W/Conl1kk7KJr0dzMLxFhfQEzF8kZC3tE\nwKvZDEkcuHZLElsb7IhF+5svWD0TiovI9g0D550CgYEA3iTtVk+HfMPo+iKKa9zM\naHejexPe17LkTYRwDGHlaktzN6DlGBmgsz2ih3Kj0iRMwPjZ//74J4mbulAsgaup\n3VfZjfEsyBrxr+tDqDkFN9qESYdnksOMyePvCfrPod3JfE0+e4zBNJwPB+4slA78\n5xtw5yzEIZu5ZZHVy5cN6ss=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-tmiby@pertamina-emloyee-score.iam.gserviceaccount.com",
+  "client_id": "113389784483701814028",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-tmiby%40pertamina-emloyee-score.iam.gserviceaccount.com"
+}

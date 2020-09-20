@@ -1,4 +1,5 @@
-﻿$(function() {
+﻿
+$(function() {
 	var btn = document.getElementById('close-menu');
 
 	if (btn)
@@ -61,15 +62,21 @@
 			});
 		});
 
-	var $el = $('.employes');
-	function anim() {
+    var $el = $('.employes');
+    var lenght = 2;
+    function anim() {
 		var st = $el.scrollTop();
-		var sb = $el.prop('scrollHeight') - $el.innerHeight();
-		$el.animate({ scrollTop: st < sb / 2 ? sb : 0 }, 4000, anim);
+        var sb = $el.prop('scrollHeight') - $el.innerHeight();
+        var data= document.getElementsByClassName("employe-data");
+        if (data) {
+            lenght = data.length <= 0 ? 2 : data.length;
+        }
+        $el.animate({ scrollTop: st < sb / 2 ? sb : 0 }, lenght*1000 , anim);
 	}
 	function stop() {
 		$el.stop();
-	}
-	anim();
+    }
+
+    anim();
 	$el.hover(stop, anim);
 });

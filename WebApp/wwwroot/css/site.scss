@@ -502,3 +502,17 @@ select {
     border: solid rgba(0, 0, 0, 0.199) 1px;
     outline: 0;
 }
+
+.lottie {
+    position: absolute;
+    margin: auto;
+    height: 85%;
+    width: 100%;
+    display: none;
+    justify-content: center;
+    .lottie-body {
+        width: 81%;
+        margin-left: 25%;
+        margin-top: 11%;
+    }
+}

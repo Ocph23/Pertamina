@@ -21,9 +21,10 @@ namespace WebApp.Api
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [ApiAuthorize]
     public class KaryawanController : ControllerBase
     {
+        private IPeriodeService _periode;
         private IConfiguration _config;
         private UserManager<IdentityUser> _userManager;
         private ApplicationDbContext _context;
@@ -32,8 +33,9 @@ namespace WebApp.Api
         public KaryawanController(IConfiguration config, SignInManager<IdentityUser> signInManager,
             ILogger<LoginModel> logger,
             UserManager<IdentityUser> userManager, ApplicationDbContext dbcontext,
-            IEmailSender emailSender)
+            IEmailSender emailSender,  IPeriodeService periode)
         {
+            _periode = periode;
             _config = config;
             _userManager = userManager;
             _context = dbcontext;
@@ -263,6 +265,67 @@ namespace WebApp.Api
 
 
 
+        }
+
+
+        [HttpGet("PointByKaryawanId/{id}")]
+        public async Task<IActionResult> PointByKaryawanIdAsync(int id)
+        {
+            try
+            {
+                var periode = await _periode.ActivePeriode();
+                var selisih = periode.Selesai.Subtract(periode.Mulai);
+                var pelanggarans = _context.Pelanggaran.Where(x => x.TerlaporId == id  && x.Tanggal>periode.Mulai && x.Tanggal <=periode.Selesai).Include(x => x.ItemPelanggarans);
+                var pengaduan = _context.Pelanggaran.Where(x => x.PelaporId == id && x.Jenis== PelanggaranType.Pengaduan && x.Tanggal>periode.Mulai && x.Tanggal <=periode.Selesai).Include(x => x.ItemPelanggarans);
+                var totalDay = (selisih.Days + 1);
+                double totalPelanggaran = 0;
+                if (pelanggarans.Count() > 0)
+                {
+                        var groupDate = pelanggarans.GroupBy(x => new { Tahun = x.Tanggal.Year, Month = x.Tanggal.Month, Day = x.Tanggal.Day });
+                        totalDay -= groupDate.Count();
+                        totalPelanggaran = pelanggarans.SelectMany(x => x.ItemPelanggarans).Sum(x => x.NilaiKaryawan);
+                }
+
+                double totalPengaduan= 0;
+                if (pengaduan.Count() > 0)
+                {
+                    totalPengaduan = pengaduan.SelectMany(x => x.ItemPelanggarans).Sum(x => x.Penambahan);
+                }
+
+                var score = 100 + (totalDay * 0.5);
+                score = score >= 105 ? 105 : score;
+
+                var total = score+ totalPengaduan - totalPelanggaran;
+                return Ok(new { Score=total, Potongan=totalPelanggaran, Pengaduan= totalPengaduan });
+            }
+            catch (System.Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+
+        [HttpGet("changedevice/{id}/{deviceid}")]
+        [ApiAuthorize]
+        public IActionResult ChangeDevice(int id,string deviceId)
+        {
+            try
+            {
+                var karyawan= _context.Karyawan.Where(x => x.Id == id).FirstOrDefault();
+                  if(karyawan.DeviceId!= deviceId)
+                    {
+                        karyawan.DeviceId = deviceId;
+                        _context.SaveChanges();
+                    }
+                return Ok(true);
+            }
+            catch (System.Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
         }
     }
 

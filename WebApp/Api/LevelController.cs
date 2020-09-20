@@ -12,7 +12,7 @@ namespace WebApp.Api
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [ApiAuthorize]
     public class LevelController : ControllerBase
     {
         private IConfiguration _config;
@@ -26,7 +26,7 @@ namespace WebApp.Api
 
         // GET: api/Employees
         [HttpGet]
-        [Authorize]
+        [ApiAuthorize]
         public IActionResult Get()
         {
             try

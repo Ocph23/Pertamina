@@ -9,12 +9,11 @@ using WebApp.Data;
 using WebApp.Models;
 using WebApp.Middlewares;
 
-
 namespace WebApp.Api
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [ApiAuthorize]
     public class DetailLevelController : ControllerBase
     {
         private IConfiguration _config;

@@ -610,4 +610,21 @@ select option {
   border: solid rgba(0, 0, 0, 0.199) 1px;
   outline: 0;
 }
+
+.lottie {
+  position: absolute;
+  margin: auto;
+  height: 85%;
+  width: 100%;
+  display: none;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.lottie .lottie-body {
+  width: 81%;
+  margin-left: 25%;
+  margin-top: 11%;
+}
 /*# sourceMappingURL=site.css.map */

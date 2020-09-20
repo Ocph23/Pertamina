@@ -9,4 +9,15 @@ namespace WebApp.Data
 
         public string Password { get; set; }
     }
+
+
+    public class ChangePassword
+    {
+
+        public string UserId { get; set; }
+        public string UserName{ get; set; }
+        public string OldPassword { get; set; }
+
+        public string NewPassword { get; set; }
+    }
 }

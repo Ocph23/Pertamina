@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/main.css" />
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css" />
-    <!--script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.3/signalr.min.js"></script-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+    <!--script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.3/signalr.min.js"></script-->
 </head>
 <body>
     <header>
@@ -40,19 +40,20 @@
             </div>
         </nav>
     </header>
-     <main role="main" class="pb-3">
-            @RenderBody()
-              <footer class="border-top footer text-muted">
+    <main role="main" class="pb-3">
+        @RenderBody()
+        <footer class="border-top footer text-muted">
             &copy; 2020 - Pertamin - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-    </footer>
-        </main>
+        </footer>
+    </main>
 
-  
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/lottiefiles/lottie-player/dist/lottie-player.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <script src="~/lib/angularjs/angular.min.js"></script>
-       <script src="~/js/services.js" asp-append-version="true"></script>
+    <script src="~/js/services.js" asp-append-version="true"></script>
     <script src="~/js/app.js" asp-append-version="true"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)

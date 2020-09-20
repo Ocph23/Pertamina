@@ -39,6 +39,7 @@ namespace WebApp.Middlewares
         {
             try
             {
+                await Task.Delay(100);
                 var tokenHandler = new JwtSecurityTokenHandler();
                 SecurityToken validatedToken = null; 
                 var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
@@ -64,9 +65,13 @@ namespace WebApp.Middlewares
                                new Claim(ClaimTypes.Role, role),
 
                 };
-                var identity = new ClaimsIdentity(claims, "basic");
+                var identity = new ClaimsIdentity(claims, "Bearer");
+
+                var user = await userService.GetById(id);
+
                 context.User = new ClaimsPrincipal(identity);
-                context.Items["User"] = context.User;
+                if(user!=null)
+                    context.Items["User"] = user;
             }
             catch
             {
